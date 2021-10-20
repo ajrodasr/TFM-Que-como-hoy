@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uoc.tfm.qch.security.service.UsuarioRepository">
+
+	<resultMap id="usuario" type="com.uoc.tfm.qch.security.domain.Usuario">
+		<id column="ID_USUARIO" property="id" />
+		<result column="NOMBRE_USUARIO" property="nombre" />
+		<result column="APELLIDO1_USUARIO" property="apellido1" />
+		<result column="APELLIDO2_USUARIO" property="apellido2" />
+		<result column="PASSWORD_USUARIO" property="password" />
+		<result column="EMAIL_USUARIO" property="email" />
+		<result column="TOKEN_PASSWORD_USUARIO" property="tokenPassword" />
+		<collection javaType="ArrayList" property="roles" resultMap="rol"/>
+	</resultMap>
+	
+	<resultMap id="rol" type="com.uoc.tfm.qch.security.domain.Rol">
+		<id column="ID_ROL" property="id" />
+		<result column="NOMBRE_ROL" property="rolNombre" />
+	</resultMap>
+
+	<select id="getUsuarioById" resultMap="usuario">
+		SELECT u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			u.EMAIL AS EMAIL_USUARIO,
+			u.PASSWORD AS PASSWORD_USUARIO,
+			u.TOKEN_PASSWORD AS TOKEN_PASSWORD_USUARIO,
+			r.ID AS ID_ROL,
+			r.NOMBRE AS NOMBRE_ROL
+		FROM usuarios u 
+		JOIN usuario_rol ur ON ur.USUARIO = u.ID
+		JOIN roles r ON r.ID = ur.ROL
+		WHERE u.ID = #{idUsuario}
+	</select>
+
+	<select id="getUsuarioByEmail" resultMap="usuario">
+		SELECT u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			u.EMAIL AS EMAIL_USUARIO,
+			u.PASSWORD AS PASSWORD_USUARIO,
+			u.TOKEN_PASSWORD AS TOKEN_PASSWORD_USUARIO,
+			r.ID AS ID_ROL,
+			r.NOMBRE AS NOMBRE_ROL
+		FROM usuarios u 
+		JOIN usuario_rol ur ON ur.USUARIO = u.ID
+		JOIN roles r ON r.ID = ur.ROL
+		WHERE u.EMAIL = #{idUsuario}
+	</select>
+	
+	<select id="getUsuarioByIdOrEmail" resultMap="usuario">
+		SELECT u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			u.EMAIL AS EMAIL_USUARIO,
+			u.PASSWORD AS PASSWORD_USUARIO,
+			u.TOKEN_PASSWORD AS TOKEN_PASSWORD_USUARIO,
+			r.ID AS ID_ROL,
+			r.NOMBRE AS NOMBRE_ROL
+		FROM usuarios u 
+		JOIN usuario_rol ur ON ur.USUARIO = u.ID
+		JOIN roles r ON r.ID = ur.ROL
+		WHERE u.ID = #{idOrEmail} OR u.EMAIL = #{idOrEmail}
+	</select>
+	
+	<select id="getUsuarioByTokenPassword" resultMap="usuario">
+		SELECT u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			u.EMAIL AS EMAIL_USUARIO,
+			u.PASSWORD AS PASSWORD_USUARIO,
+			u.TOKEN_PASSWORD AS TOKEN_PASSWORD_USUARIO,
+			r.ID AS ID_ROL,
+			r.NOMBRE AS NOMBRE_ROL
+		FROM usuarios u 
+		JOIN usuario_rol ur ON ur.USUARIO = u.ID
+		JOIN roles r ON r.ID = ur.ROL
+		WHERE u.TOKEN_PASSWORD = #{tokenPassword}
+	</select>
+
+	<insert id="saveUsuario">
+		INSERT INTO USUARIOS (ID, NOMBRE, APELLIDO1,
+		APELLIDO2, EMAIL, PASSWORD, TOKEN_PASSWORD)
+		VALUES (#{id}, #{nombre},
+		#{apellido1},
+		#{apellido2}, #{email},
+		#{password},
+		#{tokenPassword})
+	</insert>
+
+	<insert id="saveRolUsuario">
+		INSERT INTO USUARIO_ROL (USUARIO,ROL) values
+		<foreach collection="roles" item="element" index="index" open="(" separator="),("  close=")">
+		  #{idUsuario}, #{element.id}
+		</foreach>
+	</insert>
+	
+	<update id="updateUsuario">
+	    UPDATE USUARIOS SET
+	        NOMBRE = #{nombre},
+	        APELLIDO1 = #{apellido1},
+	        APELLIDO2 = #{apellido2},
+	        EMAIL = #{email},
+	        PASSWORD = #{password},
+	        TOKEN_PASSWORD = #{tokenPassword}
+	    WHERE ID=#{id}
+	</update>
+
+</mapper>

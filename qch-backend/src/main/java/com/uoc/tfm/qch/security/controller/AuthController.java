@@ -3,6 +3,7 @@ package com.uoc.tfm.qch.security.controller;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,10 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uoc.tfm.qch.security.domain.Rol;
 import com.uoc.tfm.qch.security.domain.Usuario;
+import com.uoc.tfm.qch.security.dto.ChangePasswordDTO;
+import com.uoc.tfm.qch.security.dto.EmailPasswordDTO;
 import com.uoc.tfm.qch.security.dto.JwtDto;
 import com.uoc.tfm.qch.security.dto.LoginUsuario;
 import com.uoc.tfm.qch.security.dto.NuevoUsuario;
 import com.uoc.tfm.qch.security.jwt.JwtProvider;
+import com.uoc.tfm.qch.security.service.AuthService;
 import com.uoc.tfm.qch.security.service.RolService;
 import com.uoc.tfm.qch.security.service.UsuarioService;
 
@@ -43,6 +47,9 @@ public class AuthController {
 
 	@Autowired
 	RolService rolService;
+	
+	@Autowired
+	AuthService authService;
 
 	@Autowired
 	JwtProvider jwtProvider;
@@ -72,17 +79,18 @@ public class AuthController {
 		}
 		usuario.setRoles(roles);
 		usuarioService.save(usuario);
+		authService.enviarEmailBienvenida(usuario.getEmail());
 		return new ResponseEntity("Usuario guardado", HttpStatus.CREATED);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
 	@PostMapping("/login")
 	public ResponseEntity<JwtDto> login (@RequestBody LoginUsuario loginUsuario){
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getId(), loginUsuario.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtProvider.generateToken(authentication);
 		JwtDto jwtDto = new JwtDto(jwt);
-		return new ResponseEntity(jwtDto, HttpStatus.OK);
+		return new ResponseEntity<JwtDto>(jwtDto, HttpStatus.OK);
 	}
 	
 	@PostMapping("/refresh")
@@ -90,5 +98,43 @@ public class AuthController {
 		String token = jwtProvider.refreshToken(jwtDto);
 		JwtDto jwt = new JwtDto(token);
 		return new ResponseEntity<JwtDto>(jwt, HttpStatus.OK);
+	}
+	
+	@PostMapping("/send-email")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ResponseEntity<?> sendEmailTemplate(@RequestBody EmailPasswordDTO dto) {
+		Usuario usuario = usuarioService.getUsuarioByIdOrEmail(dto.getEmail());
+		if(usuario == null) {
+			return new ResponseEntity("No existe un usuario con esas credenciales", HttpStatus.NOT_FOUND);
+		}
+		
+		String tokenPassword = UUID.randomUUID().toString();
+		usuario.setTokenPassword(tokenPassword);
+		
+		usuarioService.update(usuario);
+		dto.setIdUsuario(usuario.getId());
+		dto.setTokenPassword(tokenPassword);
+		authService.enviarEmailPassword(dto);
+		return new ResponseEntity("Correo con plantilla enviado correctamente", HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("/change-password")
+	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO dto){
+		
+		if(!dto.getPassword().equals(dto.getConfirmPassword())) {
+			return new ResponseEntity("Las contraseñas no coinciden", HttpStatus.BAD_REQUEST);
+		}
+		
+		Usuario usuario = usuarioService.getUsuarioByTokenPassword(dto.getTokenPassword());
+		if(usuario == null) {
+			return new ResponseEntity("No existe un usuario con esas credenciales", HttpStatus.NOT_FOUND);
+		}
+		
+		String newPassword = passwordEncoder.encode(dto.getPassword());
+		usuario.setPassword(newPassword);
+		usuario.setTokenPassword(null);
+		usuarioService.update(usuario);
+		return new ResponseEntity("Contraseña actualizada", HttpStatus.OK);
 	}
 }

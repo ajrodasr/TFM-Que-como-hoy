@@ -20,7 +20,7 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
-		log.error("Fallo en el inicio de sesión", authException);
+		log.error("Fallo en el inicio de sesión");
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error de credenciales");
 	}
 

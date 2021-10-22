@@ -1,0 +1,186 @@
+<div class="container d-flex justify-content-center">
+  <div class="card mt-3">
+    <div class="card-header text-center">
+      <h3>Resgistro</h3>
+    </div>
+    <div class="card-body">
+      <div *ngIf="mensaje" class="alert alert-danger" role="alert">
+        {{ mensaje }}
+      </div>
+      <form [formGroup]="registroForm" (ngSubmit)="onRegister()">
+        <div class="form-group m-3">
+          <label for="idUsuario">Id de usuario</label>
+          <input
+            type="text"
+            name="idUsuario"
+            class="form-control"
+            [formControl]="idUsuario"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+              registroForm.get('idUsuario').errors &&
+              (registroForm.get('idUsuario').touched ||
+                registroForm.get('idUsuario').dirty)
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="idUsuario.invalid && idUsuario.errors.required"
+              >El campo es obligatorio</span
+            >
+          </span>
+        </div>
+        <div class="form-group m-3">
+          <label for="nombre">Nombre</label>
+          <input
+            type="text"
+            name="nombre"
+            class="form-control"
+            [formControl]="nombre"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+              registroForm.get('nombre').errors &&
+              (registroForm.get('nombre').touched ||
+                registroForm.get('nombre').dirty)
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="nombre.invalid && nombre.errors.required"
+              >El campo es obligatorio</span
+            >
+            <span
+              class="text-danger"
+              *ngIf="nombre.invalid && nombre.errors.pattern"
+              >El campo tiene un caracter no permitido</span
+            >
+          </span>
+        </div>
+        <div class="form-group m-3">
+          <label for="apellido1">Primer apellido</label>
+          <input
+            type="text"
+            name="apellido1"
+            class="form-control"
+            [formControl]="apellido1"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+              registroForm.get('apellido1').errors &&
+              (registroForm.get('apellido1').touched ||
+                registroForm.get('apellido1').dirty)
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="apellido1.invalid && apellido1.errors.required"
+              >El campo es obligatorio</span
+            >
+            <span
+              class="text-danger"
+              *ngIf="apellido1.invalid && apellido1.errors.pattern"
+              >El campo tiene un caracter no permitido</span
+            >
+          </span>
+        </div>
+        <div class="form-group m-3">
+          <label for="apellido2">Segundo apellido</label>
+          <input
+            type="text"
+            name="apellido2"
+            class="form-control"
+            [formControl]="apellido2"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+              registroForm.get('apellido2').errors &&
+              (registroForm.get('apellido2').touched ||
+                registroForm.get('apellido2').dirty)
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="apellido2.invalid && apellido2.errors.required"
+              >El campo es obligatorio</span
+            >
+            <span
+              class="text-danger"
+              *ngIf="apellido2.invalid && apellido2.errors.pattern"
+              >El campo tiene un caracter no permitido</span
+            >
+          </span>
+        </div>
+        <div class="form-group m-3">
+          <label for="email">Correo electrónico</label>
+          <input
+            type="text"
+            name="email"
+            class="form-control"
+            [formControl]="email"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+              registroForm.get('email').errors &&
+              (registroForm.get('email').touched ||
+                registroForm.get('email').dirty)
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="email.invalid && email.errors.required"
+              >El campo es obligatorio</span
+            >
+            <span
+              class="text-danger"
+              *ngIf="email.invalid && email.errors.pattern"
+              >El email no es valido</span
+            >
+          </span>
+        </div>
+        <div class="form-group m-3">
+          <label for="password">Contraseña</label>
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            [formControl]="password"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+              registroForm.get('password').errors &&
+              (registroForm.get('password').touched ||
+                registroForm.get('password').dirty)
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="password.invalid && password.errors.required"
+              >El campo es obligatorio</span
+            >
+            <span
+              class="text-danger"
+              *ngIf="password.invalid && password.errors.minlength"
+              >La contraseña debe tener 8 caracteres como mínimo</span
+            >
+          </span>
+        </div>
+        <div class="form-group m-3">
+          <button
+            class="btn btn-success btn-block w-100"
+            [disabled]="!registroForm.valid"
+            type="submit"
+          >
+            Registrarse
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

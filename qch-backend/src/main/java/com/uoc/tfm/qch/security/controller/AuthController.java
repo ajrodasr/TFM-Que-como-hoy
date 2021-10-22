@@ -2,6 +2,7 @@ package com.uoc.tfm.qch.security.controller;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,9 +55,9 @@ public class AuthController {
 	@Autowired
 	JwtProvider jwtProvider;
 	
-	@PostMapping("/nuevo")
+	@PostMapping("/registro")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ResponseEntity<JwtDto> nuevo(@RequestBody NuevoUsuario nuevoUsuario) {
+	public ResponseEntity<?> nuevo(@RequestBody NuevoUsuario nuevoUsuario) {
 		if (usuarioService.existsUsuarioById(nuevoUsuario.getId())) {
 			return new ResponseEntity("El usuario ya existe", HttpStatus.BAD_REQUEST);
 		}
@@ -80,7 +81,7 @@ public class AuthController {
 		usuario.setRoles(roles);
 		usuarioService.save(usuario);
 		authService.enviarEmailBienvenida(usuario.getEmail());
-		return new ResponseEntity("Usuario guardado", HttpStatus.CREATED);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Usuario creado"), HttpStatus.CREATED);
 	}
 	
 	
@@ -135,6 +136,6 @@ public class AuthController {
 		usuario.setPassword(newPassword);
 		usuario.setTokenPassword(null);
 		usuarioService.update(usuario);
-		return new ResponseEntity("Contraseña actualizada", HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Contraseña actualizada"), HttpStatus.OK);
 	}
 }

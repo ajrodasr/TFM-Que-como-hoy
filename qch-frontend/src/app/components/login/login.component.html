@@ -1,0 +1,85 @@
+<div class="container d-flex justify-content-center">
+  <div class="card mt-3">
+    <div class="card-header text-center">
+      <h3>Iniciar sesión</h3>
+    </div>
+    <div class="card-body">
+      <div *ngIf="mensaje" class="alert alert-danger" role="alert">
+        {{ mensaje }}
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div class="form-group m-3">
+          <label for="idUsuario">Nombre de usuario o email</label>
+          <input
+            type="text"
+            name="idUsuario"
+            class="form-control"
+            [formControl]="idUsuario"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+              loginForm.get('idUsuario').errors &&
+              (loginForm.get('idUsuario').touched ||
+                loginForm.get('idUsuario').dirty)
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="idUsuario.invalid && idUsuario.errors.required"
+              >El nombre o email de usuario es obligatorio</span
+            >
+          </span>
+        </div>
+        <div class="form-group m-3">
+          <label for="password">Contraseña</label>
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            [formControl]="password"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+              loginForm.get('password').errors &&
+              (loginForm.get('password').touched ||
+                loginForm.get('password').dirty)
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="idUsuario.invalid && idUsuario.errors.required"
+              >La contraseña es obligatoria</span
+            >
+          </span>
+        </div>
+        <div class="form-group m-3">
+          <button
+            class="btn btn-success btn-block w-100"
+            [disabled]="!loginForm.valid"
+            type="submit"
+          >
+            Iniciar Sesión
+          </button>
+          <button
+            class="btn btn-secondary btn-block w-100 mt-1"
+            routerLink="/send-email"
+            type="button"
+          >
+            He olvidado la contraseña
+          </button>
+        </div>
+        <div class="form-group m-3">
+          <button
+            class="btn btn-primary btn-block w-100 mt-1"
+            routerLink="/registro"
+            type="button"
+          >
+            Registrarse
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

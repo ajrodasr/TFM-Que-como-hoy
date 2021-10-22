@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">QCH</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,7 +15,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="#"> Home </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
@@ -49,7 +49,15 @@
         </li>
       </ul>
       <div class="d-flex">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <button
+          class="btn btn-outline-success my-2 my-sm-0"
+          routerLink="/login"
+          *ngIf="!isLogged"
+          type="button"
+        >
+          Iniciar sesión
+        </button>
+        <ul *ngIf="isLogged" class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -59,16 +67,24 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Dropdown
+              Bienvenido, {{ idUsuario }}
             </a>
             <ul
               class="dropdown-menu dropdown-menu-end"
               aria-labelledby="navbarDropdown"
             >
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+              <li><a class="dropdown-item" href="#">Mis recetas</a></li>
               <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li class="text-center">
+                <button
+                  class="btn btn-outline-danger my-2 my-sm-0"
+                  (click)="onLogOut()"
+                  type="button"
+                >
+                  Cerrar Sesión
+                </button>
+              </li>
             </ul>
           </li>
         </ul>

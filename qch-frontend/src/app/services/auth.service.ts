@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { CambiarPassword } from '../models/cambiar-password';
+import { EmailPassword } from '../models/email-password';
 import { JwtDto } from '../models/jwt-dto';
 import { LoginUsuario } from '../models/login-usuario';
 import { NuevoUsuario } from '../models/nuevo-usuario';
@@ -79,5 +81,16 @@ export class AuthService {
 
   public refresh(jwdto: JwtDto): Observable<JwtDto> {
     return this.http.post<JwtDto>(BACK_URL + 'auth/refresh', jwdto);
+  }
+
+  public enviarEmailPassword(emailPassword: EmailPassword): Observable<any> {
+    return this.http.post<any>(BACK_URL + 'auth/email-password', emailPassword);
+  }
+
+  public cambiarPassword(cambiarPassword: CambiarPassword): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'auth/cambiar-password',
+      cambiarPassword
+    );
   }
 }

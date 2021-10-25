@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uoc.tfm.qch.security.domain.Rol;
 import com.uoc.tfm.qch.security.domain.Usuario;
-import com.uoc.tfm.qch.security.dto.ChangePasswordDTO;
+import com.uoc.tfm.qch.security.dto.CambiarPasswordDTO;
 import com.uoc.tfm.qch.security.dto.EmailPasswordDTO;
 import com.uoc.tfm.qch.security.dto.JwtDto;
 import com.uoc.tfm.qch.security.dto.LoginUsuario;
@@ -101,12 +101,12 @@ public class AuthController {
 		return new ResponseEntity<JwtDto>(jwt, HttpStatus.OK);
 	}
 	
-	@PostMapping("/send-email")
+	@PostMapping("/email-password")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ResponseEntity<?> sendEmailTemplate(@RequestBody EmailPasswordDTO dto) {
 		Usuario usuario = usuarioService.getUsuarioByIdOrEmail(dto.getEmail());
 		if(usuario == null) {
-			return new ResponseEntity("No existe un usuario con esas credenciales", HttpStatus.NOT_FOUND);
+			return new ResponseEntity("No existe un usuario con esas credenciales", HttpStatus.BAD_REQUEST);
 		}
 		
 		String tokenPassword = UUID.randomUUID().toString();
@@ -116,12 +116,12 @@ public class AuthController {
 		dto.setIdUsuario(usuario.getId());
 		dto.setTokenPassword(tokenPassword);
 		authService.enviarEmailPassword(dto);
-		return new ResponseEntity("Correo con plantilla enviado correctamente", HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Correo enviado"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping("/change-password")
-	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO dto){
+	@PostMapping("/cambiar-password")
+	public ResponseEntity<?> changePassword(@RequestBody CambiarPasswordDTO dto){
 		
 		if(!dto.getPassword().equals(dto.getConfirmPassword())) {
 			return new ResponseEntity("Las contraseñas no coinciden", HttpStatus.BAD_REQUEST);
@@ -129,7 +129,7 @@ public class AuthController {
 		
 		Usuario usuario = usuarioService.getUsuarioByTokenPassword(dto.getTokenPassword());
 		if(usuario == null) {
-			return new ResponseEntity("No existe un usuario con esas credenciales", HttpStatus.NOT_FOUND);
+			return new ResponseEntity("No existe un usuario con esas credenciales", HttpStatus.BAD_REQUEST);
 		}
 		
 		String newPassword = passwordEncoder.encode(dto.getPassword());

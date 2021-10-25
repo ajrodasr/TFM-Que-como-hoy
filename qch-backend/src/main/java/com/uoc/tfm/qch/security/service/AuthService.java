@@ -20,6 +20,7 @@ public class AuthService {
 	
 	String urlFront = "http://localhost:4200/";
 	String emailPasswordTemplate = "email/email-password";
+	String urlCambiarPasswordFront = "cambiar-password/";
 	
 	public void enviarEmailBienvenida(String correoElectronico) {
 		EmailDTO email = new EmailDTO();
@@ -37,7 +38,7 @@ public class AuthService {
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("idUsuario", dto.getIdUsuario());
-		model.put("url", urlFront + dto.getTokenPassword());
+		model.put("url", urlFront + urlCambiarPasswordFront + dto.getTokenPassword());
 		
 		emailService.sendEmailTemplate(email, model, emailPasswordTemplate);
 	}

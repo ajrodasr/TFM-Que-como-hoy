@@ -1,14 +1,14 @@
 package com.uoc.tfm.qch.security.dto;
 
-public class ChangePasswordDTO {
+public class CambiarPasswordDTO {
 	
 	private String password;
 	private String confirmPassword;
 	private String tokenPassword;
 	
-	public ChangePasswordDTO() {}
+	public CambiarPasswordDTO() {}
 	
-	public ChangePasswordDTO(String password, String confirmPassword, String tokenPassword) {
+	public CambiarPasswordDTO(String password, String confirmPassword, String tokenPassword) {
 		this.password = password;
 		this.confirmPassword = confirmPassword;
 		this.tokenPassword = tokenPassword;

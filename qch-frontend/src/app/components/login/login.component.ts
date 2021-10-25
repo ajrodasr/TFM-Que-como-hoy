@@ -16,11 +16,11 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginComponent implements OnInit {
   loginUsuario = new LoginUsuario();
 
-  public idUsuario: FormControl;
-  public password: FormControl;
-  public loginForm: FormGroup;
+  idUsuario: FormControl;
+  password: FormControl;
+  loginForm: FormGroup;
 
-  public mensaje: '';
+  mensaje: '';
 
   constructor(
     private formBuilder: FormBuilder,

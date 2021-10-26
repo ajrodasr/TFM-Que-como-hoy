@@ -4,7 +4,9 @@ import { CambiarPasswordComponent } from './components/cambiar-password/cambiar-
 import { EmailPasswordComponent } from './components/email-password/email-password.component';
 import { IndexComponent } from './components/index/index.component';
 import { LoginComponent } from './components/login/login.component';
+import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuario.component';
 import { RegistroComponent } from './components/registro/registro.component';
+import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
@@ -20,6 +22,11 @@ const routes: Routes = [
     path: 'cambiar-password/:tokenPassword',
     component: CambiarPasswordComponent,
     canActivate: [LoginGuard],
+  },
+  {
+    path: 'perfil-usuario',
+    component: PerfilUsuarioComponent,
+    canActivate: [AuthGuard],
   },
 ];
 

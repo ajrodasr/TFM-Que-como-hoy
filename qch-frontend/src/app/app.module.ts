@@ -11,16 +11,27 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { EmailPasswordComponent } from './components/email-password/email-password.component';
 import { CambiarPasswordComponent } from './components/cambiar-password/cambiar-password.component';
+import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuario.component';
+import { interceptorProvider } from './interceptors/auth-interceptor.service';
 
 @NgModule({
-  declarations: [AppComponent, IndexComponent, MenuComponent, LoginComponent, RegistroComponent, EmailPasswordComponent, CambiarPasswordComponent],
+  declarations: [
+    AppComponent,
+    IndexComponent,
+    MenuComponent,
+    LoginComponent,
+    RegistroComponent,
+    EmailPasswordComponent,
+    CambiarPasswordComponent,
+    PerfilUsuarioComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [interceptorProvider],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -69,10 +69,7 @@ export class AuthService {
   }
 
   public registro(nuevoUsuario: NuevoUsuario): Observable<any> {
-    return this.http.post<any>(
-      BACK_URL + 'auth/registro',
-      JSON.parse(JSON.stringify(nuevoUsuario))
-    );
+    return this.http.post<any>(BACK_URL + 'auth/registro', nuevoUsuario);
   }
 
   public login(loginUsuario: LoginUsuario): Observable<JwtDto> {

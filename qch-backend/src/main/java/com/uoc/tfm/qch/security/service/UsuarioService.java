@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uoc.tfm.qch.security.domain.Usuario;
+import com.uoc.tfm.qch.security.dto.PerfilUsuarioDTO;
 
 @Service
 @Transactional
@@ -41,9 +42,26 @@ public class UsuarioService {
 		return usuarioRepository.getUsuarioByTokenPassword(tokenPassword);
 	}
 	
+	public PerfilUsuarioDTO getPerfilUsuario(String idUsuario) {
+		Usuario usuario = usuarioRepository.getUsuarioById(idUsuario);
+		if(usuario == null) {
+			return null;
+		}
+		return new PerfilUsuarioDTO(usuario);
+	}
+	
 	public void save(Usuario usuario) {
 		usuarioRepository.saveUsuario(usuario);
 		usuarioRepository.saveRolUsuario(usuario.getId(), usuario.getRoles());
+	}
+	
+	public void updatePerfilUsuario(PerfilUsuarioDTO perfilUsuario) {
+		Usuario usuario = usuarioRepository.getUsuarioById(perfilUsuario.getId());
+		usuario.setNombre(perfilUsuario.getNombre());
+		usuario.setApellido1(perfilUsuario.getApellido1());
+		usuario.setApellido2(perfilUsuario.getApellido2());
+		usuario.setEmail(perfilUsuario.getEmail());
+		usuarioRepository.updateUsuario(usuario);
 	}
 	
 }

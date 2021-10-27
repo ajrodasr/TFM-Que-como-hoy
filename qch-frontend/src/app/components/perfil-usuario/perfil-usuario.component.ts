@@ -5,6 +5,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { CambiarPasswordPerfil } from 'src/app/models/cambiar-password-perfil';
+import { JwtDto } from 'src/app/models/jwt-dto';
 import { PerfilUsuario } from 'src/app/models/perfil-usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -18,6 +20,9 @@ export class PerfilUsuarioComponent implements OnInit {
   perfilUsuario = new PerfilUsuario();
   error = false;
   mensaje = '';
+  cambiarPasswordPerfil = new CambiarPasswordPerfil();
+  errorPass = false;
+  mensajePass = '';
 
   id: FormControl;
   nombre: FormControl;
@@ -26,6 +31,11 @@ export class PerfilUsuarioComponent implements OnInit {
   email: FormControl;
 
   perfilUsuarioForm: FormGroup;
+
+  password: FormControl;
+  confirmPassword: FormControl;
+
+  cambiarPasswordForm: FormGroup;
 
   constructor(
     private authService: AuthService,
@@ -57,6 +67,20 @@ export class PerfilUsuarioComponent implements OnInit {
         console.log(err);
       }
     );
+
+    this.password = new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]);
+    this.confirmPassword = new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]);
+
+    this.cambiarPasswordForm = this.formBuilder.group({
+      password: this.password,
+      confirmPassword: this.confirmPassword,
+    });
   }
 
   onActualizaDatos(): void {
@@ -75,5 +99,26 @@ export class PerfilUsuarioComponent implements OnInit {
         this.mensaje = err.error;
       }
     );
+  }
+
+  onCambiarPassword(): void {
+    this.cambiarPasswordPerfil.idUsuario = this.authService.getUsername();
+    this.cambiarPasswordPerfil.password = this.password.value;
+    this.cambiarPasswordPerfil.confirmPassword = this.confirmPassword.value;
+
+    this.usuarioService
+      .cambiarPasswordPerfil(this.cambiarPasswordPerfil)
+      .subscribe(
+        (data) => {
+          this.mensajePass = data.mensaje;
+          const token = this.authService.getToken();
+          this.authService.refresh(new JwtDto(token));
+        },
+        (err) => {
+          this.mensajePass = err.error;
+          this.errorPass = true;
+          console.log(err);
+        }
+      );
   }
 }

@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uoc.tfm.qch.security.domain.Usuario;
+import com.uoc.tfm.qch.security.dto.CambiarPasswordPerfilDTO;
 import com.uoc.tfm.qch.security.dto.PerfilUsuarioDTO;
 import com.uoc.tfm.qch.security.service.UsuarioService;
 
@@ -21,6 +24,9 @@ import com.uoc.tfm.qch.security.service.UsuarioService;
 @CrossOrigin
 public class UsuarioController {
 
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	UsuarioService usuarioService;
 	
@@ -42,5 +48,25 @@ public class UsuarioController {
 		}
 		usuarioService.updatePerfilUsuario(perfilUsuario);
 		return new ResponseEntity(Collections.singletonMap("mensaje", "Datos actualizados"), HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("/cambiar-password")
+	public ResponseEntity<?> changePassword(@RequestBody CambiarPasswordPerfilDTO dto){
+		
+		if(!dto.getPassword().equals(dto.getConfirmPassword())) {
+			return new ResponseEntity("Las contraseñas no coinciden", HttpStatus.BAD_REQUEST);
+		}
+		
+		Usuario usuario = usuarioService.getUsuarioById(dto.getIdUsuario());
+		if(usuario == null) {
+			return new ResponseEntity("No existe un usuario con esas credenciales", HttpStatus.BAD_REQUEST);
+		}
+		
+		String newPassword = passwordEncoder.encode(dto.getPassword());
+		usuario.setPassword(newPassword);
+		usuario.setTokenPassword(null);
+		usuarioService.update(usuario);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Contraseña actualizada"), HttpStatus.OK);
 	}
 }

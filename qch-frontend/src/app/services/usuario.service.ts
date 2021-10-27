@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CambiarPasswordPerfil } from '../models/cambiar-password-perfil';
 import { PerfilUsuario } from '../models/perfil-usuario';
 
 const BACK_URL = 'http://localhost:8080/';
@@ -24,6 +25,15 @@ export class UsuarioService {
     return this.http.post<PerfilUsuario>(
       BACK_URL + 'perfil-usuario/actualizar-datos',
       perfilUsuario
+    );
+  }
+
+  public cambiarPasswordPerfil(
+    cambiarPasswordPerfil: CambiarPasswordPerfil
+  ): Observable<any> {
+    return this.http.post<PerfilUsuario>(
+      BACK_URL + 'perfil-usuario/cambiar-password',
+      cambiarPasswordPerfil
     );
   }
 }

@@ -1,82 +1,217 @@
 <h3 class="mt-3 mb-3 text-center">Perfil de usuario</h3>
-<div class="container d-flex justify-content-center">
+<div class="container d-flex justify-content-center min-vw-100">
   <form
     *ngIf="perfilUsuarioForm"
     [formGroup]="perfilUsuarioForm"
     (ngSubmit)="onActualizaDatos()"
   >
-    <div class="row mt-3">
-      <div class="col">
-        <label for="idUsuario">Id usuario</label>
-        <input
-          type="text"
-          name="idUsuario"
-          class="form-control"
-          [formControl]="id"
-          readonly
-        />
-      </div>
-      <div class="col">
-        <label for="email">Email</label>
-        <input
-          type="text"
-          name="email"
-          class="form-control"
-          [formControl]="email"
-        />
-      </div>
+    <div
+      class="form-group m-3"
+      *ngIf="mensaje && !error"
+      class="alert"
+      [class.alert-success]="!error"
+      [class.alert-danger]="error"
+      role="alert"
+    >
+      {{ mensaje }}
     </div>
-    <div class="row mt-3">
-      <div class="col">
-        <label for="nombre">Nombre</label>
-        <input
-          type="text"
-          name="nombre"
-          class="form-control"
-          [formControl]="nombre"
-        />
-      </div>
-      <div class="col">
-        <label for="apellido1">Primer apellido</label>
-        <input
-          type="text"
-          name="apellido1"
-          class="form-control"
-          [formControl]="apellido1"
-        />
-      </div>
-      <div class="col">
-        <label for="apellido2">Segundo apellido</label>
-        <input
-          type="text"
-          name="apellido2"
-          class="form-control"
-          [formControl]="apellido2"
-        />
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col"></div>
-      <div class="col">
-        <button
-          class="btn btn-success btn-block w-100"
-          [disabled]="!perfilUsuarioForm.valid"
-          type="submit"
+    <div class="form-group m-3">
+      <label for="id">Id de usuario</label>
+      <input
+        type="text"
+        name="id"
+        class="form-control"
+        [formControl]="id"
+        readonly
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          perfilUsuarioForm.get('id').errors &&
+          (perfilUsuarioForm.get('id').touched ||
+            perfilUsuarioForm.get('id').dirty)
+        "
+      >
+        <span class="text-danger" *ngIf="id.invalid && id.errors.required"
+          >El campo es obligatorio</span
         >
-          Guardar datos
-        </button>
-      </div>
-      <div class="col"></div>
+      </span>
     </div>
-    <div class="row mt-3">
-      <div class="col">
-        <div *ngIf="mensaje && error" class="alert alert-danger" role="alert">
-          {{ mensaje }}
-        </div>
-        <div *ngIf="mensaje && !error" class="alert alert-success" role="alert">
-          {{ mensaje }}
-        </div>
-      </div>
+    <div class="form-group m-3">
+      <label for="nombre">Nombre</label>
+      <input
+        type="text"
+        name="nombre"
+        class="form-control"
+        [formControl]="nombre"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          perfilUsuarioForm.get('nombre').errors &&
+          (perfilUsuarioForm.get('nombre').touched ||
+            perfilUsuarioForm.get('nombre').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="nombre.invalid && nombre.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <label for="apellido1">Primer apellido</label>
+      <input
+        type="text"
+        name="apellido1"
+        class="form-control"
+        [formControl]="apellido1"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          perfilUsuarioForm.get('apellido1').errors &&
+          (perfilUsuarioForm.get('apellido1').touched ||
+            perfilUsuarioForm.get('apellido1').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="apellido1.invalid && apellido1.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <label for="apellido2">Segundo apellido</label>
+      <input
+        type="text"
+        name="apellido2"
+        class="form-control"
+        [formControl]="apellido2"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          perfilUsuarioForm.get('apellido2').errors &&
+          (perfilUsuarioForm.get('apellido2').touched ||
+            perfilUsuarioForm.get('apellido2').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="apellido2.invalid && apellido2.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <label for="email">Email</label>
+      <input
+        type="text"
+        name="email"
+        class="form-control"
+        [formControl]="email"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          perfilUsuarioForm.get('email').errors &&
+          (perfilUsuarioForm.get('email').touched ||
+            perfilUsuarioForm.get('email').dirty)
+        "
+      >
+        <span class="text-danger" *ngIf="email.invalid && email.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <button
+        class="btn btn-success btn-block w-100"
+        [disabled]="!perfilUsuarioForm.valid"
+        type="submit"
+      >
+        Actualizar datos
+      </button>
+    </div>
+  </form>
+  <form [formGroup]="cambiarPasswordForm" (ngSubmit)="onCambiarPassword()">
+    <div
+      class="form-group m-3"
+      *ngIf="mensajePass"
+      class="alert"
+      [class.alert-success]="!errorPass"
+      [class.alert-danger]="errorPass"
+      role="alert"
+    >
+      {{ mensajePass }}
+    </div>
+    <div class="form-group m-3">
+      <label for="email">Nueva contraseña</label>
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        [formControl]="password"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          cambiarPasswordForm.get('password').errors &&
+          (cambiarPasswordForm.get('password').touched ||
+            cambiarPasswordForm.get('password').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="password.invalid && password.errors.required"
+          >El campo es obligatorio</span
+        >
+        <span
+          class="text-danger"
+          *ngIf="password.invalid && password.errors.minlength"
+          >Debe tener 8 caracteres como mínimo</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <label for="email">Confirme nueva contraseña</label>
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        [formControl]="confirmPassword"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          cambiarPasswordForm.get('confirmPassword').errors &&
+          (cambiarPasswordForm.get('confirmPassword').touched ||
+            cambiarPasswordForm.get('confirmPassword').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="confirmPassword.invalid && confirmPassword.errors.required"
+          >El campo es obligatorio</span
+        >
+        <span
+          class="text-danger"
+          *ngIf="confirmPassword.invalid && confirmPassword.errors.minlength"
+          >Debe tener 8 caracteres como mínimo</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <button
+        class="btn btn-outline-success btn-block"
+        [disabled]="!cambiarPasswordForm.valid"
+        type="submit"
+      >
+        Actualizar contraseña
+      </button>
     </div>
   </form>
 </div>

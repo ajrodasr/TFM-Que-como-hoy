@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uoc.tfm.qch.ingredientes.service.IngredienteRepository">
+
+	<resultMap id="ingrediente" type="com.uoc.tfm.qch.ingredientes.domain.Ingrediente">
+		<id column="ID_INGREDIENTE" property="id" />
+		<result column="NOMBRE_INGREDIENTE" property="nombre" />
+		<association property="grupo" javaType="com.uoc.tfm.qch.ingredientes.domain.GrupoIngrediente">
+			<id column="ID_GRUPO" property="id" />
+			<result column="NOMBRE_GRUPO" property="nombre" />
+			<result column="RACIONES_SEMANA_GRUPO" property="racionesSemana" />
+		</association>
+	</resultMap>
+	
+	<resultMap id="grupo" type="com.uoc.tfm.qch.ingredientes.domain.GrupoIngrediente">
+		<id column="ID_GRUPO" property="id" />
+		<result column="NOMBRE_GRUPO" property="nombre" />
+		<result column="RACIONES_SEMANA_GRUPO" property="racionesSemana" />
+	</resultMap>
+	
+	<select id="getIngredientes" resultMap="ingrediente">
+		SELECT I.ID AS ID_INGREDIENTE,
+			I.NOMBRE AS NOMBRE_INGREDIENTE,
+			G.ID AS ID_GRUPO,
+			G.NOMBRE AS NOMBRE_GRUPO,
+			G.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM INGREDIENTES I
+		JOIN GRUPO_INGREDIENTE G ON I.GRUPO = G.ID
+		ORDER BY I.NOMBRE
+	</select>
+
+	<select id="getIngredienteById" resultMap="ingrediente">
+		SELECT I.ID AS ID_INGREDIENTE,
+			I.NOMBRE AS NOMBRE_INGREDIENTE,
+			G.ID AS ID_GRUPO,
+			G.NOMBRE AS NOMBRE_GRUPO,
+			G.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM INGREDIENTES I
+		JOIN GRUPO_INGREDIENTE G ON I.GRUPO = G.ID
+		WHERE I.ID = #{idIngrediente}
+		ORDER BY I.NOMBRE
+	</select>
+	
+	<select id="getIngredienteByGrupo" resultMap="ingrediente">
+		SELECT I.ID AS ID_INGREDIENTE,
+			I.NOMBRE AS NOMBRE_INGREDIENTE,
+			G.ID AS ID_GRUPO,
+			G.NOMBRE AS NOMBRE_GRUPO,
+			G.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM INGREDIENTES I
+		JOIN GRUPO_INGREDIENTE G ON I.GRUPO = G.ID
+		WHERE G.ID = #{idGrupo}
+		ORDER BY I.NOMBRE
+	</select>
+	
+	<insert id="saveIngrediente">
+		INSERT INTO INGREDIENTES (NOMBRE, GRUPO) VALUES (#{nombre},#{grupo.id})
+	</insert>
+	
+	<update id="updateIngrediente">
+	    UPDATE INGREDIENTES SET
+	        NOMBRE = #{nombre},
+	        GRUPO = #{grupo.id}
+	    WHERE ID=#{id}
+	</update>
+
+	<select id="getGrupoById" resultMap="grupo">
+		SELECT ID AS ID_GRUPO,
+			NOMBRE AS NOMBRE_GRUPO,
+			RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM GRUPO_INGREDIENTE
+		WHERE ID = #{idGrupoIngrediente}
+		ORDER BY I.NOMBRE
+	</select>
+
+	<insert id="saveGrupoIngrediente">
+		INSERT INTO GRUPO_INGREDIENTE GRUPO_INGREDIENTE (NOMBRE, RACIONES_SEMANA) VALUES (#{nombre}, #{racionesSemana})
+	</insert>
+	
+	<update id="updateGrupoIngrediente">
+	    UPDATE GRUPO_INGREDIENTE SET
+	        NOMBRE = #{nombre},
+	        RACIONES_SEMANA = #{racionesSemana}
+	    WHERE ID=#{id}
+	</update>
+
+</mapper>

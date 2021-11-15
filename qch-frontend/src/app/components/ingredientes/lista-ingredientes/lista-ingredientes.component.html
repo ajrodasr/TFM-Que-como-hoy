@@ -1,0 +1,43 @@
+<div class="container p-5">
+  <h1>Ingredientes</h1>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mt-3">
+    <div
+      *ngFor="let ingrediente of ingredientes"
+      class="col card animate__animated animate__bounce animate__fadeIn"
+    >
+      <div class="row g-0">
+        <div class="col-10">
+          <div class="card-body">
+            <h5 class="card-title">{{ ingrediente.nombre }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              {{ ingrediente.grupo.nombre }}
+            </h6>
+            <p class="card-text">
+              ({{ ingrediente.grupo.racionesSemana }} raciones/semana)
+            </p>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card-body">
+            <a
+              class="text-primary"
+              [routerLink]="['/ingrediente', ingrediente.id]"
+              title="Editar"
+              ><i class="fas fa-edit"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fixed-bottom-right">
+    <button
+      type="button"
+      class="btn-outline-success rounded-circle w-100 h-100"
+      routerLink="/ingredientes/nuevo"
+      title="Editar"
+    >
+      <i class="fas fa-plus"></i>
+    </button>
+  </div>
+</div>

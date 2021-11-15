@@ -1,6 +1,5 @@
 package com.uoc.tfm.qch.security.controller;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -94,9 +93,15 @@ public class AuthController {
 		return new ResponseEntity<JwtDto>(jwtDto, HttpStatus.OK);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/refresh")
-	public ResponseEntity<JwtDto> refreshToken (@RequestBody JwtDto jwtDto) throws ParseException{
-		String token = jwtProvider.refreshToken(jwtDto);
+	public ResponseEntity<JwtDto> refreshToken (@RequestBody JwtDto jwtDto){
+		String token;
+		try {
+			token = jwtProvider.refreshToken(jwtDto);
+		} catch (Exception e) {
+			return new ResponseEntity(e.getMessage(), HttpStatus.BAD_GATEWAY);
+		}
 		JwtDto jwt = new JwtDto(token);
 		return new ResponseEntity<JwtDto>(jwt, HttpStatus.OK);
 	}

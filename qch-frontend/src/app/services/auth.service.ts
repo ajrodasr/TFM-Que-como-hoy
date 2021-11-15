@@ -65,7 +65,7 @@ export class AuthService {
 
   public logOut(): void {
     window.sessionStorage.clear();
-    this.router.navigate(['/']);
+    window.location.href = '/';
   }
 
   public registro(nuevoUsuario: NuevoUsuario): Observable<any> {

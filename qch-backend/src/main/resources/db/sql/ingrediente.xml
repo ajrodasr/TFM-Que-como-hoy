@@ -41,7 +41,19 @@
 		ORDER BY I.NOMBRE
 	</select>
 	
-	<select id="getIngredienteByGrupo" resultMap="ingrediente">
+	<select id="getIngredienteByNombre" resultMap="ingrediente">
+		SELECT I.ID AS ID_INGREDIENTE,
+			I.NOMBRE AS NOMBRE_INGREDIENTE,
+			G.ID AS ID_GRUPO,
+			G.NOMBRE AS NOMBRE_GRUPO,
+			G.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM INGREDIENTES I
+		JOIN GRUPO_INGREDIENTE G ON I.GRUPO = G.ID
+		WHERE I.NOMBRE = #{ingredienteNombre}
+		ORDER BY I.NOMBRE
+	</select>
+	
+	<select id="getIngredientesByGrupo" resultMap="ingrediente">
 		SELECT I.ID AS ID_INGREDIENTE,
 			I.NOMBRE AS NOMBRE_INGREDIENTE,
 			G.ID AS ID_GRUPO,
@@ -63,6 +75,14 @@
 	        GRUPO = #{grupo.id}
 	    WHERE ID=#{id}
 	</update>
+	
+	<select id="getGrupos" resultMap="grupo">
+		SELECT ID AS ID_GRUPO,
+			NOMBRE AS NOMBRE_GRUPO,
+			RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM GRUPO_INGREDIENTE
+		ORDER BY NOMBRE
+	</select>
 
 	<select id="getGrupoById" resultMap="grupo">
 		SELECT ID AS ID_GRUPO,

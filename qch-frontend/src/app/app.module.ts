@@ -13,6 +13,9 @@ import { EmailPasswordComponent } from './components/email-password/email-passwo
 import { CambiarPasswordComponent } from './components/cambiar-password/cambiar-password.component';
 import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuario.component';
 import { interceptorProvider } from './interceptors/auth-interceptor.service';
+import { IngredienteComponent } from './components/ingredientes/ingrediente/ingrediente.component';
+import { ListaIngredientesComponent } from './components/ingredientes/lista-ingredientes/lista-ingredientes.component';
+import { NuevoIngredienteComponent } from './components/ingredientes/nuevo-ingrediente/nuevo-ingrediente.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +27,9 @@ import { interceptorProvider } from './interceptors/auth-interceptor.service';
     EmailPasswordComponent,
     CambiarPasswordComponent,
     PerfilUsuarioComponent,
+    IngredienteComponent,
+    ListaIngredientesComponent,
+    NuevoIngredienteComponent,
   ],
   imports: [
     BrowserModule,

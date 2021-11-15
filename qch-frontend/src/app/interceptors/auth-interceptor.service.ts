@@ -44,10 +44,11 @@ export class AuthInterceptorService implements HttpInterceptor {
               return next.handle(intReq);
             })
           );
-        } else {
-          this.authService.logOut();
-          return throwError(err);
         }
+        if (err.status === 502 && token) {
+          this.authService.logOut();
+        }
+        return throwError(err);
       })
     );
   }

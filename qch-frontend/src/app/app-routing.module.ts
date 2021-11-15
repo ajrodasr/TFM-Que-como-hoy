@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { CambiarPasswordComponent } from './components/cambiar-password/cambiar-password.component';
 import { EmailPasswordComponent } from './components/email-password/email-password.component';
 import { IndexComponent } from './components/index/index.component';
+import { IngredienteComponent } from './components/ingredientes/ingrediente/ingrediente.component';
+import { ListaIngredientesComponent } from './components/ingredientes/lista-ingredientes/lista-ingredientes.component';
+import { NuevoIngredienteComponent } from './components/ingredientes/nuevo-ingrediente/nuevo-ingrediente.component';
 import { LoginComponent } from './components/login/login.component';
 import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuario.component';
 import { RegistroComponent } from './components/registro/registro.component';
@@ -26,6 +29,21 @@ const routes: Routes = [
   {
     path: 'perfil-usuario',
     component: PerfilUsuarioComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'ingredientes',
+    component: ListaIngredientesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'ingrediente/:idIngrediente',
+    component: IngredienteComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'ingredientes/nuevo',
+    component: NuevoIngredienteComponent,
     canActivate: [AuthGuard],
   },
 ];

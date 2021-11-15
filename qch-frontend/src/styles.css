@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+/* CUSTOM STYLES */
+
+.fixed-bottom-right {
+  position: fixed;
+  right: 3em;
+  bottom: 3em;
+  z-index: 1030;
+  width: 3em;
+  height: 3em;
+}

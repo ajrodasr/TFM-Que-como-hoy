@@ -1,7 +1,6 @@
 package com.uoc.tfm.qch.ingredientes.dto;
 
 import com.uoc.tfm.qch.ingredientes.domain.GrupoIngrediente;
-import com.uoc.tfm.qch.ingredientes.domain.Ingrediente;
 
 public class IngredienteDTO {
 	
@@ -15,12 +14,6 @@ public class IngredienteDTO {
 		this.id = id;
 		this.nombre = nombre;
 		this.grupo = grupo;
-	}
-	
-	public IngredienteDTO(Ingrediente ingrediente) {
-		this.id = ingrediente.getId();
-		this.nombre = ingrediente.getNombre();
-		this.grupo = ingrediente.getGrupo();
 	}
 	
 	public int getId() {

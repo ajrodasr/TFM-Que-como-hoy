@@ -23,7 +23,7 @@ public class IngredienteService {
 		List<IngredienteDTO> ingredientes = new ArrayList<IngredienteDTO>();
 		if(!ing.isEmpty()) {
 			for (Ingrediente ingrediente : ing) {
-				ingredientes.add(new IngredienteDTO(ingrediente));
+				ingredientes.add(new IngredienteDTO(ingrediente.getId(), ingrediente.getNombre(), ingrediente.getGrupo()));
 			}
 		}
 		return ingredientes;
@@ -33,7 +33,7 @@ public class IngredienteService {
 		Ingrediente ing = ingredienteRepository.getIngredienteById(idIngrediente);
 		IngredienteDTO ingrediente = null;
 		if(ing != null) {
-			ingrediente = new IngredienteDTO(ing);
+			ingrediente = new IngredienteDTO(ing.getId(), ing.getNombre(), ing.getGrupo());
 		}
 		return ingrediente;
 	}
@@ -43,7 +43,7 @@ public class IngredienteService {
 		List<IngredienteDTO> ingredientes = new ArrayList<IngredienteDTO>();
 		if(!ing.isEmpty()) {
 			for (Ingrediente ingrediente : ing) {
-				ingredientes.add(new IngredienteDTO(ingrediente));
+				ingredientes.add(new IngredienteDTO(ingrediente.getId(), ingrediente.getNombre(), ingrediente.getGrupo()));
 			}
 		}
 		return ingredientes;
@@ -69,7 +69,7 @@ public class IngredienteService {
 		Ingrediente ing = ingredienteRepository.getIngredienteByNombre(nombreIngrediente);
 		IngredienteDTO ingrediente = null;
 		if(ing != null) {
-			ingrediente = new IngredienteDTO(ing);
+			ingrediente = new IngredienteDTO(ing.getId(), ing.getNombre(), ing.getGrupo());
 		}
 		return ingrediente;
 	}

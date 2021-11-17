@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uoc.tfm.qch.recetas.service.RecetaRepository">
+
+	<resultMap id="receta" type="com.uoc.tfm.qch.recetas.domain.Receta">
+		<id column="ID_RECETA" property="id" />
+		<result column="TITULO_RECETA" property="titulo" />
+		<result column="DESCRIPCION_RECETA" property="descripcion" />
+		<result column="INSTRUCCIONES_RECETA" property="instrucciones" />
+		<result column="FECHA_CREACION_RECETA" property="fechaCreacion" />
+		<association property="usuario" javaType="com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO">
+			<id column="ID_USUARIO" property="id" />
+			<result column="NOMBRE_USUARIO" property="nombre" />
+			<result column="APELLIDO1_USUARIO" property="apellido1" />
+			<result column="APELLIDO2_USUARIO" property="apellido2" />
+		</association>
+		<association property="tipoReceta" javaType="com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO">
+			<id column="ID_TIPO_RECETA" property="id" />
+			<result column="NOMBRE_TIPO_RECETA" property="nombre" />
+		</association>
+		<collection javaType="ArrayList" property="likes" ofType="string">
+			<result column="LIKES_RECETA" />
+		</collection>
+		<collection javaType="ArrayList" property="ingredientes" resultMap="ingrediente"/>
+	</resultMap>
+	
+	<resultMap id="ingrediente" type="com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO">
+		<id column="ID_INGREDIENTE" property="id" />
+		<result column="NOMBRE_INGREDIENTE" property="nombre" />
+		<result column="CANTIDAD_INGREDIENTE" property="cantidad" />
+		<association property="grupo" javaType="com.uoc.tfm.qch.recetas.dto.GrupoIngredienteDTO">
+			<id column="ID_GRUPO" property="id" />
+			<result column="NOMBRE_GRUPO" property="nombre" />
+			<result column="RACIONES_SEMANA_GRUPO" property="racionesSemana" />
+		</association>
+	</resultMap>
+	
+	<resultMap id="grupo" type="com.uoc.tfm.qch.recetas.dto.GrupoIngredienteDTO">
+		<id column="ID_GRUPO" property="id" />
+		<result column="NOMBRE_GRUPO" property="nombre" />
+		<result column="RACIONES_SEMANA_GRUPO" property="racionesSemana" />
+	</resultMap>
+	
+	<select id="getRecetaById" resultMap="receta">
+		SELECT r.ID AS ID_RECETA,
+			r.TITULO AS TITULO_RECETA,
+			r.DESCRIPCION AS DESCRIPCION_RECETA,
+			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
+			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			lr.USUARIO AS LIKES_RECETA,
+			u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			tr.ID AS ID_TIPO_RECETA,
+			tr.NOMBRE AS NOMBRE_TIPO_RECETA,
+			i.ID AS ID_INGREDIENTE,
+			i.NOMBRE AS NOMBRE_INGREDIENTE,
+			ir.CANTIDAD AS CANTIDAD_INGREDIENTE,
+			g.ID AS ID_GRUPO,
+			g.NOMBRE AS NOMBRE_GRUPO,
+			g.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM RECETAS r
+		LEFT JOIN LIKE_RECETA lr ON lr.RECETA = r.ID 
+		LEFT JOIN USUARIOS u ON u.ID = r.USUARIO 
+		LEFT JOIN TIPO_RECETA tr ON tr.ID = r.TIPO 
+		LEFT JOIN INGREDIENTE_RECETA ir ON ir.RECETA = r.ID
+		LEFT JOIN INGREDIENTES i ON i.ID = ir.INGREDIENTE
+		LEFT JOIN GRUPO_INGREDIENTE g ON i.GRUPO = g.ID
+		WHERE r.ID = #{idReceta}
+	</select>
+	
+	<select id="getRecetas" resultMap="receta">
+		SELECT r.ID AS ID_RECETA,
+			r.TITULO AS TITULO_RECETA,
+			r.DESCRIPCION AS DESCRIPCION_RECETA,
+			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
+			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			lr.USUARIO AS LIKES_RECETA,
+			u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			tr.ID AS ID_TIPO_RECETA,
+			tr.NOMBRE AS NOMBRE_TIPO_RECETA,
+			i.ID AS ID_INGREDIENTE,
+			i.NOMBRE AS NOMBRE_INGREDIENTE,
+			ir.CANTIDAD AS CANTIDAD_INGREDIENTE,
+			g.ID AS ID_GRUPO,
+			g.NOMBRE AS NOMBRE_GRUPO,
+			g.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM RECETAS r
+		LEFT JOIN LIKE_RECETA lr ON lr.RECETA = r.ID 
+		LEFT JOIN USUARIOS u ON u.ID = r.USUARIO 
+		LEFT JOIN TIPO_RECETA tr ON tr.ID = r.TIPO 
+		LEFT JOIN INGREDIENTE_RECETA ir ON ir.RECETA = r.ID
+		LEFT JOIN INGREDIENTES i ON i.ID = ir.INGREDIENTE
+		LEFT JOIN GRUPO_INGREDIENTE g ON i.GRUPO = g.ID
+	</select>
+	
+	<select id="getRecetasPublicadas" resultMap="receta">
+		SELECT r.ID AS ID_RECETA,
+			r.TITULO AS TITULO_RECETA,
+			r.DESCRIPCION AS DESCRIPCION_RECETA,
+			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
+			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			lr.USUARIO AS LIKES_RECETA,
+			u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			tr.ID AS ID_TIPO_RECETA,
+			tr.NOMBRE AS NOMBRE_TIPO_RECETA,
+			i.ID AS ID_INGREDIENTE,
+			i.NOMBRE AS NOMBRE_INGREDIENTE,
+			ir.CANTIDAD AS CANTIDAD_INGREDIENTE,
+			g.ID AS ID_GRUPO,
+			g.NOMBRE AS NOMBRE_GRUPO,
+			g.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM RECETAS r
+		LEFT JOIN LIKE_RECETA lr ON lr.RECETA = r.ID 
+		LEFT JOIN USUARIOS u ON u.ID = r.USUARIO 
+		LEFT JOIN TIPO_RECETA tr ON tr.ID = r.TIPO 
+		LEFT JOIN INGREDIENTE_RECETA ir ON ir.RECETA = r.ID
+		LEFT JOIN INGREDIENTES i ON i.ID = ir.INGREDIENTE
+		LEFT JOIN GRUPO_INGREDIENTE g ON i.GRUPO = g.ID
+		WHERE r.PUBLICADA = 1
+	</select>
+	
+	<select id="getRecetasByTipo" resultMap="receta">
+		SELECT r.ID AS ID_RECETA,
+			r.TITULO AS TITULO_RECETA,
+			r.DESCRIPCION AS DESCRIPCION_RECETA,
+			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
+			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			tr.ID AS ID_TIPO_RECETA,
+			tr.NOMBRE AS NOMBRE_TIPO_RECETA,
+			i.ID AS ID_INGREDIENTE,
+			i.NOMBRE AS NOMBRE_INGREDIENTE,
+			ir.CANTIDAD AS CANTIDAD_INGREDIENTE,
+			g.ID AS ID_GRUPO,
+			g.NOMBRE AS NOMBRE_GRUPO,
+			g.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM RECETAS r
+		LEFT JOIN USUARIOS u ON u.ID = r.USUARIO 
+		LEFT JOIN TIPO_RECETA tr ON tr.ID = r.TIPO 
+		LEFT JOIN INGREDIENTE_RECETA ir ON ir.RECETA = r.ID
+		LEFT JOIN INGREDIENTES i ON i.ID = ir.INGREDIENTE
+		LEFT JOIN GRUPO_INGREDIENTE g ON i.GRUPO = g.ID
+		WHERE tr.ID = #{idTipoReceta}
+	</select>
+	
+	<insert id="saveReceta">
+	<selectKey order="BEFORE" keyProperty="id" resultType="int">
+		SELECT AUTO_INCREMENT 
+		FROM information_schema.TABLES 
+		WHERE TABLE_NAME = 'RECETAS'
+	</selectKey>
+		INSERT INTO RECETAS (TITULO, DESCRIPCION, INSTRUCCIONES, USUARIO, TIPO) VALUES (#{titulo},#{descripcion},#{instrucciones},#{usuario.id},#{tipoReceta.id})
+	</insert>
+	
+	<update id="updateReceta">
+	    UPDATE RECETAS SET 
+			TITULO = #{titulo}, 
+			DESCRIPCION = #{descripcion}, 
+			INSTRUCCIONES = #{instrucciones}, 
+			USUARIO = #{usuario.id}, 
+			TIPO = #{tipo.id}
+		WHERE ID=#{idReceta}
+	</update>
+	
+	<update id="deleteReceta">
+	    UPDATE RECETAS SET 
+			USUARIO = NULL,
+			PUBLICADA = 0 
+		WHERE ID=#{idReceta}
+	</update>
+	
+	<update id="publicarReceta">
+	    UPDATE RECETAS SET 
+			PUBLICADA = 1
+		WHERE ID = #{idReceta}
+	</update>
+	
+	<update id="despublicarReceta">
+	    UPDATE RECETAS SET 
+			PUBLICADA = 0
+		WHERE ID=#{idReceta}
+	</update>
+	
+	<select id="getIngredientesReceta" resultMap="ingrediente">
+		SELECT i.ID AS ID_INGREDIENTE,
+			i.NOMBRE AS NOMBRE_INGREDIENTE,
+			ir.CANTIDAD AS CANTIDAD_INGREDIENTE,
+			gi.ID AS ID_GRUPO,
+			gi.NOMBRE AS NOMBRE_GRUPO,
+			gi.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM INGREDIENTE_RECETA ir
+		LEFT JOIN INGREDIENTES i ON i.ID = ir.INGREDIENTE 
+		LEFT JOIN GRUPO_INGREDIENTE gi ON gi.ID = i.GRUPO
+		WHERE RECETA = #{idReceta}
+	</select>
+	
+	<insert id="saveIngredientesReceta">
+		INSERT INTO INGREDIENTE_RECETA (INGREDIENTE,RECETA,CANTIDAD) values
+		<foreach collection="ingredientes" item="element" index="index" open="(" separator="),("  close=")">
+		  #{element.id},#{idReceta},#{element.cantidad} 
+		</foreach>
+	</insert>
+	
+	<insert id="saveIngredienteReceta">
+		INSERT INTO INGREDIENTE_RECETA (INGREDIENTE, RECETA, CANTIDAD) VALUES (#{ingrediente.id},#{idReceta},#{ingrediente.cantidad})
+	</insert>
+
+	<delete id="deleteIngredienteReceta">
+		DELETE FROM INGREDIENTE_RECETA WHERE INGREDIENTE = #{idIngrediente} AND RECETA = #{idReceta}
+	</delete>
+	
+	<insert id="saveLike">
+		INSERT INTO LIKE_RECETA (USUARIO, RECETA) VALUES (#{idUsuario},#{idReceta})
+	</insert>
+
+	<delete id="deleteLike">
+		DELETE FROM LIKE_RECETA WHERE USUARIO = #{idUsuario} AND RECETA = #{idReceta}
+	</delete>
+</mapper>

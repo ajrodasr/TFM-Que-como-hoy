@@ -56,19 +56,6 @@ export class IngredienteComponent implements OnInit {
     });
   }
 
-  getIngrediente(): void {
-    const idIngrediente = this.activatedRoute.snapshot.params.idIngrediente;
-    this.ingredienteService.getIngredientesById(idIngrediente).subscribe(
-      (data) => {
-        this.ingrediente = data;
-        console.log(data);
-      },
-      (err) => {
-        this.mensaje = err.mensaje;
-      }
-    );
-  }
-
   onUpdateIngrediente(): void {
     this.ingrediente.nombre = this.nombre.value;
     this.ingrediente.grupo.id = this.idGrupo.value;

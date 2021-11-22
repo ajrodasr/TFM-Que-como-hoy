@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { CambiarPassword } from '../models/cambiar-password';
 import { EmailPassword } from '../models/email-password';
 import { JwtDto } from '../models/jwt-dto';
@@ -9,7 +10,7 @@ import { LoginUsuario } from '../models/login-usuario';
 import { NuevoUsuario } from '../models/nuevo-usuario';
 
 const TOKEN_KEY = 'AuthToken';
-const BACK_URL = 'http://localhost:8080/';
+const BACK_URL = environment.APIEndpoint;
 
 @Injectable({
   providedIn: 'root',

@@ -25,7 +25,7 @@ public interface RecetaRepository {
 	void deleteIngredienteReceta(int idReceta, int idIngrediente);
 	
 	int getLikesByIdReceta(int idReceta);
-	
+	List<Integer> getLikesByUsuario(String idUsuario);
 	void saveLike(String idUsuario, int idReceta);
 	void deleteLike(String idUsuario, int idReceta);
 }

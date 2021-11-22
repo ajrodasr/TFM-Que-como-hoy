@@ -220,6 +220,12 @@
 		DELETE FROM INGREDIENTE_RECETA WHERE INGREDIENTE = #{idIngrediente} AND RECETA = #{idReceta}
 	</delete>
 	
+	<select id="getLikesByUsuario" resultType="Integer">
+		SELECT RECETA
+		FROM LIKE_RECETA
+		WHERE USUARIO = #{idUsuario}
+	</select>
+	
 	<insert id="saveLike">
 		INSERT INTO LIKE_RECETA (USUARIO, RECETA) VALUES (#{idUsuario},#{idReceta})
 	</insert>

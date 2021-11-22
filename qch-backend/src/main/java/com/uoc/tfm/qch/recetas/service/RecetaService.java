@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.uoc.tfm.qch.recetas.domain.Receta;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
 
 @Service
@@ -18,8 +19,8 @@ public class RecetaService {
 	@Autowired
 	RecetaRepository recetaRepository;
 	
-	public RecetaDTO getRecetaById(int idReceta) {
-		Receta receta = recetaRepository.getRecetaById(idReceta);
+	public RecetaDTO getRecetaById(String idReceta) {
+		Receta receta = recetaRepository.getRecetaById(Integer.valueOf(idReceta));
 		RecetaDTO dto = new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getDescripcion(), receta.getInstrucciones(), receta.getUsuario(), receta.getFechaCreacion(), receta.getLikes(), receta.getTipoReceta(), receta.getIngredientes());
 		return dto;
 	}
@@ -54,32 +55,36 @@ public class RecetaService {
 		recetaRepository.updateReceta(rec);
 	}
 	
-	public void deleteReceta(int idReceta) {
-		recetaRepository.deleteReceta(idReceta);
+	public void deleteReceta(String idReceta) {
+		recetaRepository.deleteReceta(Integer.valueOf(idReceta));
 	}
 	
-	public void publicarReceta(int idReceta) {
-		recetaRepository.publicarReceta(idReceta);
+	public void publicarReceta(String idReceta) {
+		recetaRepository.publicarReceta(Integer.valueOf(idReceta));
 	}
 	
-	public void despublicarReceta(int idReceta) {
-		recetaRepository.despublicarReceta(idReceta);
+	public void despublicarReceta(String idReceta) {
+		recetaRepository.despublicarReceta(Integer.valueOf(idReceta));
 	}
 	
-	public void saveIngredienteReceta(int idReceta, IngredienteRecetaDTO ingrediente) {
-		recetaRepository.saveIngredienteReceta(idReceta, ingrediente);
+	public void saveIngredienteReceta(String idReceta, IngredienteRecetaDTO ingrediente) {
+		recetaRepository.saveIngredienteReceta(Integer.valueOf(idReceta), ingrediente);
 	}
 	
-	public void deleteIngredienteReceta(int idReceta, int idIngrediente) {
-		recetaRepository.deleteIngredienteReceta(idReceta, idIngrediente);
+	public void deleteIngredienteReceta(String idReceta, String idIngrediente) {
+		recetaRepository.deleteIngredienteReceta(Integer.valueOf(idReceta), Integer.valueOf(idReceta));
 	}
 	
-	public void saveLike(String idUsuario, int idReceta) {
-		recetaRepository.saveLike(idUsuario, idReceta);
+	public List<Integer> getLikesByUsuario(String idUsuario){
+		return recetaRepository.getLikesByUsuario(idUsuario);
 	}
 	
-	public void deleteLike(String idUsuario, int idReceta) {
-		recetaRepository.deleteLike(idUsuario, idReceta);
+	public void saveLike(LikeRecetaDTO like) {
+		recetaRepository.saveLike(like.getIdUsuario(), Integer.parseInt(like.getIdReceta()));
+	}
+	
+	public void deleteLike(LikeRecetaDTO like) {
+		recetaRepository.deleteLike(like.getIdUsuario(), Integer.parseInt(like.getIdReceta()));
 	}
 	
 }

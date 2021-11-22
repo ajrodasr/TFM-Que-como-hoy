@@ -1,10 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { CambiarPasswordPerfil } from '../models/cambiar-password-perfil';
 import { PerfilUsuario } from '../models/perfil-usuario';
 
-const BACK_URL = 'http://localhost:8080/';
+const BACK_URL = environment.APIEndpoint;
 
 @Injectable({
   providedIn: 'root',

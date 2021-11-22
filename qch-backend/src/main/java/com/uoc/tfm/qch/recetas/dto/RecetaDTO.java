@@ -12,7 +12,7 @@ public class RecetaDTO {
 	private LocalDateTime fechaCreacion;
 	private UsuarioRecetaDTO usuario;
 	private TipoRecetaDTO tipoReceta;
-	List<IngredienteRecetaDTO> ingredientes;
+	private List<IngredienteRecetaDTO> ingredientes;
 	private List<String> likes;
 	
 	public RecetaDTO() {}

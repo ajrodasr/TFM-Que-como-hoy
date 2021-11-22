@@ -1,0 +1,53 @@
+<div class="container p-5">
+  <h1>Recetas</h1>
+  <div
+    *ngIf="recetas && likes"
+    class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 mt-3"
+  >
+    <div *ngFor="let receta of recetas" class="card p-0 m-1">
+      <a [routerLink]="['/receta', receta.id]"
+        ><img
+          src="./assets/images/recetas/terneraVerduras.jpg"
+          class="card-img-top"
+          alt="terneraVerduras"
+      /></a>
+      <div class="card-body">
+        <h5 class="card-title">
+          <a [routerLink]="['/receta', receta.id]">{{ receta.titulo }}</a>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          {{ receta.tipoReceta.nombre }}
+        </h6>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          {{ receta.descripcion }}
+        </p>
+      </div>
+      <div class="card-body">
+        <ng-template [ngIf]="like(receta.id)" [ngIfElse]="notLike">
+          <button
+            (click)="onDislike(receta.id)"
+            class="btn btn-block text-danger"
+            title="Dislike"
+          >
+            <i class="fas fa-heart"></i>
+          </button>
+        </ng-template>
+
+        <ng-template #notLike>
+          <button
+            (click)="onLike(receta.id)"
+            class="btn btn-block text-danger"
+            title="Like"
+          >
+            <i class="far fa-heart"></i>
+          </button>
+        </ng-template>
+        <small *ngIf="receta.likes.length > 0">
+          Le gusta a {{ receta.likes.length }} personas</small
+        >
+      </div>
+    </div>
+  </div>
+</div>

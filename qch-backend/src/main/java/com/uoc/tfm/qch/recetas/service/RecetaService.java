@@ -21,7 +21,7 @@ public class RecetaService {
 	
 	public RecetaDTO getRecetaById(String idReceta) {
 		Receta receta = recetaRepository.getRecetaById(Integer.valueOf(idReceta));
-		RecetaDTO dto = new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getDescripcion(), receta.getInstrucciones(), receta.getUsuario(), receta.getFechaCreacion(), receta.getLikes(), receta.getTipoReceta(), receta.getIngredientes());
+		RecetaDTO dto = new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes());
 		return dto;
 	}
 	
@@ -29,7 +29,16 @@ public class RecetaService {
 		List<Receta> recetas = recetaRepository.getRecetas();
 		List<RecetaDTO> dto = new ArrayList<RecetaDTO>();
 		for (Receta receta : recetas) {
-			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getDescripcion(), receta.getInstrucciones(), receta.getUsuario(), receta.getFechaCreacion(), receta.getLikes(), receta.getTipoReceta(), receta.getIngredientes()));
+			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes()));
+		}
+		return dto;
+	}
+	
+	public List<RecetaDTO> getRecetasByUsuario(String idUsuario){
+		List<Receta> recetas = recetaRepository.getRecetasByUsuario(idUsuario);
+		List<RecetaDTO> dto = new ArrayList<RecetaDTO>();
+		for (Receta receta : recetas) {
+			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes()));
 		}
 		return dto;
 	}
@@ -38,20 +47,20 @@ public class RecetaService {
 		List<Receta> recetas = recetaRepository.getRecetasPublicadas();
 		List<RecetaDTO> dto = new ArrayList<RecetaDTO>();
 		for (Receta receta : recetas) {
-			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getDescripcion(), receta.getInstrucciones(), receta.getUsuario(), receta.getFechaCreacion(), receta.getLikes(), receta.getTipoReceta(), receta.getIngredientes()));
+			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes()));
 		}
 		return dto;
 	}
 	
 	@Transactional
 	public void saveReceta(RecetaDTO receta) {
-		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getDescripcion(), receta.getInstrucciones(), receta.getUsuario(), receta.getFechaCreacion(), receta.getLikes(), receta.getTipoReceta(), receta.getIngredientes());
+		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes());
 		recetaRepository.saveReceta(rec);
 		recetaRepository.saveIngredientesReceta(rec.getId(), rec.getIngredientes());
 	}
 	
 	public void updateReceta(RecetaDTO receta) {
-		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getDescripcion(), receta.getInstrucciones(), receta.getUsuario(), receta.getFechaCreacion(), receta.getLikes(), receta.getTipoReceta(), receta.getIngredientes());
+		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes());
 		recetaRepository.updateReceta(rec);
 	}
 	

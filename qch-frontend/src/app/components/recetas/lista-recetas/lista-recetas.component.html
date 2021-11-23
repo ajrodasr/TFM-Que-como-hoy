@@ -1,52 +1,96 @@
+<style>
+  .center-cropped {
+    height: 200px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+</style>
 <div class="container p-5">
-  <h1>Recetas</h1>
+  <h1>{{ titulo }}</h1>
   <div
     *ngIf="recetas && likes"
-    class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 mt-3"
+    class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3"
   >
-    <div *ngFor="let receta of recetas" class="card p-0 m-1">
-      <a [routerLink]="['/receta', receta.id]"
-        ><img
-          src="./assets/images/recetas/terneraVerduras.jpg"
-          class="card-img-top"
-          alt="terneraVerduras"
-      /></a>
-      <div class="card-body">
-        <h5 class="card-title">
-          <a [routerLink]="['/receta', receta.id]">{{ receta.titulo }}</a>
-        </h5>
-        <h6 class="card-subtitle mb-2 text-muted">
-          {{ receta.tipoReceta.nombre }}
-        </h6>
-      </div>
-      <div class="card-body">
-        <p class="card-text">
-          {{ receta.descripcion }}
-        </p>
-      </div>
-      <div class="card-body">
-        <ng-template [ngIf]="like(receta.id)" [ngIfElse]="notLike">
-          <button
-            (click)="onDislike(receta.id)"
-            class="btn btn-block text-danger"
-            title="Dislike"
-          >
-            <i class="fas fa-heart"></i>
-          </button>
-        </ng-template>
+    <div *ngFor="let receta of recetas" class="p-1">
+      <div class="card p-0">
+        <a
+          [routerLink]="['/receta', receta.id]"
+          class="center-cropped"
+          [style]="
+            'background-image: url(./assets/images/recetas/' +
+            receta.imagen +
+            '), url(./assets/images/recetas/default.jpg)'
+          "
+        ></a>
+        <div class="card-body">
+          <h5 class="card-title">
+            <a [routerLink]="['/receta', receta.id]">{{ receta.titulo }}</a>
+          </h5>
+          <div class="row">
+            <div class="col-6">
+              <small class="text-muted">{{ receta.usuario.id }}</small>
+            </div>
+            <div class="col-6 text-end">
+              <small class="badge bg-secondary">{{
+                receta.tipoReceta.nombre
+              }}</small>
+            </div>
+          </div>
+        </div>
 
-        <ng-template #notLike>
-          <button
-            (click)="onLike(receta.id)"
-            class="btn btn-block text-danger"
-            title="Like"
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-4" title="Minutos de elaboración">
+              <i class="far fa-clock"></i>
+              {{ receta.tiempo }}
+            </div>
+            <div class="col-4" title="Comensales">
+              <i class="fas fa-male"></i> {{ receta.comensales }}
+            </div>
+            <div class="col-4">
+              <i
+                *ngIf="receta.dificultad === 'DIFICIL'"
+                class="text-danger fas fa-thermometer-three-quarters"
+                title="Dificultad: alta"
+              ></i>
+              <i
+                *ngIf="receta.dificultad === 'MEDIO'"
+                title="Dificultad: media"
+                class="text-warning fas fa-thermometer-half"
+              ></i>
+              <i
+                *ngIf="receta.dificultad === 'FACIL'"
+                class="text-success fas fa-thermometer-quarter"
+                title="Dificultad: baja"
+              ></i>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <ng-template [ngIf]="like(receta.id)" [ngIfElse]="notLike">
+            <button
+              (click)="onDislike(receta.id)"
+              class="btn btn-block text-danger"
+              title="Dislike"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </ng-template>
+
+          <ng-template #notLike>
+            <button
+              (click)="onLike(receta.id)"
+              class="btn btn-block text-danger"
+              title="Like"
+            >
+              <i class="far fa-heart"></i>
+            </button>
+          </ng-template>
+          <small *ngIf="receta.likes.length > 0">
+            Le gusta a {{ receta.likes.length }} personas</small
           >
-            <i class="far fa-heart"></i>
-          </button>
-        </ng-template>
-        <small *ngIf="receta.likes.length > 0">
-          Le gusta a {{ receta.likes.length }} personas</small
-        >
+        </div>
       </div>
     </div>
   </div>

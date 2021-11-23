@@ -23,6 +23,13 @@ export class RecetaService {
     );
   }
 
+  public getRecetasByUsuario(idUsuario: string): Observable<Receta[]> {
+    const param = new HttpParams().append('idUsuario', idUsuario);
+    return this.http.get<Receta[]>(BACK_URL + 'api/recetas/usuario', {
+      params: param,
+    });
+  }
+
   public getLikesUsuario(idUsuario: string): Observable<number[]> {
     const param = new HttpParams().append('idUsuario', idUsuario);
     return this.http.get<number[]>(BACK_URL + 'api/recetas/likes-usuario', {

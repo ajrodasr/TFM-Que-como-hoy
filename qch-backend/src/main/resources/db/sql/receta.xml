@@ -5,9 +5,12 @@
 	<resultMap id="receta" type="com.uoc.tfm.qch.recetas.domain.Receta">
 		<id column="ID_RECETA" property="id" />
 		<result column="TITULO_RECETA" property="titulo" />
-		<result column="DESCRIPCION_RECETA" property="descripcion" />
+		<result column="IMAGEN_RECETA" property="imagen" />
 		<result column="INSTRUCCIONES_RECETA" property="instrucciones" />
 		<result column="FECHA_CREACION_RECETA" property="fechaCreacion" />
+		<result column="TIEMPO_RECETA" property="tiempo" />
+		<result column="COMENSALES_RECETA" property="comensales" />
+		<result column="DIFICULTAD_RECETA" property="dificultad" />
 		<association property="usuario" javaType="com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO">
 			<id column="ID_USUARIO" property="id" />
 			<result column="NOMBRE_USUARIO" property="nombre" />
@@ -44,9 +47,12 @@
 	<select id="getRecetaById" resultMap="receta">
 		SELECT r.ID AS ID_RECETA,
 			r.TITULO AS TITULO_RECETA,
-			r.DESCRIPCION AS DESCRIPCION_RECETA,
+			r.IMAGEN AS IMAGEN_RECETA,
 			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
 			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			r.TIEMPO AS TIEMPO_RECETA,
+			r.COMENSALES AS COMENSALES_RECETA,
+			r.DIFICULTAD AS DIFICULTAD_RECETA,
 			lr.USUARIO AS LIKES_RECETA,
 			u.ID AS ID_USUARIO,
 			u.NOMBRE AS NOMBRE_USUARIO,
@@ -73,9 +79,12 @@
 	<select id="getRecetas" resultMap="receta">
 		SELECT r.ID AS ID_RECETA,
 			r.TITULO AS TITULO_RECETA,
-			r.DESCRIPCION AS DESCRIPCION_RECETA,
+			r.IMAGEN AS IMAGEN_RECETA,
 			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
 			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			r.TIEMPO AS TIEMPO_RECETA,
+			r.COMENSALES AS COMENSALES_RECETA,
+			r.DIFICULTAD AS DIFICULTAD_RECETA,
 			lr.USUARIO AS LIKES_RECETA,
 			u.ID AS ID_USUARIO,
 			u.NOMBRE AS NOMBRE_USUARIO,
@@ -101,9 +110,12 @@
 	<select id="getRecetasPublicadas" resultMap="receta">
 		SELECT r.ID AS ID_RECETA,
 			r.TITULO AS TITULO_RECETA,
-			r.DESCRIPCION AS DESCRIPCION_RECETA,
+			r.IMAGEN AS IMAGEN_RECETA,
 			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
 			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			r.TIEMPO AS TIEMPO_RECETA,
+			r.COMENSALES AS COMENSALES_RECETA,
+			r.DIFICULTAD AS DIFICULTAD_RECETA,
 			lr.USUARIO AS LIKES_RECETA,
 			u.ID AS ID_USUARIO,
 			u.NOMBRE AS NOMBRE_USUARIO,
@@ -130,9 +142,13 @@
 	<select id="getRecetasByTipo" resultMap="receta">
 		SELECT r.ID AS ID_RECETA,
 			r.TITULO AS TITULO_RECETA,
-			r.DESCRIPCION AS DESCRIPCION_RECETA,
+			r.IMAGEN AS IMAGEN_RECETA,
 			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
 			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			r.TIEMPO AS TIEMPO_RECETA,
+			r.COMENSALES AS COMENSALES_RECETA,
+			r.DIFICULTAD AS DIFICULTAD_RECETA,
+			lr.USUARIO AS LIKES_RECETA,
 			u.ID AS ID_USUARIO,
 			u.NOMBRE AS NOMBRE_USUARIO,
 			u.APELLIDO1 AS APELLIDO1_USUARIO,
@@ -146,6 +162,7 @@
 			g.NOMBRE AS NOMBRE_GRUPO,
 			g.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
 		FROM RECETAS r
+		LEFT JOIN LIKE_RECETA lr ON lr.RECETA = r.ID
 		LEFT JOIN USUARIOS u ON u.ID = r.USUARIO 
 		LEFT JOIN TIPO_RECETA tr ON tr.ID = r.TIPO 
 		LEFT JOIN INGREDIENTE_RECETA ir ON ir.RECETA = r.ID
@@ -154,20 +171,55 @@
 		WHERE tr.ID = #{idTipoReceta}
 	</select>
 	
+	<select id="getRecetasByUsuario" resultMap="receta">
+		SELECT r.ID AS ID_RECETA,
+			r.TITULO AS TITULO_RECETA,
+			r.IMAGEN AS IMAGEN_RECETA,
+			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
+			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			r.TIEMPO AS TIEMPO_RECETA,
+			r.COMENSALES AS COMENSALES_RECETA,
+			r.DIFICULTAD AS DIFICULTAD_RECETA,
+			lr.USUARIO AS LIKES_RECETA,
+			u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			tr.ID AS ID_TIPO_RECETA,
+			tr.NOMBRE AS NOMBRE_TIPO_RECETA,
+			i.ID AS ID_INGREDIENTE,
+			i.NOMBRE AS NOMBRE_INGREDIENTE,
+			ir.CANTIDAD AS CANTIDAD_INGREDIENTE,
+			g.ID AS ID_GRUPO,
+			g.NOMBRE AS NOMBRE_GRUPO,
+			g.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM RECETAS r
+		LEFT JOIN LIKE_RECETA lr ON lr.RECETA = r.ID
+		LEFT JOIN USUARIOS u ON u.ID = r.USUARIO 
+		LEFT JOIN TIPO_RECETA tr ON tr.ID = r.TIPO 
+		LEFT JOIN INGREDIENTE_RECETA ir ON ir.RECETA = r.ID
+		LEFT JOIN INGREDIENTES i ON i.ID = ir.INGREDIENTE
+		LEFT JOIN GRUPO_INGREDIENTE g ON i.GRUPO = g.ID
+		WHERE r.USUARIO = #{idUsuario}
+	</select>
+	
 	<insert id="saveReceta">
 	<selectKey order="BEFORE" keyProperty="id" resultType="int">
 		SELECT AUTO_INCREMENT 
 		FROM information_schema.TABLES 
 		WHERE TABLE_NAME = 'RECETAS'
 	</selectKey>
-		INSERT INTO RECETAS (TITULO, DESCRIPCION, INSTRUCCIONES, USUARIO, TIPO) VALUES (#{titulo},#{descripcion},#{instrucciones},#{usuario.id},#{tipoReceta.id})
+		INSERT INTO RECETAS (TITULO, INSTRUCCIONES, USUARIO, TIPO, IMAGEN, TIEMPO, COMENSALES, DIFICULTAD) VALUES (#{titulo},#{instrucciones},#{usuario.id},#{tipoReceta.id},#{imagen},#{tiempo},#{comensales},#{dificultad})
 	</insert>
 	
 	<update id="updateReceta">
 	    UPDATE RECETAS SET 
 			TITULO = #{titulo}, 
-			DESCRIPCION = #{descripcion}, 
-			INSTRUCCIONES = #{instrucciones}, 
+			IMAGEN = #{imagen},
+			INSTRUCCIONES = #{instrucciones},
+			TIEMPO = #{tiempo},
+			COMENSALES = #{comensales},
+			DIFICULTAD = #{dificultad}, 
 			USUARIO = #{usuario.id}, 
 			TIPO = #{tipo.id}
 		WHERE ID=#{idReceta}

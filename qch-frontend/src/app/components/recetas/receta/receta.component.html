@@ -2,19 +2,23 @@
   <div class="row">
     <img
       class="mt-3 mb-3"
-      src="./assets/images/recetas/terneraVerduras.jpg"
+      [src]="'./assets/images/recetas/' + receta.imagen"
+      onerror="this.src='./assets/images/recetas/default.jpg'"
       alt="terneraVerduras"
     />
   </div>
   <div class="row mt-3 mb-3">
     <h1>{{ receta.titulo }}</h1>
-    <small class="col-1 badge bg-secondary">{{
-      receta.tipoReceta.nombre
-    }}</small>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-muted">{{ receta.usuario.id }}</span>
+      </div>
+      <div class="col-6 text-end">
+        <small class="badge bg-secondary">{{ receta.tipoReceta.nombre }}</small>
+      </div>
+    </div>
   </div>
-  <div class="row mt-3 mb-3">
-    <p>{{ receta.descripcion }}</p>
-  </div>
+
   <div class="row mt-3 mb-3">
     <div class="col-lg-3 bg-light p-3">
       <h4>Ingredientes</h4>
@@ -31,6 +35,58 @@
       </ul>
       <h6>Recomendado</h6>
       <p>{{ getRecomendacion() }}</p>
+      <div class="row">
+        <div class="col-4" title="Minutos de elaboración">
+          <i class="far fa-clock"></i>
+          {{ receta.tiempo }}
+        </div>
+        <div class="col-4" title="Comensales">
+          <i class="fas fa-male"></i> {{ receta.comensales }}
+        </div>
+        <div class="col-4">
+          <i
+            *ngIf="receta.dificultad === 'DIFICIL'"
+            class="text-danger fas fa-thermometer-three-quarters"
+            title="Dificultad: alta"
+          ></i>
+          <i
+            *ngIf="receta.dificultad === 'MEDIO'"
+            title="Dificultad: media"
+            class="text-warning fas fa-thermometer-half"
+          ></i>
+          <i
+            *ngIf="receta.dificultad === 'FACIL'"
+            class="text-success fas fa-thermometer-quarter"
+            title="Dificultad: baja"
+          ></i>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <ng-template [ngIf]="like()" [ngIfElse]="notLike">
+            <button
+              (click)="onDislike()"
+              class="btn btn-block text-danger"
+              title="Dislike"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </ng-template>
+
+          <ng-template #notLike>
+            <button
+              (click)="onLike()"
+              class="btn btn-block text-danger"
+              title="Like"
+            >
+              <i class="far fa-heart"></i>
+            </button>
+          </ng-template>
+          <small *ngIf="receta.likes.length > 0">
+            Le gusta a {{ receta.likes.length }} personas</small
+          >
+        </div>
+      </div>
     </div>
     <div class="col-lg-9 p-3">
       <h4>Instrucciones</h4>

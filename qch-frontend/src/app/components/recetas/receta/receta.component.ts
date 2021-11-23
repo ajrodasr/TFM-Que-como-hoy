@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LikeReceta } from 'src/app/models/like-receta';
 import { Receta } from 'src/app/models/receta';
+import { AuthService } from 'src/app/services/auth.service';
 import { RecetaService } from 'src/app/services/receta.service';
 
 @Component({
@@ -10,14 +12,17 @@ import { RecetaService } from 'src/app/services/receta.service';
 })
 export class RecetaComponent implements OnInit {
   receta: Receta;
+  idUsuario: string;
 
   constructor(
     private recetaService: RecetaService,
+    private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.idUsuario = this.authService.getUsername();
     const idReceta = this.activatedRoute.snapshot.params.idReceta;
     this.recetaService.getReceta(idReceta).subscribe(
       (receta) => {
@@ -38,8 +43,28 @@ export class RecetaComponent implements OnInit {
           : racionesSemana;
     });
     if (racionesSemana === 7) {
-      return 'Un día a la semana perfectamente.';
+      return 'Un día a la semana perfectamente';
     }
     return racionesSemana + ' días a la semana como máximo';
+  }
+
+  like(): boolean {
+    return this.receta.likes.includes(this.idUsuario);
+  }
+
+  onLike(): void {
+    const like = new LikeReceta(this.receta.id, this.idUsuario);
+    this.recetaService.like(like).subscribe((data) => {
+      this.receta.likes.push(this.idUsuario);
+    });
+  }
+
+  onDislike(): void {
+    const like = new LikeReceta(this.receta.id, this.idUsuario);
+    this.recetaService.dislike(like).subscribe((data) => {
+      this.receta.likes = this.receta.likes.filter(
+        (element) => element !== this.idUsuario
+      );
+    });
   }
 }

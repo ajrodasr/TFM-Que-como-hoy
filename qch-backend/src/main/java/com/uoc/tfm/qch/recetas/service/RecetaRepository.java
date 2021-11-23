@@ -13,6 +13,7 @@ public interface RecetaRepository {
 	List<Receta> getRecetas();
 	List<Receta> getRecetasPublicadas();
 	List<Receta> getRecetasByTipo(int idTipoReceta);
+	List<Receta> getRecetasByUsuario(String idUsuario);
 	void saveReceta(Receta receta);
 	void publicarReceta(int idReceta);
 	void despublicarReceta(int idReceta);

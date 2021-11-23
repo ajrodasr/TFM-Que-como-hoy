@@ -39,6 +39,12 @@ public class RecetaController {
 		return new ResponseEntity<List<RecetaDTO>>(recetas, HttpStatus.OK);
 	}
 	
+	@GetMapping("usuario")
+	public ResponseEntity<List<RecetaDTO>> getRecetasByUsuario(@RequestParam String idUsuario) {
+		List<RecetaDTO> recetas = recetaService.getRecetasByUsuario(idUsuario);
+		return new ResponseEntity<List<RecetaDTO>>(recetas, HttpStatus.OK);
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("receta")
 	public ResponseEntity<RecetaDTO> getRecetaById(@RequestParam String idReceta) {

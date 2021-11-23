@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { element } from 'protractor';
 import { LikeReceta } from 'src/app/models/like-receta';
 import { Receta } from 'src/app/models/receta';
 import { AuthService } from 'src/app/services/auth.service';
 import { RecetaService } from 'src/app/services/receta.service';
 
 @Component({
-  selector: 'app-lista-recetas',
-  templateUrl: './lista-recetas.component.html',
-  styleUrls: ['./lista-recetas.component.css'],
+  selector: 'app-mis-recetas',
+  templateUrl: '../lista-recetas/lista-recetas.component.html',
+  styleUrls: ['./mis-recetas.component.css'],
 })
-export class ListaRecetasComponent implements OnInit {
-  titulo = 'Recetas';
+export class MisRecetasComponent implements OnInit {
+  titulo = 'Mis recetas';
   recetas: Receta[];
   likes: number[];
 
@@ -26,9 +25,11 @@ export class ListaRecetasComponent implements OnInit {
   ngOnInit(): void {
     this.idUsuario = this.authService.getUsername();
 
-    this.recetaService.getAllRecetas().subscribe((recetas) => {
-      this.recetas = recetas;
-    });
+    this.recetaService
+      .getRecetasByUsuario(this.idUsuario)
+      .subscribe((recetas) => {
+        this.recetas = recetas;
+      });
 
     this.recetaService.getLikesUsuario(this.idUsuario).subscribe((likes) => {
       this.likes = likes;

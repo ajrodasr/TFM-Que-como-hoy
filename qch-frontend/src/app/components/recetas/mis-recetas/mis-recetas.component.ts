@@ -6,11 +6,10 @@ import { RecetaService } from 'src/app/services/receta.service';
 
 @Component({
   selector: 'app-mis-recetas',
-  templateUrl: '../lista-recetas/lista-recetas.component.html',
+  templateUrl: './mis-recetas.component.html',
   styleUrls: ['./mis-recetas.component.css'],
 })
 export class MisRecetasComponent implements OnInit {
-  titulo = 'Mis recetas';
   recetas: Receta[];
   likes: number[];
 
@@ -29,6 +28,7 @@ export class MisRecetasComponent implements OnInit {
       .getRecetasByUsuario(this.idUsuario)
       .subscribe((recetas) => {
         this.recetas = recetas;
+        console.log(this.recetas);
       });
 
     this.recetaService.getLikesUsuario(this.idUsuario).subscribe((likes) => {
@@ -40,41 +40,45 @@ export class MisRecetasComponent implements OnInit {
     return this.likes.includes(id);
   }
 
+  publicada(id: number): boolean {
+    return this.recetas.find((receta) => (receta.id = id)).publicada;
+  }
+
   onLike(idReceta: number): void {
     const like = new LikeReceta(idReceta, this.idUsuario);
-    this.recetaService.like(like).subscribe(
-      (data) => {
-        this.likes.push(idReceta);
-        this.recetas.forEach((receta) => {
-          if (receta.id === idReceta) {
-            receta.likes.push(this.idUsuario);
-          }
-        });
-      },
-      (err) => {
-        this.mensaje = err.error;
-        console.log(err);
-      }
-    );
+    this.recetaService.like(like).subscribe((data) => {
+      this.likes.push(idReceta);
+      this.recetas.forEach((receta) => {
+        if (receta.id === idReceta) {
+          receta.likes.push(this.idUsuario);
+        }
+      });
+    });
   }
 
   onDislike(idReceta: number): void {
     const like = new LikeReceta(idReceta, this.idUsuario);
-    this.recetaService.dislike(like).subscribe(
-      (data) => {
-        this.likes = this.likes.filter((id) => id !== idReceta);
-        this.recetas.forEach((receta) => {
-          if (receta.id === idReceta) {
-            receta.likes = receta.likes.filter(
-              (usuarioReceta) => usuarioReceta !== this.idUsuario
-            );
-          }
-        });
-      },
-      (err) => {
-        this.mensaje = err.error;
-        console.log(err);
-      }
-    );
+    this.recetaService.dislike(like).subscribe((data) => {
+      this.likes = this.likes.filter((id) => id !== idReceta);
+      this.recetas.forEach((receta) => {
+        if (receta.id === idReceta) {
+          receta.likes = receta.likes.filter(
+            (usuarioReceta) => usuarioReceta !== this.idUsuario
+          );
+        }
+      });
+    });
+  }
+
+  onPublicar(idReceta: number): void {
+    this.recetaService.publicar(idReceta).subscribe((data) => {
+      this.recetas.find((receta) => receta.id === idReceta).publicada = true;
+    });
+  }
+
+  onDespublicar(idReceta: number): void {
+    this.recetaService.despublicar(idReceta).subscribe((data) => {
+      this.recetas.find((receta) => receta.id === idReceta).publicada = false;
+    });
   }
 }

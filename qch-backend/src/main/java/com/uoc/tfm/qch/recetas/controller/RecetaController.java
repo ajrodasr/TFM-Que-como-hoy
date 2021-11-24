@@ -47,7 +47,7 @@ public class RecetaController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("receta")
-	public ResponseEntity<RecetaDTO> getRecetaById(@RequestParam String idReceta) {
+	public ResponseEntity<RecetaDTO> getRecetaById(@RequestParam int idReceta) {
 		RecetaDTO receta = recetaService.getRecetaById(idReceta);
 		if(receta == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
@@ -67,7 +67,7 @@ public class RecetaController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("publicar")
-	public ResponseEntity<?> publicarReceta(@RequestParam String idReceta) {
+	public ResponseEntity<?> publicarReceta(@RequestParam int idReceta) {
 		RecetaDTO dto = recetaService.getRecetaById(idReceta);
 		if(dto == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
@@ -78,7 +78,7 @@ public class RecetaController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("despublicar")
-	public ResponseEntity despublicarReceta(@RequestParam String idReceta) {
+	public ResponseEntity despublicarReceta(@RequestParam int idReceta) {
 		RecetaDTO dto = recetaService.getRecetaById(idReceta);
 		if(dto == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
@@ -90,7 +90,7 @@ public class RecetaController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("editar")
 	public ResponseEntity<?> updateReceta(@RequestBody RecetaDTO receta) {
-		RecetaDTO dto = recetaService.getRecetaById(String.valueOf(receta.getId()));
+		RecetaDTO dto = recetaService.getRecetaById(receta.getId());
 		if(dto == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
@@ -100,7 +100,7 @@ public class RecetaController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("eliminar")
-	public ResponseEntity<?> updateReceta(@RequestParam String idReceta) {
+	public ResponseEntity<?> updateReceta(@RequestParam int idReceta) {
 		RecetaDTO dto = recetaService.getRecetaById(idReceta);
 		if(dto == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
@@ -111,7 +111,7 @@ public class RecetaController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("anade-ingrediente")
-	public ResponseEntity<?> saveIngredienteReceta(@RequestParam String idReceta, @RequestBody IngredienteRecetaDTO ingrediente) {
+	public ResponseEntity<?> saveIngredienteReceta(@RequestParam int idReceta, @RequestBody IngredienteRecetaDTO ingrediente) {
 		RecetaDTO dto = recetaService.getRecetaById(idReceta);
 		if(dto == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
@@ -122,7 +122,7 @@ public class RecetaController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("quita-ingrediente")
-	public ResponseEntity<?> deleteIngredienteReceta(@RequestParam String idReceta, @RequestParam String idIngrediente) {
+	public ResponseEntity<?> deleteIngredienteReceta(@RequestParam int idReceta, @RequestParam String idIngrediente) {
 		RecetaDTO dto = recetaService.getRecetaById(idReceta);
 		if(dto == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);

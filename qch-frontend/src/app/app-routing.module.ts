@@ -10,6 +10,7 @@ import { LoginComponent } from './components/login/login.component';
 import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuario.component';
 import { ListaRecetasComponent } from './components/recetas/lista-recetas/lista-recetas.component';
 import { MisRecetasComponent } from './components/recetas/mis-recetas/mis-recetas.component';
+import { NuevaRecetaComponent } from './components/recetas/nueva-receta/nueva-receta.component';
 import { RecetaComponent } from './components/recetas/receta/receta.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -57,6 +58,11 @@ const routes: Routes = [
   {
     path: 'receta/:idReceta',
     component: RecetaComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'recetas/nueva',
+    component: NuevaRecetaComponent,
     canActivate: [AuthGuard],
   },
   {

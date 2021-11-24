@@ -2,21 +2,21 @@ package com.uoc.tfm.qch.recetas.dto;
 
 public class LikeRecetaDTO {
 	
-	private String idReceta;
+	private int idReceta;
 	private String idUsuario;
 	
 	public LikeRecetaDTO() {}
 
-	public LikeRecetaDTO(String idReceta, String idUsuario) {
+	public LikeRecetaDTO(int idReceta, String idUsuario) {
 		this.idReceta = idReceta;
 		this.idUsuario = idUsuario;
 	}
 
-	public String getIdReceta() {
+	public int getIdReceta() {
 		return idReceta;
 	}
 
-	public void setIdReceta(String idReceta) {
+	public void setIdReceta(int idReceta) {
 		this.idReceta = idReceta;
 	}
 

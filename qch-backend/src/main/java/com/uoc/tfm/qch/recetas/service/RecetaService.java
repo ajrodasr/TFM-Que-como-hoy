@@ -19,9 +19,9 @@ public class RecetaService {
 	@Autowired
 	RecetaRepository recetaRepository;
 	
-	public RecetaDTO getRecetaById(String idReceta) {
-		Receta receta = recetaRepository.getRecetaById(Integer.valueOf(idReceta));
-		RecetaDTO dto = new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes());
+	public RecetaDTO getRecetaById(int idReceta) {
+		Receta receta = recetaRepository.getRecetaById(idReceta);
+		RecetaDTO dto = new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada());
 		return dto;
 	}
 	
@@ -29,7 +29,7 @@ public class RecetaService {
 		List<Receta> recetas = recetaRepository.getRecetas();
 		List<RecetaDTO> dto = new ArrayList<RecetaDTO>();
 		for (Receta receta : recetas) {
-			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes()));
+			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada()));
 		}
 		return dto;
 	}
@@ -38,7 +38,7 @@ public class RecetaService {
 		List<Receta> recetas = recetaRepository.getRecetasByUsuario(idUsuario);
 		List<RecetaDTO> dto = new ArrayList<RecetaDTO>();
 		for (Receta receta : recetas) {
-			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes()));
+			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada()));
 		}
 		return dto;
 	}
@@ -47,40 +47,40 @@ public class RecetaService {
 		List<Receta> recetas = recetaRepository.getRecetasPublicadas();
 		List<RecetaDTO> dto = new ArrayList<RecetaDTO>();
 		for (Receta receta : recetas) {
-			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes()));
+			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada()));
 		}
 		return dto;
 	}
 	
 	@Transactional
 	public void saveReceta(RecetaDTO receta) {
-		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes());
+		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada());
 		recetaRepository.saveReceta(rec);
 		recetaRepository.saveIngredientesReceta(rec.getId(), rec.getIngredientes());
 	}
 	
 	public void updateReceta(RecetaDTO receta) {
-		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes());
+		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada());
 		recetaRepository.updateReceta(rec);
 	}
 	
-	public void deleteReceta(String idReceta) {
+	public void deleteReceta(int idReceta) {
 		recetaRepository.deleteReceta(Integer.valueOf(idReceta));
 	}
 	
-	public void publicarReceta(String idReceta) {
+	public void publicarReceta(int idReceta) {
 		recetaRepository.publicarReceta(Integer.valueOf(idReceta));
 	}
 	
-	public void despublicarReceta(String idReceta) {
+	public void despublicarReceta(int idReceta) {
 		recetaRepository.despublicarReceta(Integer.valueOf(idReceta));
 	}
 	
-	public void saveIngredienteReceta(String idReceta, IngredienteRecetaDTO ingrediente) {
+	public void saveIngredienteReceta(int idReceta, IngredienteRecetaDTO ingrediente) {
 		recetaRepository.saveIngredienteReceta(Integer.valueOf(idReceta), ingrediente);
 	}
 	
-	public void deleteIngredienteReceta(String idReceta, String idIngrediente) {
+	public void deleteIngredienteReceta(int idReceta, String idIngrediente) {
 		recetaRepository.deleteIngredienteReceta(Integer.valueOf(idReceta), Integer.valueOf(idReceta));
 	}
 	
@@ -89,11 +89,11 @@ public class RecetaService {
 	}
 	
 	public void saveLike(LikeRecetaDTO like) {
-		recetaRepository.saveLike(like.getIdUsuario(), Integer.parseInt(like.getIdReceta()));
+		recetaRepository.saveLike(like.getIdUsuario(), like.getIdReceta());
 	}
 	
 	public void deleteLike(LikeRecetaDTO like) {
-		recetaRepository.deleteLike(like.getIdUsuario(), Integer.parseInt(like.getIdReceta()));
+		recetaRepository.deleteLike(like.getIdUsuario(), like.getIdReceta());
 	}
 	
 }

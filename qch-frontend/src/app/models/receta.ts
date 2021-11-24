@@ -15,6 +15,7 @@ export class Receta {
   tipoReceta: TipoReceta;
   ingredientes: Ingrediente[];
   likes: string[];
+  publicada: boolean;
 
   constructor(
     id: number = -1,
@@ -28,7 +29,8 @@ export class Receta {
     usuario: UsuarioReceta = new UsuarioReceta(),
     tipoReceta: TipoReceta = new TipoReceta(),
     ingredientes: Ingrediente[] = [],
-    likes: string[] = []
+    likes: string[] = [],
+    publicada: boolean = false
   ) {
     this.id = id;
     this.titulo = titulo;
@@ -42,5 +44,6 @@ export class Receta {
     this.tipoReceta = tipoReceta;
     this.ingredientes = ingredientes;
     this.likes = likes;
+    this.publicada = publicada;
   }
 }

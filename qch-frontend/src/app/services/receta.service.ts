@@ -30,6 +30,20 @@ export class RecetaService {
     });
   }
 
+  public publicar(id: number): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/recetas/publicar?idReceta=' + id,
+      {}
+    );
+  }
+
+  public despublicar(id: number): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/recetas/despublicar?idReceta=' + id,
+      {}
+    );
+  }
+
   public getLikesUsuario(idUsuario: string): Observable<number[]> {
     const param = new HttpParams().append('idUsuario', idUsuario);
     return this.http.get<number[]>(BACK_URL + 'api/recetas/likes-usuario', {

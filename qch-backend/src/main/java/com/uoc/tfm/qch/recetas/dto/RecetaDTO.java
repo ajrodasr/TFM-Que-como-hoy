@@ -19,12 +19,13 @@ public class RecetaDTO {
 	private UsuarioRecetaDTO usuario;
 	private TipoRecetaDTO tipoReceta;
 	List<IngredienteRecetaDTO> ingredientes;
+	private boolean publicada;
 	
 	public RecetaDTO() {}
 	
 	public RecetaDTO(int id, String titulo, String imagen, String instrucciones,
 			LocalDateTime fechaCreacion, int tiempo, int comensales, Dificultad dificultad, List<String> likes,
-			UsuarioRecetaDTO usuario, TipoRecetaDTO tipoReceta, List<IngredienteRecetaDTO> ingredientes) {
+			UsuarioRecetaDTO usuario, TipoRecetaDTO tipoReceta, List<IngredienteRecetaDTO> ingredientes, boolean publicada) {
 		this.id = id;
 		this.titulo = titulo;
 		this.imagen = imagen;
@@ -37,6 +38,7 @@ public class RecetaDTO {
 		this.usuario = usuario;
 		this.tipoReceta = tipoReceta;
 		this.ingredientes = ingredientes;
+		this.publicada = publicada;
 	}
 
 	public int getId() {
@@ -133,5 +135,13 @@ public class RecetaDTO {
 
 	public void setIngredientes(List<IngredienteRecetaDTO> ingredientes) {
 		this.ingredientes = ingredientes;
+	}
+	
+	public boolean isPublicada() {
+		return publicada;
+	}
+
+	public void setPublicada(boolean publicada) {
+		this.publicada = publicada;
 	}
 }

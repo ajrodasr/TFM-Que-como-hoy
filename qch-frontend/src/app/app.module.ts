@@ -20,6 +20,7 @@ import { ListaRecetasComponent } from './components/recetas/lista-recetas/lista-
 import { RecetaComponent } from './components/recetas/receta/receta.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MisRecetasComponent } from './components/recetas/mis-recetas/mis-recetas.component';
+import { NuevaRecetaComponent } from './components/recetas/nueva-receta/nueva-receta.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { MisRecetasComponent } from './components/recetas/mis-recetas/mis-receta
     RecetaComponent,
     FooterComponent,
     MisRecetasComponent,
+    NuevaRecetaComponent,
   ],
   imports: [
     BrowserModule,

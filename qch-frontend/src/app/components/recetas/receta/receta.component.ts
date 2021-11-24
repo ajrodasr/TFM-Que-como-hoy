@@ -26,7 +26,11 @@ export class RecetaComponent implements OnInit {
     const idReceta = this.activatedRoute.snapshot.params.idReceta;
     this.recetaService.getReceta(idReceta).subscribe(
       (receta) => {
-        this.receta = receta;
+        if (receta.publicada || receta.usuario.id === this.idUsuario) {
+          this.receta = receta;
+        } else {
+          this.router.navigate(['/recetas']);
+        }
       },
       (err) => {
         this.router.navigate(['/recetas']);

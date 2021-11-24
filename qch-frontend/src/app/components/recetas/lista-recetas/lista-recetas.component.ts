@@ -11,7 +11,6 @@ import { RecetaService } from 'src/app/services/receta.service';
   styleUrls: ['./lista-recetas.component.css'],
 })
 export class ListaRecetasComponent implements OnInit {
-  titulo = 'Recetas';
   recetas: Receta[];
   likes: number[];
 
@@ -41,39 +40,27 @@ export class ListaRecetasComponent implements OnInit {
 
   onLike(idReceta: number): void {
     const like = new LikeReceta(idReceta, this.idUsuario);
-    this.recetaService.like(like).subscribe(
-      (data) => {
-        this.likes.push(idReceta);
-        this.recetas.forEach((receta) => {
-          if (receta.id === idReceta) {
-            receta.likes.push(this.idUsuario);
-          }
-        });
-      },
-      (err) => {
-        this.mensaje = err.error;
-        console.log(err);
-      }
-    );
+    this.recetaService.like(like).subscribe((data) => {
+      this.likes.push(idReceta);
+      this.recetas.forEach((receta) => {
+        if (receta.id === idReceta) {
+          receta.likes.push(this.idUsuario);
+        }
+      });
+    });
   }
 
   onDislike(idReceta: number): void {
     const like = new LikeReceta(idReceta, this.idUsuario);
-    this.recetaService.dislike(like).subscribe(
-      (data) => {
-        this.likes = this.likes.filter((id) => id !== idReceta);
-        this.recetas.forEach((receta) => {
-          if (receta.id === idReceta) {
-            receta.likes = receta.likes.filter(
-              (usuarioReceta) => usuarioReceta !== this.idUsuario
-            );
-          }
-        });
-      },
-      (err) => {
-        this.mensaje = err.error;
-        console.log(err);
-      }
-    );
+    this.recetaService.dislike(like).subscribe((data) => {
+      this.likes = this.likes.filter((id) => id !== idReceta);
+      this.recetas.forEach((receta) => {
+        if (receta.id === idReceta) {
+          receta.likes = receta.likes.filter(
+            (usuarioReceta) => usuarioReceta !== this.idUsuario
+          );
+        }
+      });
+    });
   }
 }

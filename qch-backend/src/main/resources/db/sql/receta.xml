@@ -45,6 +45,11 @@
 		<result column="RACIONES_SEMANA_GRUPO" property="racionesSemana" />
 	</resultMap>
 	
+	<resultMap id="tiporeceta" type="com.uoc.tfm.qch.recetas.domain.TipoReceta">
+		<id column="ID_TIPO_RECETA" property="id" />
+		<result column="NOMBRE_TIPO_RECETA" property="nombre" />
+	</resultMap>
+	
 	<select id="getRecetaById" resultMap="receta">
 		SELECT r.ID AS ID_RECETA,
 			r.TITULO AS TITULO_RECETA,
@@ -291,4 +296,11 @@
 	<delete id="deleteLike">
 		DELETE FROM LIKE_RECETA WHERE USUARIO = #{idUsuario} AND RECETA = #{idReceta}
 	</delete>
+	
+	<select id="getTiposReceta" resultMap="tiporeceta">
+		SELECT ID AS ID_TIPO_RECETA,
+			NOMBRE AS NOMBRE_TIPO_RECETA
+		FROM TIPO_RECETA
+		ORDER BY ID
+	</select>
 </mapper>

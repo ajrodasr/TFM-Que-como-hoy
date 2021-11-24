@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO;
 import com.uoc.tfm.qch.recetas.service.RecetaService;
 
 @RestController
@@ -157,5 +158,11 @@ public class RecetaController {
 		} 
 		recetaService.deleteLike(like);
 		return new ResponseEntity(Collections.singletonMap("Mensaje", "Like eliminado correctamente"), HttpStatus.OK);
+	}
+	
+	@GetMapping("tipos")
+	public ResponseEntity<List<TipoRecetaDTO>> getTiposReceta() {
+		List<TipoRecetaDTO> tipos = recetaService.getTiposReceta();
+		return new ResponseEntity<List<TipoRecetaDTO>>(tipos, HttpStatus.OK);
 	}
 }

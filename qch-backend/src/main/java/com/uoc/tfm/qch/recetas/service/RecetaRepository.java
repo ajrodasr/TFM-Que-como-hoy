@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.uoc.tfm.qch.recetas.domain.Receta;
+import com.uoc.tfm.qch.recetas.domain.TipoReceta;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 
 @Mapper
@@ -29,4 +30,6 @@ public interface RecetaRepository {
 	List<Integer> getLikesByUsuario(String idUsuario);
 	void saveLike(String idUsuario, int idReceta);
 	void deleteLike(String idUsuario, int idReceta);
+	
+	List<TipoReceta> getTiposReceta();
 }

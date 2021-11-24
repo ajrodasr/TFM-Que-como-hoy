@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uoc.tfm.qch.recetas.domain.Receta;
+import com.uoc.tfm.qch.recetas.domain.TipoReceta;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO;
 
 @Service
 @Transactional
@@ -94,6 +96,15 @@ public class RecetaService {
 	
 	public void deleteLike(LikeRecetaDTO like) {
 		recetaRepository.deleteLike(like.getIdUsuario(), like.getIdReceta());
+	}
+	
+	public List<TipoRecetaDTO> getTiposReceta(){
+		List<TipoReceta> tiposReceta = recetaRepository.getTiposReceta();
+		List<TipoRecetaDTO> tipos = new ArrayList<TipoRecetaDTO>();
+		for (TipoReceta tipoReceta : tiposReceta) {
+			tipos.add(new TipoRecetaDTO(tipoReceta));
+		}
+		return tipos;
 	}
 	
 }

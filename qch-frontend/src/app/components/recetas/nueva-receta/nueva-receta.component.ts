@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { Receta } from 'src/app/models/receta';
 import { RecetaService } from 'src/app/services/receta.service';
 
@@ -15,6 +16,57 @@ import { RecetaService } from 'src/app/services/receta.service';
   styleUrls: ['./nueva-receta.component.css'],
 })
 export class NuevaRecetaComponent implements OnInit {
+  config: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '15rem',
+    minHeight: '5rem',
+    placeholder: 'Escriba aqui las instrucciones...',
+    translate: 'no',
+    defaultParagraphSeparator: 'p',
+    toolbarHiddenButtons: [
+      [
+        'undo',
+        'redo',
+        'strikeThrough',
+        'subscript',
+        'superscript',
+        'indent',
+        'outdent',
+        'heading',
+        'fontName',
+      ],
+      [
+        'fontSize',
+        'textColor',
+        'backgroundColor',
+        'customClasses',
+        'link',
+        'unlink',
+        'insertImage',
+        'insertVideo',
+        'insertHorizontalRule',
+        'removeFormat',
+        'toggleEditorMode',
+      ],
+    ],
+    customClasses: [
+      {
+        name: 'quote',
+        class: 'quote',
+      },
+      {
+        name: 'redText',
+        class: 'redText',
+      },
+      {
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
+      },
+    ],
+  };
+
   nuevoReceta = new Receta();
 
   titulo: FormControl;
@@ -40,9 +92,9 @@ export class NuevaRecetaComponent implements OnInit {
     this.instrucciones = new FormControl('', Validators.required);
     this.tipoReceta = new FormControl('', Validators.required);
     this.imagen = new FormControl('', Validators.required);
-    this.tiempo = new FormControl('', [Validators.required]);
-    this.comensales = new FormControl('', [Validators.required]);
-    this.dificultad = new FormControl('', [Validators.required]);
+    this.tiempo = new FormControl('', Validators.required);
+    this.comensales = new FormControl('', Validators.required);
+    this.dificultad = new FormControl('', Validators.required);
 
     this.recetaForm = this.formBuilder.group({
       titulo: this.titulo,
@@ -56,6 +108,6 @@ export class NuevaRecetaComponent implements OnInit {
   }
 
   onNuevaReceta(): void {
-    console.log('hecho');
+    console.log(this.instrucciones.value);
   }
 }

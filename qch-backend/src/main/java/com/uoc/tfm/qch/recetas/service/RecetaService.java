@@ -58,7 +58,9 @@ public class RecetaService {
 	public void saveReceta(RecetaDTO receta) {
 		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada());
 		recetaRepository.saveReceta(rec);
-		recetaRepository.saveIngredientesReceta(rec.getId(), rec.getIngredientes());
+		if(!rec.getIngredientes().isEmpty()) {
+			recetaRepository.saveIngredientesReceta(rec.getId(), rec.getIngredientes());
+		}
 	}
 	
 	public void updateReceta(RecetaDTO receta) {

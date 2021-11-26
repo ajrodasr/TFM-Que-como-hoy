@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { delay } from 'rxjs/operators';
 import { LikeReceta } from 'src/app/models/like-receta';
 import { Receta } from 'src/app/models/receta';
 import { AuthService } from 'src/app/services/auth.service';
 import { RecetaService } from 'src/app/services/receta.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-mis-recetas',
@@ -10,6 +12,8 @@ import { RecetaService } from 'src/app/services/receta.service';
   styleUrls: ['./mis-recetas.component.css'],
 })
 export class MisRecetasComponent implements OnInit {
+  BACK_URL_IMAGES = environment.APIEndpoint + 'images/';
+
   recetas: Receta[];
   likes: number[];
 
@@ -28,7 +32,6 @@ export class MisRecetasComponent implements OnInit {
       .getRecetasByUsuario(this.idUsuario)
       .subscribe((recetas) => {
         this.recetas = recetas;
-        console.log(this.recetas);
       });
 
     this.recetaService.getLikesUsuario(this.idUsuario).subscribe((likes) => {
@@ -38,10 +41,6 @@ export class MisRecetasComponent implements OnInit {
 
   like(id: number): boolean {
     return this.likes.includes(id);
-  }
-
-  publicada(id: number): boolean {
-    return this.recetas.find((receta) => (receta.id = id)).publicada;
   }
 
   onLike(idReceta: number): void {

@@ -26,6 +26,12 @@
         >
       </span>
     </div>
+    <select class="selectpicker" data-live-search="true">
+      <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
+      <option data-tokens="mustard">Burger, Shake and a Smile</option>
+      <option data-tokens="frosting">Sugar, Spice and all things nice</option>
+    </select>
+
     <div class="form-group m-3">
       <label for="instrucciones">Instrucciones</label>
 
@@ -51,12 +57,12 @@
     </div>
     <div class="form-group m-3">
       <label for="tipoReceta">Tipo de receta</label>
-      <input
-        type="text"
-        name="tipoReceta"
-        class="form-control"
-        [formControl]="tipoReceta"
-      />
+      <select class="form-select" formControlName="tipoReceta">
+        <option [value]="null" disabled>Selecciona tipo de receta...</option>
+        <option *ngFor="let tipo of tiposReceta" [value]="tipo.id">
+          {{ tipo.nombre }}
+        </option>
+      </select>
       <span
         class="text-danger"
         *ngIf="
@@ -75,11 +81,14 @@
     <div class="form-group m-3">
       <label for="imagen">Imagen</label>
       <input
-        type="text"
+        type="file"
         name="imagen"
         class="form-control"
         [formControl]="imagen"
+        (change)="onChange($event)"
+        accept="image/png, image/gif, image/jpeg"
       />
+      <img *ngIf="miniatura" [src]="miniatura" alt="miniatura" class="w-25" />
       <span
         class="text-danger"
         *ngIf="
@@ -141,12 +150,12 @@
     </div>
     <div class="form-group m-3">
       <label for="dificultad">Dificultad</label>
-      <input
-        type="number"
-        name="dificultad"
-        class="form-control"
-        [formControl]="dificultad"
-      />
+      <select class="form-select" formControlName="dificultad">
+        <option [value]="null" disabled>Selecciona dificultad...</option>
+        <option [value]="'FACIL'">Facil</option>
+        <option [value]="'MEDIO'">Dificultad media</option>
+        <option [value]="'DIFICIL'">Dificil</option>
+      </select>
       <span
         class="text-danger"
         *ngIf="
@@ -162,14 +171,16 @@
         >
       </span>
     </div>
-
+    <div *ngIf="error" class="alert alert-danger" role="alert">
+      {{ mensaje }}
+    </div>
     <div class="form-group m-3">
       <button
         class="btn btn-success btn-block w-100"
         [disabled]="!recetaForm.valid"
         type="submit"
       >
-        Registrarse
+        Crear receta
       </button>
     </div>
   </form>

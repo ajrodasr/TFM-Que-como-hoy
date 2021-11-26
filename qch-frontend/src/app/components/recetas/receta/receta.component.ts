@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LikeReceta } from 'src/app/models/like-receta';
 import { Receta } from 'src/app/models/receta';
+import { TipoReceta } from 'src/app/models/tipo-receta';
 import { AuthService } from 'src/app/services/auth.service';
 import { RecetaService } from 'src/app/services/receta.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-receta',
@@ -11,6 +13,7 @@ import { RecetaService } from 'src/app/services/receta.service';
   styleUrls: ['./receta.component.css'],
 })
 export class RecetaComponent implements OnInit {
+  BACK_URL_IMAGES = environment.APIEndpoint + 'images/';
   receta: Receta;
   idUsuario: string;
 
@@ -70,5 +73,9 @@ export class RecetaComponent implements OnInit {
         (element) => element !== this.idUsuario
       );
     });
+  }
+
+  handleMissingImage(event): void {
+    event.target.src = this.BACK_URL_IMAGES + 'default.jpg';
   }
 }

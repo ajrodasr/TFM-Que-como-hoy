@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LikeReceta } from '../models/like-receta';
 import { Receta } from '../models/receta';
+import { TipoReceta } from '../models/tipo-receta';
 
 const BACK_URL = environment.APIEndpoint;
 
@@ -28,6 +29,14 @@ export class RecetaService {
     return this.http.get<Receta[]>(BACK_URL + 'api/recetas/usuario', {
       params: param,
     });
+  }
+
+  public getTiposReceta(): Observable<TipoReceta[]> {
+    return this.http.get<TipoReceta[]>(BACK_URL + 'api/recetas/tipos');
+  }
+
+  public nuevaReceta(receta: Receta): Observable<any> {
+    return this.http.post<any>(BACK_URL + 'api/recetas/nueva', receta);
   }
 
   public publicar(id: number): Observable<any> {
@@ -57,5 +66,9 @@ export class RecetaService {
 
   public dislike(like: LikeReceta): Observable<any> {
     return this.http.post<any>(BACK_URL + 'api/recetas/dislike', like);
+  }
+
+  public uploadImage(image: FormData): Observable<any> {
+    return this.http.post<any>(BACK_URL + 'api/recetas/upload-image', image);
   }
 }

@@ -8,13 +8,13 @@
 </style>
 <div class="container p-5">
   <div class="row">
-    <div class="col-6">
+    <div class="col-12 col-sm-8">
       <h1>Mis recetas</h1>
     </div>
-    <div class="col-6 text-end">
+    <div class="col-12 col-sm-4 text-end">
       <button
         type="button"
-        class="btn-primary"
+        class="btn-primary w-100"
         routerLink="/recetas/nueva"
         title="Añadir receta"
       >
@@ -32,9 +32,12 @@
           [routerLink]="['/receta', receta.id]"
           class="center-cropped"
           [style]="
-            'background-image: url(./assets/images/recetas/' +
+            'background-image: url(' +
+            BACK_URL_IMAGES +
             receta.imagen +
-            '), url(./assets/images/recetas/default.jpg)'
+            '), url(' +
+            BACK_URL_IMAGES +
+            'default.jpg)'
           "
         ></a>
         <div class="card-body">
@@ -104,10 +107,7 @@
             <small> Le gusta a {{ receta.likes.length }} personas</small>
           </div>
           <div class="col-3 text-center">
-            <ng-template
-              [ngIf]="publicada(receta.id)"
-              [ngIfElse]="notPublicada"
-            >
+            <ng-template [ngIf]="receta.publicada" [ngIfElse]="notPublicada">
               <button
                 (click)="onDespublicar(receta.id)"
                 class="btn btn-block text-success"

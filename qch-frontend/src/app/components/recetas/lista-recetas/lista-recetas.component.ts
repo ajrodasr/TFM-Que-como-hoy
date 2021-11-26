@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { element } from 'protractor';
 import { LikeReceta } from 'src/app/models/like-receta';
 import { Receta } from 'src/app/models/receta';
 import { AuthService } from 'src/app/services/auth.service';
 import { RecetaService } from 'src/app/services/receta.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-lista-recetas',
@@ -11,8 +11,12 @@ import { RecetaService } from 'src/app/services/receta.service';
   styleUrls: ['./lista-recetas.component.css'],
 })
 export class ListaRecetasComponent implements OnInit {
+  BACK_URL_IMAGES = environment.APIEndpoint + 'images/';
+
   recetas: Receta[];
   likes: number[];
+
+  loading = true;
 
   mensaje: string;
   idUsuario: string;

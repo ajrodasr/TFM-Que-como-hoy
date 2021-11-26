@@ -7,6 +7,8 @@ public class UsuarioRecetaDTO {
 	private String apellido1;
 	private String apellido2;
 	
+	public UsuarioRecetaDTO() {}
+	
 	public UsuarioRecetaDTO(String id, String nombre, String apellido1, String apellido2) {
 		this.id = id;
 		this.nombre = nombre;

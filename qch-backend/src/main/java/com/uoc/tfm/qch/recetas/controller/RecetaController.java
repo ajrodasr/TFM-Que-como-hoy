@@ -1,5 +1,8 @@
 package com.uoc.tfm.qch.recetas.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
@@ -164,5 +168,13 @@ public class RecetaController {
 	public ResponseEntity<List<TipoRecetaDTO>> getTiposReceta() {
 		List<TipoRecetaDTO> tipos = recetaService.getTiposReceta();
 		return new ResponseEntity<List<TipoRecetaDTO>>(tipos, HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("upload-image")
+	public ResponseEntity<?> uplaodImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
+		Path path = Path.of("src", "main","resources","static","images",file.getOriginalFilename());
+		Files.write(path, file.getBytes());
+		return new ResponseEntity(Collections.singletonMap("Mensaje", "Imagen subida correctamente"), HttpStatus.OK);
 	}
 }

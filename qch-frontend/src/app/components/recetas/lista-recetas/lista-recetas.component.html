@@ -18,9 +18,12 @@
           [routerLink]="['/receta', receta.id]"
           class="center-cropped"
           [style]="
-            'background-image: url(./assets/images/recetas/' +
+            'background-image: url(' +
+            BACK_URL_IMAGES +
             receta.imagen +
-            '), url(./assets/images/recetas/default.jpg)'
+            '), url(' +
+            BACK_URL_IMAGES +
+            'default.jpg)'
           "
         ></a>
         <div class="card-body">

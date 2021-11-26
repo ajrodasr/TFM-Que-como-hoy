@@ -232,8 +232,8 @@
 			COMENSALES = #{comensales},
 			DIFICULTAD = #{dificultad}, 
 			USUARIO = #{usuario.id}, 
-			TIPO = #{tipo.id}
-		WHERE ID=#{idReceta}
+			TIPO = #{tipoReceta.id}
+		WHERE ID=#{id}
 	</update>
 	
 	<update id="deleteReceta">

@@ -2,8 +2,8 @@
   <div class="row">
     <img
       class="mt-3 mb-3"
-      [src]="'./assets/images/recetas/' + receta.imagen"
-      onerror="this.src='./assets/images/recetas/default.jpg'"
+      [src]="BACK_URL_IMAGES + receta.imagen"
+      (error)="handleMissingImage($event)"
       alt="terneraVerduras"
     />
   </div>
@@ -82,9 +82,7 @@
               <i class="far fa-heart"></i>
             </button>
           </ng-template>
-          <small *ngIf="receta.likes.length > 0">
-            Le gusta a {{ receta.likes.length }} personas</small
-          >
+          <small> Le gusta a {{ receta.likes.length }} personas</small>
         </div>
       </div>
     </div>

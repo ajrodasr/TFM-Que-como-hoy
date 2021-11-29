@@ -48,6 +48,12 @@ public class IngredienteController {
 		return new ResponseEntity<IngredienteDTO>(ingrediente, HttpStatus.OK);
 	}
 	
+	@GetMapping("/filter")
+	public ResponseEntity<List<IngredienteDTO>> getIngredientesFilterNombre(@RequestParam String term) {
+		List<IngredienteDTO> ingredientes = ingredienteService.getIngredientesFilterNombre(term);
+		return new ResponseEntity<List<IngredienteDTO>>(ingredientes, HttpStatus.OK);
+	}
+	
 	@GetMapping("/grupos")
 	public ResponseEntity<List<GrupoIngrediente>> getGrupos() {
 		List<GrupoIngrediente> grupos = new ArrayList<GrupoIngrediente>();

@@ -26,12 +26,63 @@
         >
       </span>
     </div>
-    <select class="selectpicker" data-live-search="true">
-      <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
-      <option data-tokens="mustard">Burger, Shake and a Smile</option>
-      <option data-tokens="frosting">Sugar, Spice and all things nice</option>
-    </select>
+    <div class="form-group m-3">
+      <form [formGroup]="ingredienteForm" (ngSubmit)="onNuevoIngrediente()">
+        <label for="ingredientes">Ingredientes</label>
+        <input type="hidden" [formControl]="id" />
+        <div class="row">
+          <div class="col-4">
+            <input
+              #searchBox
+              type="text"
+              name="ingrediente"
+              class="form-control input-lg"
+              autocomplete="off"
+              (input)="filter(searchBox.value)"
+              [formControl]="nombre"
+            />
 
+            <div *ngIf="ingredientes" class="list-group">
+              <button
+                *ngFor="let ingrediente of ingredientes"
+                (click)="onSelectIngrediente(ingrediente)"
+                type="button"
+                class="list-group-item list-group-item-action"
+                aria-current="true"
+              >
+                {{ ingrediente.nombre }}
+              </button>
+            </div>
+          </div>
+          <div class="col-4">
+            <input
+              type="text"
+              class="form-control input-lg"
+              [formControl]="cantidad"
+            />
+          </div>
+          <div class="col-4">
+            <button [disabled]="!ingredienteForm.valid" class="btn btn-primary">
+              Añadir
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="ingredientesSeleccionados.length !== 0" class="form-group m-3">
+      <div class="btn-group-vertical">
+        <button
+          *ngFor="let ingredienteSeleccionado of ingredientesSeleccionados"
+          class="btn btn-light"
+          title="Eliminar ingrediente"
+          type="button"
+          (click)="eliminarIngrediente(ingredienteSeleccionado.id)"
+        >
+          {{ ingredienteSeleccionado.nombre }} -
+          {{ ingredienteSeleccionado.cantidad }} <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
     <div class="form-group m-3">
       <label for="instrucciones">Instrucciones</label>
 

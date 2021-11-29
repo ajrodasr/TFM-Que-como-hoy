@@ -30,6 +30,13 @@ export class IngredienteService {
     );
   }
 
+  public getIngredientesFilterNombre(term: string): Observable<Ingrediente[]> {
+    const param = new HttpParams().append('term', term);
+    return this.http.get<Ingrediente[]>(BACK_URL + 'api/ingredientes/filter', {
+      params: param,
+    });
+  }
+
   public getIngredientesByGrupo(idGrupo: number): Observable<Ingrediente[]> {
     const param = new HttpParams().append('idGrupo', idGrupo.toString());
     return this.http.get<Ingrediente[]>(BACK_URL + 'api/ingredientes', {

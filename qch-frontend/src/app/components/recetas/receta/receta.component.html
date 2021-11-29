@@ -29,8 +29,8 @@
       </ul>
       <h6>Contiene</h6>
       <ul>
-        <li *ngFor="let ingrediente of receta.ingredientes">
-          {{ ingrediente.grupo.nombre }}
+        <li *ngFor="let grupo of getContiene()">
+          {{ grupo.nombre }}
         </li>
       </ul>
       <h6>Recomendado</h6>

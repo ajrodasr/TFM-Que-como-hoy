@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GrupoIngrediente } from 'src/app/models/grupo-ingrediente';
 import { LikeReceta } from 'src/app/models/like-receta';
 import { Receta } from 'src/app/models/receta';
-import { TipoReceta } from 'src/app/models/tipo-receta';
 import { AuthService } from 'src/app/services/auth.service';
 import { RecetaService } from 'src/app/services/receta.service';
 import { environment } from 'src/environments/environment';
@@ -53,6 +53,24 @@ export class RecetaComponent implements OnInit {
       return 'Un día a la semana perfectamente';
     }
     return racionesSemana + ' días a la semana como máximo';
+  }
+
+  getContiene(): GrupoIngrediente[] {
+    const gruposId = new Set<number>();
+    this.receta.ingredientes.forEach((ingrediente) => {
+      gruposId.add(ingrediente.grupo.id);
+    });
+
+    const grupos: GrupoIngrediente[] = [];
+
+    this.receta.ingredientes.forEach((ingrediente) => {
+      if (gruposId.has(ingrediente.grupo.id)) {
+        grupos.push(ingrediente.grupo);
+        gruposId.delete(ingrediente.grupo.id);
+      }
+    });
+
+    return grupos;
   }
 
   like(): boolean {

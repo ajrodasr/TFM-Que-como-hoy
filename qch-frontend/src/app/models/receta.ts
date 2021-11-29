@@ -1,4 +1,4 @@
-import { Ingrediente } from './ingrediente';
+import { IngredienteReceta } from './ingrediente-receta';
 import { TipoReceta } from './tipo-receta';
 import { UsuarioReceta } from './usuario-receta';
 
@@ -13,7 +13,7 @@ export class Receta {
   dificultad: string;
   usuario: UsuarioReceta;
   tipoReceta: TipoReceta;
-  ingredientes: Ingrediente[];
+  ingredientes: IngredienteReceta[];
   likes: string[];
   publicada: boolean;
 
@@ -28,7 +28,7 @@ export class Receta {
     dificultad: string = '',
     usuario: UsuarioReceta = new UsuarioReceta(),
     tipoReceta: TipoReceta = new TipoReceta(),
-    ingredientes: Ingrediente[] = [],
+    ingredientes: IngredienteReceta[] = [],
     likes: string[] = [],
     publicada: boolean = false
   ) {

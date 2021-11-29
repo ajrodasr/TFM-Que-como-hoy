@@ -7,10 +7,20 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { catchError, mergeMap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  mergeMap,
+  switchMap,
+} from 'rxjs/operators';
+import { Ingrediente } from 'src/app/models/ingrediente';
+import { IngredienteReceta } from 'src/app/models/ingrediente-receta';
 import { Receta } from 'src/app/models/receta';
 import { TipoReceta } from 'src/app/models/tipo-receta';
 import { AuthService } from 'src/app/services/auth.service';
+import { IngredienteService } from 'src/app/services/ingrediente.service';
 import { RecetaService } from 'src/app/services/receta.service';
 
 @Component({
@@ -75,7 +85,10 @@ export class NuevaRecetaComponent implements OnInit {
   tiposReceta: TipoReceta[];
   imageFile: File;
   miniatura: string;
+  ingredientes: Ingrediente[];
+  ingredientesSeleccionados: IngredienteReceta[] = [];
 
+  // Receta
   titulo: FormControl;
   instrucciones: FormControl;
   tipoReceta: FormControl;
@@ -86,12 +99,20 @@ export class NuevaRecetaComponent implements OnInit {
 
   recetaForm: FormGroup;
 
+  // Ingrediente
+  id: FormControl;
+  nombre: FormControl;
+  cantidad: FormControl;
+
+  ingredienteForm: FormGroup;
+
   mensaje = '';
   error = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private recetaService: RecetaService,
+    private ingredienteService: IngredienteService,
     private authService: AuthService,
     private router: Router
   ) {}
@@ -118,6 +139,16 @@ export class NuevaRecetaComponent implements OnInit {
       comensales: this.comensales,
       dificultad: this.dificultad,
     });
+
+    this.id = new FormControl('', Validators.required);
+    this.nombre = new FormControl('', Validators.required);
+    this.cantidad = new FormControl('', Validators.required);
+
+    this.ingredienteForm = this.formBuilder.group({
+      id: this.id,
+      nombre: this.nombre,
+      cantidad: this.cantidad,
+    });
   }
 
   onNuevaReceta(): void {
@@ -133,6 +164,7 @@ export class NuevaRecetaComponent implements OnInit {
     this.nuevaReceta.comensales = this.comensales.value;
     this.nuevaReceta.dificultad = this.dificultad.value;
     this.nuevaReceta.usuario.id = this.idUsuario;
+    this.nuevaReceta.ingredientes = this.ingredientesSeleccionados;
 
     const uploadImageData = new FormData();
     uploadImageData.append(
@@ -172,5 +204,41 @@ export class NuevaRecetaComponent implements OnInit {
       this.miniatura = e.target.result.toString();
     };
     fileReader.readAsDataURL(this.imageFile);
+  }
+
+  filter(term: string): void {
+    if (term.length > 2) {
+      this.ingredienteService
+        .getIngredientesFilterNombre(term)
+        .subscribe((ingredientes) => (this.ingredientes = ingredientes));
+    } else {
+      this.ingredientes = null;
+    }
+    this.id.setValue(null);
+  }
+
+  onSelectIngrediente(ingrediente: Ingrediente): void {
+    this.id.setValue(ingrediente.id);
+    this.nombre.setValue(ingrediente.nombre);
+    this.ingredientes = null;
+  }
+
+  onNuevoIngrediente(): void {
+    this.ingredientesSeleccionados.push(
+      new IngredienteReceta(
+        this.id.value,
+        this.nombre.value,
+        this.cantidad.value
+      )
+    );
+    this.id.setValue(null);
+    this.nombre.setValue(null);
+    this.cantidad.setValue(null);
+  }
+
+  eliminarIngrediente(idIngrediente: number): void {
+    this.ingredientesSeleccionados = this.ingredientesSeleccionados.filter(
+      (ingrediente) => ingrediente.id !== idIngrediente
+    );
   }
 }

@@ -55,6 +55,7 @@ INSERT INTO GRUPO_INGREDIENTE (NOMBRE, RACIONES_SEMANA) VALUES
 ('Fruta', 7),
 ('Frutos secos', 7),
 ('Hortalizas', 7),
+('Huevos', 3),
 ('Leches y derivados', 3),
 ('Legumbres', 7),
 ('Pasta', 4),

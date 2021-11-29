@@ -11,6 +11,7 @@ import com.uoc.tfm.qch.ingredientes.domain.Ingrediente;
 public interface IngredienteRepository {
 	Ingrediente getIngredienteById(int idIngrediente);
 	Ingrediente getIngredienteByNombre(String ingredienteNombre);
+	List<Ingrediente> getIngredientesFilterNombre(String term);
 	List<Ingrediente> getIngredientes();
 	List<Ingrediente> getIngredientesByGrupo(int idGrupo);
 	void saveIngrediente(Ingrediente ingrediente);

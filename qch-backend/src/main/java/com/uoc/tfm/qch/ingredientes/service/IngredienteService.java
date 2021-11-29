@@ -38,6 +38,17 @@ public class IngredienteService {
 		return ingrediente;
 	}
 	
+	public List<IngredienteDTO> getIngredientesFilterNombre(String term){
+		List<Ingrediente> ing = ingredienteRepository.getIngredientesFilterNombre(term);
+		List<IngredienteDTO> ingredientes = new ArrayList<IngredienteDTO>();
+		if(!ing.isEmpty()) {
+			for (Ingrediente ingrediente : ing) {
+				ingredientes.add(new IngredienteDTO(ingrediente.getId(), ingrediente.getNombre(), ingrediente.getGrupo()));
+			}
+		}
+		return ingredientes;
+	}
+	
 	public List<IngredienteDTO> getIngredientesByGrupo(int idGrupo){
 		List<Ingrediente> ing = ingredienteRepository.getIngredientesByGrupo(idGrupo);
 		List<IngredienteDTO> ingredientes = new ArrayList<IngredienteDTO>();

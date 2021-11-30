@@ -117,11 +117,9 @@ export class EditarRecetaComponent implements OnInit {
   ngOnInit(): void {
     const idReceta = this.activatedRoute.snapshot.params.idreceta;
     this.idUsuario = this.authService.getUsername();
-    
     this.recetaService
       .getTiposReceta()
       .subscribe((tipos) => (this.tiposReceta = tipos));
-    
     this.recetaService.getReceta(idReceta).subscribe(receta => {
       this.receta = receta;
       this.titulo = new FormControl(receta.titulo, Validators.required);
@@ -132,7 +130,6 @@ export class EditarRecetaComponent implements OnInit {
       this.comensales = new FormControl(receta.comensales, Validators.required);
       this.dificultad = new FormControl(receta.dificultad, Validators.required);
       this.ingredientesSeleccionados = receta.ingredientes;
-  
       this.recetaForm = this.formBuilder.group({
         titulo: this.titulo,
         instrucciones: this.instrucciones,
@@ -246,6 +243,6 @@ export class EditarRecetaComponent implements OnInit {
       this.ingredientesSeleccionados = this.ingredientesSeleccionados.filter(
         (ingrediente) => ingrediente.id !== idIngrediente
       );
-    })
+    });
   }
 }

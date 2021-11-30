@@ -85,7 +85,7 @@ public class RecetaService {
 	}
 	
 	public void deleteIngredienteReceta(int idReceta, int idIngrediente) {
-		recetaRepository.deleteIngredienteReceta(idReceta, idReceta);
+		recetaRepository.deleteIngredienteReceta(idReceta, idIngrediente);
 	}
 	
 	public List<Integer> getLikesByUsuario(String idUsuario){

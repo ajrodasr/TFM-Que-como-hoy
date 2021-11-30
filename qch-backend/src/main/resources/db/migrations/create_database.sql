@@ -51,6 +51,7 @@ INSERT INTO GRUPO_INGREDIENTE (NOMBRE, RACIONES_SEMANA) VALUES
 ('Carne', 3),
 ('Carne grasa', 2),
 ('Cereales', 7),
+('Dulces', 1),
 ('Especias', 7),
 ('Fruta', 7),
 ('Frutos secos', 7),

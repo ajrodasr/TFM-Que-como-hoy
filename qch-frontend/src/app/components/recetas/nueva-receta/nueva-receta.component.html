@@ -61,9 +61,19 @@
               [formControl]="cantidad"
             />
           </div>
-          <div class="col-4">
+          <div class="col-4 col-lg-2">
             <button [disabled]="!ingredienteForm.valid" class="btn btn-primary">
               Añadir
+            </button>
+          </div>
+          <div class="col-6 col-lg-2 mt-3 mt-lg-0">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-target="#nuevoIngredienteModal"
+            >
+              Crear ingrediente
             </button>
           </div>
         </div>
@@ -235,4 +245,108 @@
       </button>
     </div>
   </form>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="nuevoIngredienteModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="nuevoIngredienteModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form
+        [formGroup]="nuevoIngredienteForm"
+        (ngSubmit)="onCreateIngrediente()"
+      >
+        <div class="modal-header">
+          <h5 class="modal-title" id="nuevoIngredienteModalLongTitle">
+            Nuevo ingrediente
+          </h5>
+        </div>
+
+        <div class="modal-body">
+          <div
+            *ngIf="errorIngrediente && mensajeIngrediente"
+            class="alert alert-danger"
+            role="alert"
+          >
+            {{ mensajeIngrediente }}
+          </div>
+          <div
+            *ngIf="!errorIngrediente && mensajeIngrediente"
+            class="alert alert-success"
+            role="alert"
+          >
+            {{ mensajeIngrediente }}
+          </div>
+
+          <div class="form-group m-3">
+            <label for="idUsuario">Nombre</label>
+            <input
+              type="text"
+              name="nombreIngrediente"
+              class="form-control input-lg"
+              [formControl]="nombreIngrediente"
+            />
+            <span
+              class="text-danger"
+              *ngIf="
+                nuevoIngredienteForm.get('nombreIngrediente').errors &&
+                (nuevoIngredienteForm.get('nombreIngrediente').touched ||
+                  nuevoIngredienteForm.get('nombreIngrediente').dirty)
+              "
+            >
+              <span
+                class="text-danger"
+                *ngIf="
+                  nombreIngrediente.invalid && nombreIngrediente.errors.required
+                "
+                >El campo es obligatorio</span
+              >
+            </span>
+          </div>
+          <div class="form-group m-3">
+            <label for="grupo">Grupo de alimentos</label>
+            <select class="form-select" formControlName="idGrupo">
+              <option [value]="null" disabled>Selecciona grupo...</option>
+              <option *ngFor="let grupo of grupos" [value]="grupo.id">
+                {{ grupo.nombre }}
+              </option>
+            </select>
+            <span
+              class="text-danger"
+              *ngIf="
+                nuevoIngredienteForm.get('idGrupo').errors &&
+                (nuevoIngredienteForm.get('idGrupo').touched ||
+                  nuevoIngredienteForm.get('idGrupo').dirty)
+              "
+            >
+              <span
+                class="text-danger"
+                *ngIf="idGrupo.invalid && idGrupo.errors.required"
+                >El campo es obligatorio</span
+              >
+            </span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            Cancelar
+          </button>
+          <button
+            class="btn btn-success"
+            [disabled]="!nuevoIngredienteForm.valid"
+            type="submit"
+          >
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

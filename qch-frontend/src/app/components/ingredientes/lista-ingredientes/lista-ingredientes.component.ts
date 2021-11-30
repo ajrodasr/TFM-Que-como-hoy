@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Ingrediente } from 'src/app/models/ingrediente';
+import { AuthService } from 'src/app/services/auth.service';
 import { IngredienteService } from 'src/app/services/ingrediente.service';
 
 @Component({
@@ -10,7 +11,10 @@ import { IngredienteService } from 'src/app/services/ingrediente.service';
 export class ListaIngredientesComponent implements OnInit {
   ingredientes: Ingrediente[];
 
-  constructor(private ingredienteService: IngredienteService) {}
+  constructor(
+    private ingredienteService: IngredienteService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.ingredienteService.getAllIngredientes().subscribe(
@@ -22,5 +26,8 @@ export class ListaIngredientesComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 }

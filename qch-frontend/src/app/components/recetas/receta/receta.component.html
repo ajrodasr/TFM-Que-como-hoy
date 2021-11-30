@@ -12,6 +12,35 @@
     <div class="row">
       <div class="col-6">
         <span class="text-muted">{{ receta.usuario.id }}</span>
+        <div *ngIf="miReceta()">
+          <ng-template [ngIf]="receta.publicada" [ngIfElse]="notPublicada">
+            <button
+              (click)="onDespublicar(receta.id)"
+              class="btn btn-block text-success"
+              title="Despublicar"
+            >
+              <i class="fas fa-check-circle"></i>
+            </button>
+          </ng-template>
+
+          <ng-template #notPublicada>
+            <button
+              (click)="onPublicar(receta.id)"
+              class="btn btn-block text-danger"
+              title="Publicar"
+            >
+              <i class="far fa-check-circle"></i>
+            </button>
+          </ng-template>
+          <a
+            btn
+            btn-block
+            text-primary
+            [routerLink]="'/receta/editar/' + receta.id"
+            title="Editar receta"
+            ><i class="fas fa-edit"></i
+          ></a>
+        </div>
       </div>
       <div class="col-6 text-end">
         <small class="badge bg-secondary">{{ receta.tipoReceta.nombre }}</small>
@@ -24,7 +53,7 @@
       <h4>Ingredientes</h4>
       <ul>
         <li *ngFor="let ingrediente of receta.ingredientes">
-          {{ ingrediente.cantidad }} de {{ ingrediente.nombre }}
+          {{ ingrediente.nombre }} - {{ ingrediente.cantidad }}
         </li>
       </ul>
       <h6>Contiene</h6>
@@ -82,7 +111,7 @@
               <i class="far fa-heart"></i>
             </button>
           </ng-template>
-          <small> Le gusta a {{ receta.likes.length }} personas</small>
+          <small>{{ receta.likes.length }} me gusta</small>
         </div>
       </div>
     </div>

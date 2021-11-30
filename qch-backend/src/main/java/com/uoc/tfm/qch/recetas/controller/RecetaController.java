@@ -177,4 +177,18 @@ public class RecetaController {
 		Files.write(path, file.getBytes());
 		return new ResponseEntity(Collections.singletonMap("Mensaje", "Imagen subida correctamente"), HttpStatus.OK);
 	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("delete-image")
+	public ResponseEntity<?> deleteImage(@RequestParam int idReceta) throws IOException {
+		RecetaDTO dto = recetaService.getRecetaById(idReceta);
+		if(dto == null) {
+			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
+		} 
+		Path path = Path.of("src", "main","resources","static","images",dto.getImagen());
+		Files.delete(path);
+		return new ResponseEntity(Collections.singletonMap("Mensaje", "Imagen eliminada correctamente"), HttpStatus.OK);
+	}
+	
+	
 }

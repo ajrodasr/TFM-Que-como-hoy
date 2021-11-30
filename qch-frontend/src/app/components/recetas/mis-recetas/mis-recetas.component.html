@@ -84,7 +84,7 @@
           </div>
         </div>
         <div class="card-body row">
-          <div class="col-9">
+          <div class="col-8">
             <ng-template [ngIf]="like(receta.id)" [ngIfElse]="notLike">
               <button
                 (click)="onDislike(receta.id)"
@@ -104,9 +104,9 @@
                 <i class="far fa-heart"></i>
               </button>
             </ng-template>
-            <small> Le gusta a {{ receta.likes.length }} personas</small>
+            <small> {{ receta.likes.length }} me gusta</small>
           </div>
-          <div class="col-3 text-center">
+          <div class="col-4 text-center">
             <ng-template [ngIf]="receta.publicada" [ngIfElse]="notPublicada">
               <button
                 (click)="onDespublicar(receta.id)"
@@ -126,6 +126,14 @@
                 <i class="far fa-check-circle"></i>
               </button>
             </ng-template>
+            <a
+              btn
+              btn-block
+              text-primary
+              [routerLink]="'/receta/editar/' + receta.id"
+              title="Editar receta"
+              ><i class="fas fa-edit"></i
+            ></a>
           </div>
         </div>
       </div>

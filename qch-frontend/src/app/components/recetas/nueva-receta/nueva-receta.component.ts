@@ -7,10 +7,8 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import {
-  catchError,
-  mergeMap,
-} from 'rxjs/operators';
+import { catchError, mergeMap } from 'rxjs/operators';
+import { GrupoIngrediente } from 'src/app/models/grupo-ingrediente';
 import { Ingrediente } from 'src/app/models/ingrediente';
 import { IngredienteReceta } from 'src/app/models/ingrediente-receta';
 import { Receta } from 'src/app/models/receta';
@@ -102,8 +100,19 @@ export class NuevaRecetaComponent implements OnInit {
 
   ingredienteForm: FormGroup;
 
+  nuevoIngrediente = new Ingrediente();
+  grupos: GrupoIngrediente[];
+
+  nombreIngrediente: FormControl;
+  idGrupo: FormControl;
+
+  nuevoIngredienteForm: FormGroup;
+
   mensaje = '';
   error = false;
+
+  mensajeIngrediente = '';
+  errorIngrediente = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -144,6 +153,18 @@ export class NuevaRecetaComponent implements OnInit {
       id: this.id,
       nombre: this.nombre,
       cantidad: this.cantidad,
+    });
+
+    this.ingredienteService.getGrupos().subscribe((grupos) => {
+      this.grupos = grupos;
+    });
+
+    this.nombreIngrediente = new FormControl('', [Validators.required]);
+    this.idGrupo = new FormControl(null, [Validators.required]);
+
+    this.nuevoIngredienteForm = this.formBuilder.group({
+      nombreIngrediente: this.nombreIngrediente,
+      idGrupo: this.idGrupo,
     });
   }
 
@@ -235,6 +256,24 @@ export class NuevaRecetaComponent implements OnInit {
   eliminarIngrediente(idIngrediente: number): void {
     this.ingredientesSeleccionados = this.ingredientesSeleccionados.filter(
       (ingrediente) => ingrediente.id !== idIngrediente
+    );
+  }
+
+  onCreateIngrediente(): void {
+    this.nuevoIngrediente.nombre = this.nombre.value;
+    this.nuevoIngrediente.grupo.id = this.idGrupo.value;
+
+    this.ingredienteService.nuevoIngrediente(this.nuevoIngrediente).subscribe(
+      (data) => {
+        this.errorIngrediente = false;
+        this.mensajeIngrediente = data.mensaje;
+        this.nombreIngrediente.reset();
+        this.idGrupo.reset();
+      },
+      (err) => {
+        this.errorIngrediente = true;
+        this.mensajeIngrediente = err.error;
+      }
     );
   }
 }

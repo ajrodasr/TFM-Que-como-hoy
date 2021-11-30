@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="col-2">
-          <div class="card-body">
+          <div *ngIf="isAdmin()" class="card-body">
             <a
               class="text-primary"
               [routerLink]="['/ingrediente', ingrediente.id]"

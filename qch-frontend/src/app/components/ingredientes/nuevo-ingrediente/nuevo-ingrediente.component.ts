@@ -25,17 +25,16 @@ export class NuevoIngredienteComponent implements OnInit {
   nuevoIngredienteForm: FormGroup;
 
   mensaje = '';
+  error = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private ingredienteService: IngredienteService,
-    private router: Router
+    private ingredienteService: IngredienteService
   ) {}
 
   ngOnInit(): void {
     this.ingredienteService.getGrupos().subscribe((grupos) => {
       this.grupos = grupos;
-      console.log(grupos);
     });
 
     this.nombre = new FormControl('', [Validators.required]);
@@ -53,9 +52,13 @@ export class NuevoIngredienteComponent implements OnInit {
 
     this.ingredienteService.nuevoIngrediente(this.nuevoIngrediente).subscribe(
       (data) => {
-        this.router.navigate(['/ingredientes']);
+        this.error = false;
+        this.mensaje = data.mensaje;
+        this.nombre.reset();
+        this.idGrupo.reset();
       },
       (err) => {
+        this.error = true;
         this.mensaje = err.error;
         console.log(err);
       }

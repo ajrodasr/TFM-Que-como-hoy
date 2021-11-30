@@ -44,14 +44,28 @@ export class RecetaService {
     return this.http.post<any>(BACK_URL + 'api/recetas/editar', receta);
   }
 
-  public anadeIngrediente(idReceta: number, ingrediente: IngredienteReceta): Observable<any> {
+  public anadeIngrediente(
+    idReceta: number,
+    ingrediente: IngredienteReceta
+  ): Observable<any> {
     return this.http.post<any>(
-      BACK_URL + 'api/recetas/anade-ingrediente?idReceta=' + idReceta, ingrediente);
+      BACK_URL + 'api/recetas/anade-ingrediente?idReceta=' + idReceta,
+      ingrediente
+    );
   }
 
-  public quitaIngrediente(idReceta: number, idIngrediente: number): Observable<any> {
+  public quitaIngrediente(
+    idReceta: number,
+    idIngrediente: number
+  ): Observable<any> {
     return this.http.post<any>(
-      BACK_URL + 'api/recetas/quita-ingrediente?idReceta=' + idReceta + '&idIngrediente=' + idIngrediente, {});
+      BACK_URL +
+        'api/recetas/quita-ingrediente?idReceta=' +
+        idReceta +
+        '&idIngrediente=' +
+        idIngrediente,
+      {}
+    );
   }
 
   public publicar(id: number): Observable<any> {
@@ -85,5 +99,12 @@ export class RecetaService {
 
   public uploadImage(image: FormData): Observable<any> {
     return this.http.post<any>(BACK_URL + 'api/recetas/upload-image', image);
+  }
+
+  public deleteImage(idReceta: number): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/recetas/delete-image?idReceta=' + idReceta,
+      {}
+    );
   }
 }

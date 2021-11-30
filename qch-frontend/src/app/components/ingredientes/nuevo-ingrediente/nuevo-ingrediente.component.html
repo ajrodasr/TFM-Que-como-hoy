@@ -4,7 +4,10 @@
       <h3>Nuevo ingrediente</h3>
     </div>
     <div class="card-body">
-      <div *ngIf="mensaje" class="alert alert-danger" role="alert">
+      <div *ngIf="error && mensaje" class="alert alert-danger" role="alert">
+        {{ mensaje }}
+      </div>
+      <div *ngIf="!error && mensaje" class="alert alert-success" role="alert">
         {{ mensaje }}
       </div>
       <form [formGroup]="nuevoIngredienteForm" (ngSubmit)="onSaveIngrediente()">

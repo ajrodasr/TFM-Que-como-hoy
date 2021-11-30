@@ -93,6 +93,25 @@ export class RecetaComponent implements OnInit {
     });
   }
 
+  onPublicar(idReceta: number): void {
+    this.recetaService.publicar(idReceta).subscribe((data) => {
+      this.receta.publicada = true;
+    });
+  }
+
+  onDespublicar(idReceta: number): void {
+    this.recetaService.despublicar(idReceta).subscribe((data) => {
+      this.receta.publicada = false;
+    });
+  }
+
+  miReceta(): boolean {
+    if (this.idUsuario !== this.receta.usuario.id) {
+      return false;
+    }
+    return true;
+  }
+
   handleMissingImage(event): void {
     event.target.src = this.BACK_URL_IMAGES + 'default.jpg';
   }

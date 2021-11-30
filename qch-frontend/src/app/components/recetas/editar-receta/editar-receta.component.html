@@ -1,239 +1,357 @@
 <div class="container">
-    <h1>Nueva receta</h1>
-    <div *ngIf="mensaje" class="alert alert-danger" role="alert">
-      {{ mensaje }}
-    </div>
-    <form [formGroup]="recetaForm" (ngSubmit)="onEditarReceta()">
-      <div class="form-group m-3">
-        <label for="titulo">Titulo</label>
-        <input
-          type="text"
-          name="titulo"
-          class="form-control input-lg"
-          [formControl]="titulo"
-        />
+  <h1>Nueva receta</h1>
+  <div *ngIf="mensaje" class="alert alert-danger" role="alert">
+    {{ mensaje }}
+  </div>
+  <form
+    *ngIf="receta.id !== -1"
+    [formGroup]="recetaForm"
+    (ngSubmit)="onEditarReceta()"
+  >
+    <div class="form-group m-3">
+      <label for="titulo">Titulo</label>
+      <input
+        type="text"
+        name="titulo"
+        class="form-control input-lg"
+        [formControl]="titulo"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          recetaForm.get('titulo').errors &&
+          (recetaForm.get('titulo').touched || recetaForm.get('titulo').dirty)
+        "
+      >
         <span
           class="text-danger"
-          *ngIf="
-            recetaForm.get('titulo').errors &&
-            (recetaForm.get('titulo').touched || recetaForm.get('titulo').dirty)
-          "
+          *ngIf="titulo.invalid && titulo.errors.required"
+          >El campo es obligatorio</span
         >
-          <span
-            class="text-danger"
-            *ngIf="titulo.invalid && titulo.errors.required"
-            >El campo es obligatorio</span
-          >
-        </span>
-      </div>
-      <div class="form-group m-3">
-        <form [formGroup]="ingredienteForm" (ngSubmit)="onNuevoIngrediente()">
-          <label for="ingredientes">Ingredientes</label>
-          <input type="hidden" [formControl]="id" />
-          <div class="row">
-            <div class="col-4">
-              <input
-                #searchBox
-                type="text"
-                name="ingrediente"
-                class="form-control input-lg"
-                autocomplete="off"
-                (input)="filter(searchBox.value)"
-                [formControl]="nombre"
-              />
-  
-              <div *ngIf="ingredientes" class="list-group">
-                <button
-                  *ngFor="let ingrediente of ingredientes"
-                  (click)="onSelectIngrediente(ingrediente)"
-                  type="button"
-                  class="list-group-item list-group-item-action"
-                  aria-current="true"
-                >
-                  {{ ingrediente.nombre }}
-                </button>
-              </div>
-            </div>
-            <div class="col-4">
-              <input
-                type="text"
-                class="form-control input-lg"
-                [formControl]="cantidad"
-              />
-            </div>
-            <div class="col-4">
-              <button [disabled]="!ingredienteForm.valid" class="btn btn-primary">
-                Añadir
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <form [formGroup]="ingredienteForm" (ngSubmit)="onNuevoIngrediente()">
+        <label for="ingredientes">Ingredientes</label>
+        <input type="hidden" [formControl]="id" />
+        <div class="row">
+          <div class="col-4">
+            <input
+              #searchBox
+              type="text"
+              name="ingrediente"
+              class="form-control input-lg"
+              autocomplete="off"
+              (input)="filter(searchBox.value)"
+              [formControl]="nombre"
+            />
+
+            <div *ngIf="ingredientes" class="list-group">
+              <button
+                *ngFor="let ingrediente of ingredientes"
+                (click)="onSelectIngrediente(ingrediente)"
+                type="button"
+                class="list-group-item list-group-item-action"
+                aria-current="true"
+              >
+                {{ ingrediente.nombre }}
               </button>
             </div>
           </div>
-        </form>
-      </div>
-      <div *ngIf="ingredientesSeleccionados.length !== 0" class="form-group m-3">
-        <div class="btn-group-vertical">
-          <button
-            *ngFor="let ingredienteSeleccionado of ingredientesSeleccionados"
-            class="btn btn-light"
-            title="Eliminar ingrediente"
-            type="button"
-            (click)="eliminarIngrediente(ingredienteSeleccionado.id)"
-          >
-            {{ ingredienteSeleccionado.nombre }} -
-            {{ ingredienteSeleccionado.cantidad }} <i class="fas fa-times"></i>
-          </button>
+          <div class="col-4">
+            <input
+              type="text"
+              class="form-control input-lg"
+              [formControl]="cantidad"
+            />
+          </div>
+          <div class="col-4 col-lg-2">
+            <button [disabled]="!ingredienteForm.valid" class="btn btn-primary">
+              Añadir
+            </button>
+          </div>
+          <div class="col-6 col-lg-2 mt-3 mt-lg-0">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-target="#nuevoIngredienteModal"
+            >
+              Crear ingrediente
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="form-group m-3">
-        <label for="instrucciones">Instrucciones</label>
-  
-        <angular-editor
-          [formControl]="instrucciones"
-          [config]="config"
-        ></angular-editor>
-  
-        <span
-          class="text-danger"
-          *ngIf="
-            recetaForm.get('instrucciones').errors &&
-            (recetaForm.get('instrucciones').touched ||
-              recetaForm.get('instrucciones').dirty)
-          "
-        >
-          <span
-            class="text-danger"
-            *ngIf="instrucciones.invalid && instrucciones.errors.required"
-            >El campo es obligatorio</span
-          >
-        </span>
-      </div>
-      <div class="form-group m-3">
-        <label for="tipoReceta">Tipo de receta</label>
-        <select class="form-select" formControlName="tipoReceta">
-          <option [value]="null" disabled>Selecciona tipo de receta...</option>
-          <option *ngFor="let tipo of tiposReceta" [value]="tipo.id">
-            {{ tipo.nombre }}
-          </option>
-        </select>
-        <span
-          class="text-danger"
-          *ngIf="
-            recetaForm.get('tipoReceta').errors &&
-            (recetaForm.get('tipoReceta').touched ||
-              recetaForm.get('tipoReceta').dirty)
-          "
-        >
-          <span
-            class="text-danger"
-            *ngIf="tipoReceta.invalid && tipoReceta.errors.required"
-            >El campo es obligatorio</span
-          >
-        </span>
-      </div>
-      <div class="form-group m-3">
-        <label for="imagen">Imagen</label>
-        <input
-          type="file"
-          name="imagen"
-          class="form-control"
-          [formControl]="imagen"
-          (change)="onChange($event)"
-          accept="image/png, image/gif, image/jpeg"
-        />
-        <img *ngIf="miniatura" [src]="miniatura" alt="miniatura" class="w-25" />
-        <span
-          class="text-danger"
-          *ngIf="
-            recetaForm.get('imagen').errors &&
-            (recetaForm.get('imagen').touched || recetaForm.get('imagen').dirty)
-          "
-        >
-          <span
-            class="text-danger"
-            *ngIf="imagen.invalid && imagen.errors.required"
-            >El campo es obligatorio</span
-          >
-        </span>
-      </div>
-      <div class="form-group m-3">
-        <label for="tiempo">Tiempo de preparación</label>
-        <input
-          type="number"
-          name="tiempo"
-          class="form-control"
-          [formControl]="tiempo"
-        />
-        <span
-          class="text-danger"
-          *ngIf="
-            recetaForm.get('tiempo').errors &&
-            (recetaForm.get('tiempo').touched || recetaForm.get('tiempo').dirty)
-          "
-        >
-          <span
-            class="text-danger"
-            *ngIf="tiempo.invalid && tiempo.errors.required"
-            >El campo es obligatorio</span
-          >
-        </span>
-      </div>
-      <div class="form-group m-3">
-        <label for="comensales">Comensales</label>
-        <input
-          type="number"
-          name="comensales"
-          class="form-control"
-          [formControl]="comensales"
-        />
-        <span
-          class="text-danger"
-          *ngIf="
-            recetaForm.get('comensales').errors &&
-            (recetaForm.get('comensales').touched ||
-              recetaForm.get('comensales').dirty)
-          "
-        >
-          <span
-            class="text-danger"
-            *ngIf="comensales.invalid && comensales.errors.required"
-            >El campo es obligatorio</span
-          >
-        </span>
-      </div>
-      <div class="form-group m-3">
-        <label for="dificultad">Dificultad</label>
-        <select class="form-select" formControlName="dificultad">
-          <option [value]="null" disabled>Selecciona dificultad...</option>
-          <option [value]="'FACIL'">Facil</option>
-          <option [value]="'MEDIO'">Dificultad media</option>
-          <option [value]="'DIFICIL'">Dificil</option>
-        </select>
-        <span
-          class="text-danger"
-          *ngIf="
-            recetaForm.get('dificultad').errors &&
-            (recetaForm.get('dificultad').touched ||
-              recetaForm.get('dificultad').dirty)
-          "
-        >
-          <span
-            class="text-danger"
-            *ngIf="dificultad.invalid && dificultad.errors.required"
-            >El campo es obligatorio</span
-          >
-        </span>
-      </div>
-      <div *ngIf="error" class="alert alert-danger" role="alert">
-        {{ mensaje }}
-      </div>
-      <div class="form-group m-3">
+      </form>
+    </div>
+    <div *ngIf="ingredientesSeleccionados.length !== 0" class="form-group m-3">
+      <div class="btn-group-vertical">
         <button
-          class="btn btn-success btn-block w-100"
-          [disabled]="!recetaForm.valid"
-          type="submit"
+          *ngFor="let ingredienteSeleccionado of ingredientesSeleccionados"
+          class="btn btn-light text-start"
+          title="Eliminar ingrediente"
+          type="button"
+          (click)="eliminarIngrediente(ingredienteSeleccionado.id)"
         >
-          Crear receta
+          {{ ingredienteSeleccionado.nombre }} -
+          {{ ingredienteSeleccionado.cantidad }}
+          <i class="fas fa-times text-danger"></i>
         </button>
       </div>
-    </form>
+    </div>
+    <div class="form-group m-3">
+      <label for="instrucciones">Instrucciones</label>
+
+      <angular-editor
+        [formControl]="instrucciones"
+        [config]="config"
+      ></angular-editor>
+
+      <span
+        class="text-danger"
+        *ngIf="
+          recetaForm.get('instrucciones').errors &&
+          (recetaForm.get('instrucciones').touched ||
+            recetaForm.get('instrucciones').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="instrucciones.invalid && instrucciones.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <label for="tipoReceta">Tipo de receta</label>
+      <select class="form-select" formControlName="tipoReceta">
+        <option [value]="null" disabled>Selecciona tipo de receta...</option>
+        <option *ngFor="let tipo of tiposReceta" [value]="tipo.id">
+          {{ tipo.nombre }}
+        </option>
+      </select>
+      <span
+        class="text-danger"
+        *ngIf="
+          recetaForm.get('tipoReceta').errors &&
+          (recetaForm.get('tipoReceta').touched ||
+            recetaForm.get('tipoReceta').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="tipoReceta.invalid && tipoReceta.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <label for="imagen">Imagen</label>
+      <input
+        type="file"
+        name="imagen"
+        class="form-control"
+        [formControl]="imagen"
+        (change)="onChange($event)"
+        accept="image/png, image/gif, image/jpeg"
+      />
+      <img *ngIf="miniatura" [src]="miniatura" alt="miniatura" class="w-25" />
+      <span
+        class="text-danger"
+        *ngIf="
+          recetaForm.get('imagen').errors &&
+          (recetaForm.get('imagen').touched || recetaForm.get('imagen').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="imagen.invalid && imagen.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <label for="tiempo">Tiempo de preparación</label>
+      <input
+        type="number"
+        name="tiempo"
+        class="form-control"
+        [formControl]="tiempo"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          recetaForm.get('tiempo').errors &&
+          (recetaForm.get('tiempo').touched || recetaForm.get('tiempo').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="tiempo.invalid && tiempo.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <label for="comensales">Comensales</label>
+      <input
+        type="number"
+        name="comensales"
+        class="form-control"
+        [formControl]="comensales"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          recetaForm.get('comensales').errors &&
+          (recetaForm.get('comensales').touched ||
+            recetaForm.get('comensales').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="comensales.invalid && comensales.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div class="form-group m-3">
+      <label for="dificultad">Dificultad</label>
+      <select class="form-select" formControlName="dificultad">
+        <option [value]="null" disabled>Selecciona dificultad...</option>
+        <option [value]="'FACIL'">Facil</option>
+        <option [value]="'MEDIO'">Dificultad media</option>
+        <option [value]="'DIFICIL'">Dificil</option>
+      </select>
+      <span
+        class="text-danger"
+        *ngIf="
+          recetaForm.get('dificultad').errors &&
+          (recetaForm.get('dificultad').touched ||
+            recetaForm.get('dificultad').dirty)
+        "
+      >
+        <span
+          class="text-danger"
+          *ngIf="dificultad.invalid && dificultad.errors.required"
+          >El campo es obligatorio</span
+        >
+      </span>
+    </div>
+    <div *ngIf="error" class="alert alert-danger" role="alert">
+      {{ mensaje }}
+    </div>
+    <div class="form-group m-3">
+      <button
+        class="btn btn-success btn-block w-100"
+        [disabled]="!recetaForm.valid"
+        type="submit"
+      >
+        Guardar receta
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="nuevoIngredienteModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="nuevoIngredienteModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form
+        [formGroup]="nuevoIngredienteForm"
+        (ngSubmit)="onCreateIngrediente()"
+      >
+        <div class="modal-header">
+          <h5 class="modal-title" id="nuevoIngredienteModalLongTitle">
+            Nuevo ingrediente
+          </h5>
+        </div>
+
+        <div class="modal-body">
+          <div
+            *ngIf="errorIngrediente && mensajeIngrediente"
+            class="alert alert-danger"
+            role="alert"
+          >
+            {{ mensajeIngrediente }}
+          </div>
+          <div
+            *ngIf="!errorIngrediente && mensajeIngrediente"
+            class="alert alert-success"
+            role="alert"
+          >
+            {{ mensajeIngrediente }}
+          </div>
+
+          <div class="form-group m-3">
+            <label for="idUsuario">Nombre</label>
+            <input
+              type="text"
+              name="nombreIngrediente"
+              class="form-control input-lg"
+              [formControl]="nombreIngrediente"
+            />
+            <span
+              class="text-danger"
+              *ngIf="
+                nuevoIngredienteForm.get('nombreIngrediente').errors &&
+                (nuevoIngredienteForm.get('nombreIngrediente').touched ||
+                  nuevoIngredienteForm.get('nombreIngrediente').dirty)
+              "
+            >
+              <span
+                class="text-danger"
+                *ngIf="
+                  nombreIngrediente.invalid && nombreIngrediente.errors.required
+                "
+                >El campo es obligatorio</span
+              >
+            </span>
+          </div>
+          <div class="form-group m-3">
+            <label for="grupo">Grupo de alimentos</label>
+            <select class="form-select" formControlName="idGrupo">
+              <option [value]="null" disabled>Selecciona grupo...</option>
+              <option *ngFor="let grupo of grupos" [value]="grupo.id">
+                {{ grupo.nombre }}
+              </option>
+            </select>
+            <span
+              class="text-danger"
+              *ngIf="
+                nuevoIngredienteForm.get('idGrupo').errors &&
+                (nuevoIngredienteForm.get('idGrupo').touched ||
+                  nuevoIngredienteForm.get('idGrupo').dirty)
+              "
+            >
+              <span
+                class="text-danger"
+                *ngIf="idGrupo.invalid && idGrupo.errors.required"
+                >El campo es obligatorio</span
+              >
+            </span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            Cancelar
+          </button>
+          <button
+            class="btn btn-success"
+            [disabled]="!nuevoIngredienteForm.valid"
+            type="submit"
+          >
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-  
+</div>

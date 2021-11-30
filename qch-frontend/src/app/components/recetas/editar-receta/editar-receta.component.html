@@ -1,0 +1,239 @@
+<div class="container">
+    <h1>Nueva receta</h1>
+    <div *ngIf="mensaje" class="alert alert-danger" role="alert">
+      {{ mensaje }}
+    </div>
+    <form [formGroup]="recetaForm" (ngSubmit)="onEditarReceta()">
+      <div class="form-group m-3">
+        <label for="titulo">Titulo</label>
+        <input
+          type="text"
+          name="titulo"
+          class="form-control input-lg"
+          [formControl]="titulo"
+        />
+        <span
+          class="text-danger"
+          *ngIf="
+            recetaForm.get('titulo').errors &&
+            (recetaForm.get('titulo').touched || recetaForm.get('titulo').dirty)
+          "
+        >
+          <span
+            class="text-danger"
+            *ngIf="titulo.invalid && titulo.errors.required"
+            >El campo es obligatorio</span
+          >
+        </span>
+      </div>
+      <div class="form-group m-3">
+        <form [formGroup]="ingredienteForm" (ngSubmit)="onNuevoIngrediente()">
+          <label for="ingredientes">Ingredientes</label>
+          <input type="hidden" [formControl]="id" />
+          <div class="row">
+            <div class="col-4">
+              <input
+                #searchBox
+                type="text"
+                name="ingrediente"
+                class="form-control input-lg"
+                autocomplete="off"
+                (input)="filter(searchBox.value)"
+                [formControl]="nombre"
+              />
+  
+              <div *ngIf="ingredientes" class="list-group">
+                <button
+                  *ngFor="let ingrediente of ingredientes"
+                  (click)="onSelectIngrediente(ingrediente)"
+                  type="button"
+                  class="list-group-item list-group-item-action"
+                  aria-current="true"
+                >
+                  {{ ingrediente.nombre }}
+                </button>
+              </div>
+            </div>
+            <div class="col-4">
+              <input
+                type="text"
+                class="form-control input-lg"
+                [formControl]="cantidad"
+              />
+            </div>
+            <div class="col-4">
+              <button [disabled]="!ingredienteForm.valid" class="btn btn-primary">
+                Añadir
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="ingredientesSeleccionados.length !== 0" class="form-group m-3">
+        <div class="btn-group-vertical">
+          <button
+            *ngFor="let ingredienteSeleccionado of ingredientesSeleccionados"
+            class="btn btn-light"
+            title="Eliminar ingrediente"
+            type="button"
+            (click)="eliminarIngrediente(ingredienteSeleccionado.id)"
+          >
+            {{ ingredienteSeleccionado.nombre }} -
+            {{ ingredienteSeleccionado.cantidad }} <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="form-group m-3">
+        <label for="instrucciones">Instrucciones</label>
+  
+        <angular-editor
+          [formControl]="instrucciones"
+          [config]="config"
+        ></angular-editor>
+  
+        <span
+          class="text-danger"
+          *ngIf="
+            recetaForm.get('instrucciones').errors &&
+            (recetaForm.get('instrucciones').touched ||
+              recetaForm.get('instrucciones').dirty)
+          "
+        >
+          <span
+            class="text-danger"
+            *ngIf="instrucciones.invalid && instrucciones.errors.required"
+            >El campo es obligatorio</span
+          >
+        </span>
+      </div>
+      <div class="form-group m-3">
+        <label for="tipoReceta">Tipo de receta</label>
+        <select class="form-select" formControlName="tipoReceta">
+          <option [value]="null" disabled>Selecciona tipo de receta...</option>
+          <option *ngFor="let tipo of tiposReceta" [value]="tipo.id">
+            {{ tipo.nombre }}
+          </option>
+        </select>
+        <span
+          class="text-danger"
+          *ngIf="
+            recetaForm.get('tipoReceta').errors &&
+            (recetaForm.get('tipoReceta').touched ||
+              recetaForm.get('tipoReceta').dirty)
+          "
+        >
+          <span
+            class="text-danger"
+            *ngIf="tipoReceta.invalid && tipoReceta.errors.required"
+            >El campo es obligatorio</span
+          >
+        </span>
+      </div>
+      <div class="form-group m-3">
+        <label for="imagen">Imagen</label>
+        <input
+          type="file"
+          name="imagen"
+          class="form-control"
+          [formControl]="imagen"
+          (change)="onChange($event)"
+          accept="image/png, image/gif, image/jpeg"
+        />
+        <img *ngIf="miniatura" [src]="miniatura" alt="miniatura" class="w-25" />
+        <span
+          class="text-danger"
+          *ngIf="
+            recetaForm.get('imagen').errors &&
+            (recetaForm.get('imagen').touched || recetaForm.get('imagen').dirty)
+          "
+        >
+          <span
+            class="text-danger"
+            *ngIf="imagen.invalid && imagen.errors.required"
+            >El campo es obligatorio</span
+          >
+        </span>
+      </div>
+      <div class="form-group m-3">
+        <label for="tiempo">Tiempo de preparación</label>
+        <input
+          type="number"
+          name="tiempo"
+          class="form-control"
+          [formControl]="tiempo"
+        />
+        <span
+          class="text-danger"
+          *ngIf="
+            recetaForm.get('tiempo').errors &&
+            (recetaForm.get('tiempo').touched || recetaForm.get('tiempo').dirty)
+          "
+        >
+          <span
+            class="text-danger"
+            *ngIf="tiempo.invalid && tiempo.errors.required"
+            >El campo es obligatorio</span
+          >
+        </span>
+      </div>
+      <div class="form-group m-3">
+        <label for="comensales">Comensales</label>
+        <input
+          type="number"
+          name="comensales"
+          class="form-control"
+          [formControl]="comensales"
+        />
+        <span
+          class="text-danger"
+          *ngIf="
+            recetaForm.get('comensales').errors &&
+            (recetaForm.get('comensales').touched ||
+              recetaForm.get('comensales').dirty)
+          "
+        >
+          <span
+            class="text-danger"
+            *ngIf="comensales.invalid && comensales.errors.required"
+            >El campo es obligatorio</span
+          >
+        </span>
+      </div>
+      <div class="form-group m-3">
+        <label for="dificultad">Dificultad</label>
+        <select class="form-select" formControlName="dificultad">
+          <option [value]="null" disabled>Selecciona dificultad...</option>
+          <option [value]="'FACIL'">Facil</option>
+          <option [value]="'MEDIO'">Dificultad media</option>
+          <option [value]="'DIFICIL'">Dificil</option>
+        </select>
+        <span
+          class="text-danger"
+          *ngIf="
+            recetaForm.get('dificultad').errors &&
+            (recetaForm.get('dificultad').touched ||
+              recetaForm.get('dificultad').dirty)
+          "
+        >
+          <span
+            class="text-danger"
+            *ngIf="dificultad.invalid && dificultad.errors.required"
+            >El campo es obligatorio</span
+          >
+        </span>
+      </div>
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ mensaje }}
+      </div>
+      <div class="form-group m-3">
+        <button
+          class="btn btn-success btn-block w-100"
+          [disabled]="!recetaForm.valid"
+          type="submit"
+        >
+          Crear receta
+        </button>
+      </div>
+    </form>
+  </div>
+  

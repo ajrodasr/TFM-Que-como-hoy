@@ -22,6 +22,7 @@ import { RecetaComponent } from './components/recetas/receta/receta.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MisRecetasComponent } from './components/recetas/mis-recetas/mis-recetas.component';
 import { NuevaRecetaComponent } from './components/recetas/nueva-receta/nueva-receta.component';
+import { EditarRecetaComponent } from './components/recetas/editar-receta/editar-receta.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { NuevaRecetaComponent } from './components/recetas/nueva-receta/nueva-re
     FooterComponent,
     MisRecetasComponent,
     NuevaRecetaComponent,
+    EditarRecetaComponent,
   ],
   imports: [
     BrowserModule,

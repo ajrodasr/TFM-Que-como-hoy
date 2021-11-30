@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { IngredienteReceta } from '../models/ingrediente-receta';
 import { LikeReceta } from '../models/like-receta';
 import { Receta } from '../models/receta';
 import { TipoReceta } from '../models/tipo-receta';
@@ -37,6 +38,20 @@ export class RecetaService {
 
   public nuevaReceta(receta: Receta): Observable<any> {
     return this.http.post<any>(BACK_URL + 'api/recetas/nueva', receta);
+  }
+
+  public editarReceta(receta: Receta): Observable<any> {
+    return this.http.post<any>(BACK_URL + 'api/recetas/editar', receta);
+  }
+
+  public anadeIngrediente(idReceta: number, ingrediente: IngredienteReceta): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/recetas/anade-ingrediente?idReceta=' + idReceta, ingrediente);
+  }
+
+  public quitaIngrediente(idReceta: number, idIngrediente: number): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/recetas/quita-ingrediente?idReceta=' + idReceta + '&idIngrediente=' + idIngrediente, {});
   }
 
   public publicar(id: number): Observable<any> {

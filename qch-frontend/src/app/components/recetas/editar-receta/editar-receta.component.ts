@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import {
   catchError,
@@ -20,11 +20,11 @@ import { IngredienteService } from 'src/app/services/ingrediente.service';
 import { RecetaService } from 'src/app/services/receta.service';
 
 @Component({
-  selector: 'app-nueva-receta',
-  templateUrl: './nueva-receta.component.html',
-  styleUrls: ['./nueva-receta.component.css'],
+  selector: 'app-editar-receta',
+  templateUrl: './editar-receta.component.html',
+  styleUrls: ['./editar-receta.component.css'],
 })
-export class NuevaRecetaComponent implements OnInit {
+export class EditarRecetaComponent implements OnInit {
   config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -77,7 +77,7 @@ export class NuevaRecetaComponent implements OnInit {
   };
 
   idUsuario: string;
-  nuevaReceta = new Receta();
+  receta = new Receta();
   tiposReceta: TipoReceta[];
   imageFile: File;
   miniatura: string;
@@ -110,30 +110,38 @@ export class NuevaRecetaComponent implements OnInit {
     private recetaService: RecetaService,
     private ingredienteService: IngredienteService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    const idReceta = this.activatedRoute.snapshot.params.idreceta;
     this.idUsuario = this.authService.getUsername();
+    
     this.recetaService
       .getTiposReceta()
       .subscribe((tipos) => (this.tiposReceta = tipos));
-    this.titulo = new FormControl('', Validators.required);
-    this.instrucciones = new FormControl('', Validators.required);
-    this.tipoReceta = new FormControl(null, Validators.required);
-    this.imagen = new FormControl('', Validators.required);
-    this.tiempo = new FormControl('', Validators.required);
-    this.comensales = new FormControl('', Validators.required);
-    this.dificultad = new FormControl(null, Validators.required);
-
-    this.recetaForm = this.formBuilder.group({
-      titulo: this.titulo,
-      instrucciones: this.instrucciones,
-      tipoReceta: this.tipoReceta,
-      imagen: this.imagen,
-      tiempo: this.tiempo,
-      comensales: this.comensales,
-      dificultad: this.dificultad,
+    
+    this.recetaService.getReceta(idReceta).subscribe(receta => {
+      this.receta = receta;
+      this.titulo = new FormControl(receta.titulo, Validators.required);
+      this.instrucciones = new FormControl(receta.instrucciones, Validators.required);
+      this.tipoReceta = new FormControl(receta.tipoReceta.id, Validators.required);
+      this.imagen = new FormControl(receta.imagen, Validators.required);
+      this.tiempo = new FormControl(receta.tiempo, Validators.required);
+      this.comensales = new FormControl(receta.comensales, Validators.required);
+      this.dificultad = new FormControl(receta.dificultad, Validators.required);
+      this.ingredientesSeleccionados = receta.ingredientes;
+  
+      this.recetaForm = this.formBuilder.group({
+        titulo: this.titulo,
+        instrucciones: this.instrucciones,
+        tipoReceta: this.tipoReceta,
+        imagen: this.imagen,
+        tiempo: this.tiempo,
+        comensales: this.comensales,
+        dificultad: this.dificultad,
+      });
     });
 
     this.id = new FormControl('', Validators.required);
@@ -147,32 +155,32 @@ export class NuevaRecetaComponent implements OnInit {
     });
   }
 
-  onNuevaReceta(): void {
+  onEditarReceta(): void {
     // Nombre a la imagen
     const nombreImagen =
       'receta_' + new Date().getTime() + '_' + this.imageFile.name;
 
-    this.nuevaReceta.titulo = this.titulo.value;
-    this.nuevaReceta.instrucciones = this.instrucciones.value;
-    this.nuevaReceta.tipoReceta.id = this.tipoReceta.value;
-    this.nuevaReceta.imagen = nombreImagen;
-    this.nuevaReceta.tiempo = this.tiempo.value;
-    this.nuevaReceta.comensales = this.comensales.value;
-    this.nuevaReceta.dificultad = this.dificultad.value;
-    this.nuevaReceta.usuario.id = this.idUsuario;
-    this.nuevaReceta.ingredientes = this.ingredientesSeleccionados;
+    this.receta.titulo = this.titulo.value;
+    this.receta.instrucciones = this.instrucciones.value;
+    this.receta.tipoReceta.id = this.tipoReceta.value;
+    this.receta.imagen = nombreImagen;
+    this.receta.tiempo = this.tiempo.value;
+    this.receta.comensales = this.comensales.value;
+    this.receta.dificultad = this.dificultad.value;
+    this.receta.usuario.id = this.idUsuario;
+    this.receta.ingredientes = this.ingredientesSeleccionados;
 
     const uploadImageData = new FormData();
     uploadImageData.append(
       'imageFile',
       this.imageFile,
-      this.nuevaReceta.imagen
+      this.receta.imagen
     );
 
     this.recetaService
       .uploadImage(uploadImageData)
       .pipe(
-        mergeMap((data1) => this.recetaService.nuevaReceta(this.nuevaReceta)),
+        mergeMap((data1) => this.recetaService.editarReceta(this.receta)),
         catchError((err) => {
           console.log(err);
           this.mensaje = err.error;
@@ -220,21 +228,24 @@ export class NuevaRecetaComponent implements OnInit {
   }
 
   onNuevoIngrediente(): void {
-    this.ingredientesSeleccionados.push(
-      new IngredienteReceta(
-        this.id.value,
-        this.nombre.value,
-        this.cantidad.value
-      )
+    const ingredienteSeleccionado = new IngredienteReceta(
+      this.id.value,
+      this.nombre.value,
+      this.cantidad.value
     );
-    this.id.setValue(null);
-    this.nombre.setValue(null);
-    this.cantidad.setValue(null);
+    this.recetaService.anadeIngrediente(this.receta.id, ingredienteSeleccionado).subscribe(data => {
+      this.ingredientesSeleccionados.push(ingredienteSeleccionado);
+      this.id.setValue(null);
+      this.nombre.setValue(null);
+      this.cantidad.setValue(null);
+    });
   }
 
   eliminarIngrediente(idIngrediente: number): void {
-    this.ingredientesSeleccionados = this.ingredientesSeleccionados.filter(
-      (ingrediente) => ingrediente.id !== idIngrediente
-    );
+    this.recetaService.quitaIngrediente(this.receta.id, idIngrediente).subscribe(data => {
+      this.ingredientesSeleccionados = this.ingredientesSeleccionados.filter(
+        (ingrediente) => ingrediente.id !== idIngrediente
+      );
+    })
   }
 }

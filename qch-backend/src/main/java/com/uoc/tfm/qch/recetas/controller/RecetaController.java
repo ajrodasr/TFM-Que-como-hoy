@@ -127,7 +127,7 @@ public class RecetaController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("quita-ingrediente")
-	public ResponseEntity<?> deleteIngredienteReceta(@RequestParam int idReceta, @RequestParam String idIngrediente) {
+	public ResponseEntity<?> deleteIngredienteReceta(@RequestParam int idReceta, @RequestParam int idIngrediente) {
 		RecetaDTO dto = recetaService.getRecetaById(idReceta);
 		if(dto == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);

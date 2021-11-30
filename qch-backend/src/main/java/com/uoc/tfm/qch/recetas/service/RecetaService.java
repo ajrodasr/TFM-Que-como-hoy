@@ -69,23 +69,23 @@ public class RecetaService {
 	}
 	
 	public void deleteReceta(int idReceta) {
-		recetaRepository.deleteReceta(Integer.valueOf(idReceta));
+		recetaRepository.deleteReceta(idReceta);
 	}
 	
 	public void publicarReceta(int idReceta) {
-		recetaRepository.publicarReceta(Integer.valueOf(idReceta));
+		recetaRepository.publicarReceta(idReceta);
 	}
 	
 	public void despublicarReceta(int idReceta) {
-		recetaRepository.despublicarReceta(Integer.valueOf(idReceta));
+		recetaRepository.despublicarReceta(idReceta);
 	}
 	
 	public void saveIngredienteReceta(int idReceta, IngredienteRecetaDTO ingrediente) {
-		recetaRepository.saveIngredienteReceta(Integer.valueOf(idReceta), ingrediente);
+		recetaRepository.saveIngredienteReceta(idReceta, ingrediente);
 	}
 	
-	public void deleteIngredienteReceta(int idReceta, String idIngrediente) {
-		recetaRepository.deleteIngredienteReceta(Integer.valueOf(idReceta), Integer.valueOf(idReceta));
+	public void deleteIngredienteReceta(int idReceta, int idIngrediente) {
+		recetaRepository.deleteIngredienteReceta(idReceta, idReceta);
 	}
 	
 	public List<Integer> getLikesByUsuario(String idUsuario){

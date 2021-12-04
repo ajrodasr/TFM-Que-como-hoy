@@ -57,6 +57,12 @@
                 {{ ingrediente.nombre }}
               </button>
             </div>
+            <div
+              *ngIf="errorAnadirIngrediente && mensajeAnadirIngrediente"
+              class="text-danger"
+            >
+              {{ mensajeAnadirIngrediente }}
+            </div>
           </div>
           <div class="col-4">
             <input
@@ -248,6 +254,9 @@
       >
         Guardar receta
       </button>
+      <a class="btn btn-danger btn-block w-100 mt-1" routerLink="/mis-recetas">
+        Cancelar
+      </a>
     </div>
   </form>
 </div>

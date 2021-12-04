@@ -117,6 +117,9 @@ export class EditarRecetaComponent implements OnInit {
   mensajeIngrediente = '';
   errorIngrediente = false;
 
+  mensajeAnadirIngrediente = '';
+  errorAnadirIngrediente = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private recetaService: RecetaService,
@@ -277,28 +280,37 @@ export class EditarRecetaComponent implements OnInit {
     );
     this.recetaService
       .anadeIngrediente(this.receta.id, ingredienteSeleccionado)
-      .subscribe((data) => {
-        this.ingredientesSeleccionados.push(ingredienteSeleccionado);
-        this.id.setValue(null);
-        this.nombre.setValue(null);
-        this.cantidad.setValue(null);
-      });
+      .subscribe(
+        (data) => {
+          this.ingredientesSeleccionados.push(ingredienteSeleccionado);
+          this.id.setValue(null);
+          this.nombre.setValue(null);
+          this.cantidad.setValue(null);
+          this.errorAnadirIngrediente = false;
+        },
+        (err) => {
+          this.mensajeAnadirIngrediente = err.error;
+          this.errorAnadirIngrediente = true;
+        }
+      );
   }
 
   eliminarIngrediente(idIngrediente: number): void {
-    this.recetaService
-      .quitaIngrediente(this.receta.id, idIngrediente)
-      .subscribe(
-        (data) => {
-          this.ingredientesSeleccionados =
-            this.ingredientesSeleccionados.filter(
-              (ingrediente) => ingrediente.id !== idIngrediente
-            );
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+    if (confirm('¿Seguro que desea eliminar el ingrediente de la receta?')) {
+      this.recetaService
+        .quitaIngrediente(this.receta.id, idIngrediente)
+        .subscribe(
+          (data) => {
+            this.ingredientesSeleccionados =
+              this.ingredientesSeleccionados.filter(
+                (ingrediente) => ingrediente.id !== idIngrediente
+              );
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+    }
   }
 
   onCreateIngrediente(): void {

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.uoc.tfm.qch.ingredientes.dto.IngredienteDTO;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
@@ -121,6 +122,12 @@ public class RecetaController {
 		if(dto == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
+		
+		for(IngredienteRecetaDTO ing : dto.getIngredientes()) {
+			if(ing.getId() == ingrediente.getId()) {
+				return new ResponseEntity("El ingrediente ya se encuentra en la receta", HttpStatus.BAD_REQUEST);
+			}
+		}
 		recetaService.saveIngredienteReceta(idReceta, ingrediente);
 		return new ResponseEntity(Collections.singletonMap("Mensaje", "Ingrediente añadido correctamente"), HttpStatus.OK);
 	}

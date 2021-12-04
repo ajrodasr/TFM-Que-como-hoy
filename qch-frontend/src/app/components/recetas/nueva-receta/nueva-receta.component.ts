@@ -114,6 +114,9 @@ export class NuevaRecetaComponent implements OnInit {
   mensajeIngrediente = '';
   errorIngrediente = false;
 
+  mensajeAnadirIngrediente = '';
+  errorAnadirIngrediente = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private recetaService: RecetaService,
@@ -241,16 +244,31 @@ export class NuevaRecetaComponent implements OnInit {
   }
 
   onNuevoIngrediente(): void {
-    this.ingredientesSeleccionados.push(
-      new IngredienteReceta(
-        this.id.value,
-        this.nombre.value,
-        this.cantidad.value
-      )
-    );
-    this.id.setValue(null);
-    this.nombre.setValue(null);
-    this.cantidad.setValue(null);
+    let repetido = false;
+    if (this.ingredientesSeleccionados.length > 0) {
+      this.ingredientesSeleccionados.forEach((ingrediente) => {
+        if (ingrediente.id === this.id.value) {
+          this.mensajeAnadirIngrediente =
+            'El ingrediente ya se encuentra en la receta';
+          this.errorAnadirIngrediente = true;
+          repetido = true;
+        }
+      });
+    }
+    if (!repetido) {
+      this.ingredientesSeleccionados.push(
+        new IngredienteReceta(
+          this.id.value,
+          this.nombre.value,
+          this.cantidad.value
+        )
+      );
+      this.id.setValue(null);
+      this.nombre.setValue(null);
+      this.cantidad.setValue(null);
+      this.mensajeAnadirIngrediente = '';
+      this.errorAnadirIngrediente = false;
+    }
   }
 
   eliminarIngrediente(idIngrediente: number): void {

@@ -23,6 +23,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MisRecetasComponent } from './components/recetas/mis-recetas/mis-recetas.component';
 import { NuevaRecetaComponent } from './components/recetas/nueva-receta/nueva-receta.component';
 import { EditarRecetaComponent } from './components/recetas/editar-receta/editar-receta.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,12 @@ import { EditarRecetaComponent } from './components/recetas/editar-receta/editar
     HttpClientModule,
     ReactiveFormsModule,
     AngularEditorModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [interceptorProvider],

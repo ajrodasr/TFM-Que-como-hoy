@@ -25,14 +25,14 @@
         </li>
       </ul>
       <div>
-        <button
+        <a
           class="btn btn-outline-success my-2 my-sm-0"
           routerLink="/login"
           *ngIf="!isLogged"
           type="button"
         >
           Iniciar sesión
-        </button>
+      </a>
         <ul *ngIf="isLogged" class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
             <a

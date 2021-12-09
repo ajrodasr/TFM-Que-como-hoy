@@ -17,6 +17,7 @@ export class MenuComponent implements OnInit {
     if (this.isLogged) {
       this.idUsuario = this.authService.getUsername();
     }
+    this.closeOnClick();
   }
 
   onLogOut(): void {
@@ -24,5 +25,19 @@ export class MenuComponent implements OnInit {
     this.isLogged = false;
     this.authService.logOut();
     window.location.reload();
+  }
+
+  closeOnClick(): void{
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const links = document.querySelectorAll('nav a');
+      const buttonClose = document.querySelector('.navbar-toggler') as HTMLElement;
+      links.forEach((a) => {
+        a.addEventListener('click', () => {
+            if (buttonClose.getAttribute('aria-expanded') === 'true'){
+              buttonClose.click();
+            }
+        });
+      });
+    });
   }
 }

@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.Page;
 import com.uoc.tfm.qch.recetas.domain.Receta;
 import com.uoc.tfm.qch.recetas.domain.TipoReceta;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.RecetaFiltradaDTO;
 import com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO;
 
 @Service
 @Transactional
@@ -52,6 +55,21 @@ public class RecetaService {
 			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada()));
 		}
 		return dto;
+	}
+	
+	public Page<RecetaFiltradaDTO> getRecetasPublicadasPaginadas(
+			String tituloReceta, 
+			Integer tipoReceta,
+			String idUsuario,
+			String dificultad,
+			Integer comensales,
+			Integer tiempo,
+			List<Integer> ingredientes){
+		return recetaRepository.getRecetasFiltradas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, ingredientes);
+	}
+	
+	public List<UsuarioRecetaDTO> getUsuariosRecetasFilter(String term){
+		return recetaRepository.getUsuariosRecetasFilter(term);
 	}
 	
 	@Transactional

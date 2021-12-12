@@ -2,10 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Ingrediente } from '../models/ingrediente';
 import { IngredienteReceta } from '../models/ingrediente-receta';
 import { LikeReceta } from '../models/like-receta';
 import { Receta } from '../models/receta';
 import { TipoReceta } from '../models/tipo-receta';
+import { UsuarioReceta } from '../models/usuario-receta';
 
 const BACK_URL = environment.APIEndpoint;
 
@@ -15,8 +17,64 @@ const BACK_URL = environment.APIEndpoint;
 export class RecetaService {
   constructor(private http: HttpClient) {}
 
-  public getAllRecetas(): Observable<Receta[]> {
-    return this.http.get<Receta[]>(BACK_URL + 'api/recetas');
+  public getAllRecetas(
+    tituloReceta: string = '',
+    tipoReceta: number = -1,
+    idUsuario: string = '',
+    dificultad: string = '',
+    comensales: number = null,
+    tiempo: number = null,
+    ingredientes: Ingrediente[] = [],
+    pageNum: number = 0
+  ): Observable<any> {
+    const parametros: string[] = [];
+
+    if (tituloReceta !== '') {
+      parametros.push(`tituloReceta=${tituloReceta}&`);
+    }
+
+    if (tipoReceta >= 0) {
+      parametros.push(`tipoReceta=${tipoReceta}&`);
+    }
+
+    if (idUsuario !== '') {
+      parametros.push(`idUsuario=${idUsuario}&`);
+    }
+
+    if (dificultad !== '') {
+      parametros.push(`dificultad=${dificultad}&`);
+    }
+
+    if (comensales) {
+      parametros.push(`comensales=${comensales}&`);
+    }
+
+    if (tiempo) {
+      parametros.push(`tiempo=${tiempo}&`);
+    }
+
+    if (ingredientes.length > 0) {
+      let ing = '';
+      ingredientes.forEach((ingrediente) => {
+        ing += `ingrediente=${ingrediente.id}&`;
+      });
+      parametros.push(ing);
+    }
+
+    if (pageNum !== 0) {
+      parametros.push(`pageNum=${pageNum}&`);
+    }
+
+    let urlConsulta = BACK_URL + 'api/recetas';
+
+    if (parametros.length > 0) {
+      urlConsulta += '?';
+      parametros.forEach((parametro) => {
+        urlConsulta += parametro;
+      });
+    }
+    console.log(urlConsulta);
+    return this.http.get<any>(urlConsulta);
   }
 
   public getReceta(idReceta: number): Observable<Receta> {
@@ -28,6 +86,13 @@ export class RecetaService {
   public getRecetasByUsuario(idUsuario: string): Observable<Receta[]> {
     const param = new HttpParams().append('idUsuario', idUsuario);
     return this.http.get<Receta[]>(BACK_URL + 'api/recetas/usuario', {
+      params: param,
+    });
+  }
+
+  public getUsuariosRecetasFilter(term: string): Observable<UsuarioReceta[]> {
+    const param = new HttpParams().append('term', term);
+    return this.http.get<UsuarioReceta[]>(BACK_URL + 'api/recetas/usuarios', {
       params: param,
     });
   }

@@ -1,13 +1,137 @@
-<style>
-  .center-cropped {
-    height: 200px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-</style>
 <div class="container p-5">
   <h1>Recetas</h1>
+  <div class="row">
+    <form [formGroup]="filtroForm" (ngSubmit)="onFilter()">
+      <div class="form-group m-3">
+        <input
+          type="text"
+          name="tituloReceta"
+          class="form-control"
+          placeholder="Título de la receta"
+          [formControl]="tituloReceta"
+        />
+      </div>
+      <div class="form-group m-3">
+        <select class="form-select" formControlName="tipoReceta">
+          <option [value]="-1">-- Tipo de receta --</option>
+          <option *ngFor="let tipo of tiposReceta" [value]="tipo.id">
+            {{ tipo.nombre }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group m-3">
+        <select class="form-select" formControlName="dificultad">
+          <option [value]="''">-- Dificultad --</option>
+          <option [value]="'FACIL'">Facil</option>
+          <option [value]="'MEDIO'">Dificultad media</option>
+          <option [value]="'DIFICIL'">Dificil</option>
+        </select>
+      </div>
+      <div class="form-group m-3">
+        <input
+          type="number"
+          name="comensales"
+          class="form-control"
+          placeholder="Comensales"
+          [formControl]="comensales"
+        />
+      </div>
+      <div class="form-group m-3">
+        <input
+          type="number"
+          name="tiempo"
+          class="form-control"
+          placeholder="Máximo tiempo de elaboración (minutos)"
+          [formControl]="tiempo"
+        />
+      </div>
+      <div class="form-group m-3">
+        <input
+          #searchBoxUsuario
+          type="text"
+          name="idUsuarioFiltro"
+          class="form-control input-lg"
+          id="idUsuarioFiltro"
+          autocomplete="off"
+          placeholder="Usuario"
+          [formControl]="idUsuarioFiltro"
+          (input)="filterUsuario(searchBoxUsuario.value)"
+        />
+
+        <div *ngIf="usuariosRecetas" class="list-group">
+          <button
+            *ngFor="let usuario of usuariosRecetas"
+            (click)="onSelectUsuario(usuario.id)"
+            type="button"
+            class="list-group-item list-group-item-action"
+            aria-current="true"
+          >
+            {{ usuario.id }}
+          </button>
+        </div>
+      </div>
+      <div class="form-group m-3">
+        <input
+          #searchBoxIngrediente
+          type="text"
+          name="ingrediente"
+          id="ingrediente"
+          class="form-control input-lg"
+          autocomplete="off"
+          placeholder="Ingredientes"
+          (input)="filterIngrediente(searchBoxIngrediente.value)"
+        />
+
+        <div *ngIf="ingredientes" class="list-group">
+          <button
+            *ngFor="let ingrediente of ingredientes"
+            (click)="onSelectIngrediente(ingrediente)"
+            type="button"
+            class="list-group-item list-group-item-action"
+            aria-current="true"
+          >
+            {{ ingrediente.nombre }}
+          </button>
+        </div>
+        <div
+          *ngIf="ingredientesSeleccionados.length !== 0"
+          class="form-group m-3"
+        >
+          <div class="btn-group-vertical">
+            <button
+              *ngFor="let ingredienteSeleccionado of ingredientesSeleccionados"
+              class="btn btn-light"
+              title="Eliminar ingrediente"
+              type="button"
+              (click)="onRemoveIngrediente(ingredienteSeleccionado)"
+            >
+              {{ ingredienteSeleccionado.nombre }} -
+              {{ ingredienteSeleccionado.cantidad }}
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group m-3">
+        <button class="btn btn-success btn-block w-100" type="submit">
+          Filtrar
+        </button>
+        <button
+          class="btn btn-primary btn-block w-100 mt-1"
+          type="button"
+          (click)="onResetForm()"
+        >
+          Restablecer
+        </button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="paginador" class="row mt-3">
+    <small
+      >Mostrando del elemento {{ paginador.primerElemento }} al
+      {{ paginador.ultimoElemento }} de {{ paginador.total }} totales</small
+    >
+  </div>
   <div
     *ngIf="recetas && likes"
     class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3"
@@ -90,11 +214,40 @@
               <i class="far fa-heart"></i>
             </button>
           </ng-template>
-          <small *ngIf="receta.likes.length > 0">
-            {{ receta.likes.length }} me gusta</small
-          >
+          <small *ngIf="receta.likes > 0"> {{ receta.likes }} me gusta</small>
         </div>
       </div>
     </div>
+  </div>
+  <div *ngIf="paginador" class="row mt-3">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
+          <a class="page-link" (click)="onFilter(paginador.primeraPagina)"
+            ><<</a
+          >
+        </li>
+        <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
+          <a class="page-link" (click)="onFilter(paginador.anteriorPagina)"
+            ><</a
+          >
+        </li>
+        <li
+          *ngFor="let pagina of paginador.paginas"
+          [ngClass]="{ active: pagina === paginador.paginaActual }"
+          class="page-item"
+        >
+          <a class="page-link" (click)="onFilter(pagina)">{{ pagina }}</a>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
+          <a class="page-link" (click)="onFilter(paginador.siguientePagina)"
+            >></a
+          >
+        </li>
+        <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
+          <a class="page-link" (click)="onFilter(paginador.ultimaPagina)">>></a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>

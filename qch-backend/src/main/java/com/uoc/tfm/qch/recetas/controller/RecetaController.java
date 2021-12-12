@@ -3,6 +3,7 @@ package com.uoc.tfm.qch.recetas.controller;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,10 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.RecetaFiltradaDTO;
 import com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO;
 import com.uoc.tfm.qch.recetas.service.RecetaService;
 
 @RestController
@@ -33,21 +39,32 @@ public class RecetaController {
 	RecetaService recetaService;
 	
 	@GetMapping
-	public ResponseEntity<List<RecetaDTO>> getRecetas() {
-		List<RecetaDTO> recetas = recetaService.getRecetasPublicadas();
-		return new ResponseEntity<List<RecetaDTO>>(recetas, HttpStatus.OK);
-	}
-	
-	@GetMapping("todas")
-	public ResponseEntity<List<RecetaDTO>> getAllRecetas() {
-		List<RecetaDTO> recetas = recetaService.getRecetas();
-		return new ResponseEntity<List<RecetaDTO>>(recetas, HttpStatus.OK);
+	public ResponseEntity<PageInfo<RecetaFiltradaDTO>> getRecetasFiltradas(
+			@RequestParam(required = false, defaultValue = "") String tituloReceta,
+			@RequestParam(required = false) Integer tipoReceta,
+			@RequestParam(required = false) String idUsuario,
+			@RequestParam(required = false) String dificultad,
+			@RequestParam(required = false) Integer comensales,
+			@RequestParam(required = false) Integer tiempo,
+			@RequestParam(required = false, defaultValue = "", value="ingrediente") Integer[] ingredientes,
+			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		Page<RecetaFiltradaDTO> recetas = recetaService.getRecetasPublicadasPaginadas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, Arrays.asList(ingredientes));
+		PageInfo<RecetaFiltradaDTO> info = new PageInfo<RecetaFiltradaDTO>(recetas);
+		return new ResponseEntity<PageInfo<RecetaFiltradaDTO>>(info, HttpStatus.OK);
 	}
 	
 	@GetMapping("usuario")
 	public ResponseEntity<List<RecetaDTO>> getRecetasByUsuario(@RequestParam String idUsuario) {
 		List<RecetaDTO> recetas = recetaService.getRecetasByUsuario(idUsuario);
 		return new ResponseEntity<List<RecetaDTO>>(recetas, HttpStatus.OK);
+	}
+	
+	@GetMapping("usuarios")
+	public ResponseEntity<List<UsuarioRecetaDTO>> getUsuariosRecetas(@RequestParam String term) {
+		List<UsuarioRecetaDTO> usuarios = recetaService.getUsuariosRecetasFilter(term);
+		return new ResponseEntity<List<UsuarioRecetaDTO>>(usuarios, HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

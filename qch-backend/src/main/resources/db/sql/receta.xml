@@ -50,6 +50,29 @@
 		<result column="NOMBRE_TIPO_RECETA" property="nombre" />
 	</resultMap>
 	
+	<resultMap id="recetaFiltrada" type="com.uoc.tfm.qch.recetas.dto.RecetaFiltradaDTO">
+		<id column="ID_RECETA" property="id" />
+		<result column="TITULO_RECETA" property="titulo" />
+		<result column="IMAGEN_RECETA" property="imagen" />
+		<result column="INSTRUCCIONES_RECETA" property="instrucciones" />
+		<result column="FECHA_CREACION_RECETA" property="fechaCreacion" />
+		<result column="TIEMPO_RECETA" property="tiempo" />
+		<result column="COMENSALES_RECETA" property="comensales" />
+		<result column="DIFICULTAD_RECETA" property="dificultad" />
+		<result column="PUBLICADA_RECETA" property="publicada" />
+		<result column="LIKES_RECETA" property="likes" />
+		<association property="usuario" javaType="com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO">
+			<id column="ID_USUARIO" property="id" />
+			<result column="NOMBRE_USUARIO" property="nombre" />
+			<result column="APELLIDO1_USUARIO" property="apellido1" />
+			<result column="APELLIDO2_USUARIO" property="apellido2" />
+		</association>
+		<association property="tipoReceta" javaType="com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO">
+			<id column="ID_TIPO_RECETA" property="id" />
+			<result column="NOMBRE_TIPO_RECETA" property="nombre" />
+		</association>
+	</resultMap>
+	
 	<select id="getRecetaById" resultMap="receta">
 		SELECT r.ID AS ID_RECETA,
 			r.TITULO AS TITULO_RECETA,
@@ -148,6 +171,49 @@
 		WHERE r.PUBLICADA = 1
 	</select>
 	
+	<select id="getRecetasFiltradas" resultMap="recetaFiltrada">
+		SELECT r.ID AS ID_RECETA,
+			r.TITULO AS TITULO_RECETA,
+			r.IMAGEN AS IMAGEN_RECETA,
+			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
+			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			r.TIEMPO AS TIEMPO_RECETA,
+			r.COMENSALES AS COMENSALES_RECETA,
+			r.DIFICULTAD AS DIFICULTAD_RECETA,
+			r.PUBLICADA AS PUBLICADA_RECETA,
+			(SELECT COUNT(*) FROM LIKE_RECETA WHERE RECETA = R.ID) AS LIKES_RECETA,
+			u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			tr.ID AS ID_TIPO_RECETA,
+			tr.NOMBRE AS NOMBRE_TIPO_RECETA
+		FROM RECETAS r
+		LEFT JOIN USUARIOS u ON u.ID = r.USUARIO 
+		LEFT JOIN TIPO_RECETA tr ON tr.ID = r.TIPO 
+		LEFT JOIN INGREDIENTE_RECETA ir ON ir.RECETA = r.ID 
+		WHERE R.PUBLICADA = 1 
+		AND (#{tipoReceta} IS NULL OR tr.ID = #{tipoReceta})
+		AND (#{idUsuario} IS NULL OR u.ID = #{idUsuario})
+		AND (#{dificultad} IS NULL OR r.DIFICULTAD = #{dificultad})
+		AND (#{comensales} IS NULL OR r.COMENSALES = #{comensales})
+		AND (#{tiempo} IS NULL OR #{tiempo} >= r.TIEMPO)
+		<bind name="titulo" value="'%' + tituloReceta + '%'" />
+		AND R.TITULO LIKE #{titulo}
+		<if test="ingredientes.size > 0">
+		AND INGREDIENTE IN 
+		<foreach collection="ingredientes" item="element" index="index" open="(" separator=","  close=")">
+		  #{element}
+		</foreach>
+		</if>
+		GROUP BY R.ID 
+		<if test="ingredientes.size > 0">
+		<bind name="size" value="ingredientes.size" />
+		HAVING COUNT(*) = #{size}
+		</if>
+		
+	</select>
+	
 	<select id="getRecetasByTipo" resultMap="receta">
 		SELECT r.ID AS ID_RECETA,
 			r.TITULO AS TITULO_RECETA,
@@ -212,6 +278,18 @@
 		LEFT JOIN INGREDIENTES i ON i.ID = ir.INGREDIENTE
 		LEFT JOIN GRUPO_INGREDIENTE g ON i.GRUPO = g.ID
 		WHERE r.USUARIO = #{idUsuario}
+	</select>
+	
+	<select id="getUsuariosRecetasFilter" resultType="com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO">
+		SELECT DISTINCT (u.ID) AS ID,
+			u.NOMBRE AS NOMBRE,
+			u.APELLIDO1 AS APELLIDO1,
+			u.APELLIDO2 AS APELLIDO2
+		FROM USUARIOS u 
+		LEFT JOIN RECETAS r ON r.USUARIO = u.ID
+		<bind name="idUsuario" value="'%' + term + '%'" />
+		WHERE u.ID like #{idUsuario}
+		ORDER BY u.ID
 	</select>
 	
 	<insert id="saveReceta">

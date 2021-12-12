@@ -230,7 +230,15 @@ export class NuevaRecetaComponent implements OnInit {
     if (term.length > 2) {
       this.ingredienteService
         .getIngredientesFilterNombre(term)
-        .subscribe((ingredientes) => (this.ingredientes = ingredientes));
+        .subscribe(
+          (ingredientes) =>
+            (this.ingredientes = ingredientes.filter(
+              (ing) =>
+                !this.ingredientesSeleccionados
+                  .map((i) => i.id)
+                  .includes(ing.id)
+            ))
+        );
     } else {
       this.ingredientes = null;
     }

@@ -3,10 +3,10 @@
     <div class="col-12 col-sm-8">
       <h1>Ingredientes</h1>
     </div>
-    <div class="col-12 col-sm-4 text-end">
+    <div class="col-12 col-md-4 text-end">
       <button
         type="button"
-        class="btn-primary w-100"
+        class="btn btn-primary w-100"
         routerLink="/ingredientes/nuevo"
         title="Añadir ingrediente"
       >
@@ -14,34 +14,125 @@
       </button>
     </div>
   </div>
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-3">
-    <div
-      *ngFor="let ingrediente of ingredientes"
-      class="col card animate__animated animate__bounce animate__fadeIn"
-    >
-      <div class="row g-0">
-        <div class="col-10">
-          <div class="card-body">
-            <h5 class="card-title">{{ ingrediente.nombre }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-              {{ ingrediente.grupo.nombre }}
-            </h6>
-            <p class="card-text">
-              ({{ ingrediente.grupo.racionesSemana }} raciones/semana)
-            </p>
-          </div>
+  <div class="row mt-3">
+    <form [formGroup]="filtroForm" (ngSubmit)="onFilter()">
+      <div class="row">
+        <div class="col-12 col-md-4">
+          <input
+            type="text"
+            name="nombreIngrediente"
+            class="form-control"
+            placeholder="Nombre del ingrediente"
+            [formControl]="nombreIngrediente"
+            autocomplete="off"
+            (input)="onFilter()"
+          />
         </div>
-        <div class="col-2">
-          <div *ngIf="isAdmin()" class="card-body">
-            <a
-              class="text-primary"
-              [routerLink]="['/ingrediente', ingrediente.id]"
-              title="Editar"
-              ><i class="fas fa-edit"></i
-            ></a>
+        <div class="col-12 col-md-4 mt-1 mt-md-0">
+          <select
+            class="form-select"
+            formControlName="grupo"
+            (change)="onFilter()"
+          >
+            <option [value]="-1">-- Grupo de ingrediente --</option>
+            <option *ngFor="let grupo of grupos" [value]="grupo.id">
+              {{ grupo.nombre }}
+            </option>
+          </select>
+        </div>
+        <div class="col-12 col-md-4 mt-1 mt-md-0">
+          <button
+            type="button"
+            class="btn btn-primary w-100"
+            title="Restablecer"
+            (click)="onReset()"
+          >
+            Restablecer
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="paginador" class="row mt-3">
+    <small
+      >Mostrando del elemento {{ paginador.primerElemento }} al
+      {{ paginador.ultimoElemento }} de {{ paginador.total }} totales</small
+    >
+  </div>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mt-3">
+    <div *ngFor="let ingrediente of ingredientes" class="p-1">
+      <div class="col card animate__animated animate__bounce animate__fadeIn">
+        <div class="row g-0">
+          <div class="col-10">
+            <div class="card-body">
+              <h5 class="card-title">{{ ingrediente.nombre }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                {{ ingrediente.grupo.nombre }}
+              </h6>
+              <p class="card-text">
+                ({{ ingrediente.grupo.racionesSemana }} raciones/semana)
+              </p>
+            </div>
+          </div>
+          <div class="col-2">
+            <div *ngIf="isAdmin()" class="card-body p-sm-1">
+              <a
+                class="text-primary"
+                [routerLink]="['/ingrediente', ingrediente.id]"
+                title="Editar"
+                ><i class="fas fa-edit"></i
+              ></a>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div *ngIf="paginador" class="row mt-3">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.primeraPagina)"
+          >
+            <<
+          </button>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.anteriorPagina)"
+          >
+            <
+          </button>
+        </li>
+        <li
+          *ngFor="let pagina of paginador.paginas"
+          [ngClass]="{ active: pagina === paginador.paginaActual }"
+          class="page-item"
+        >
+          <button class="page-link shadow-none" (click)="onFilter(pagina)">
+            {{ pagina }}
+          </button>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.siguientePagina)"
+          >
+            >
+          </button>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.ultimaPagina)"
+          >
+            >>
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>

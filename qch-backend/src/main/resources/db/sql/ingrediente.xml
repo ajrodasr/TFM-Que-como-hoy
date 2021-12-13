@@ -66,6 +66,20 @@
 		ORDER BY I.NOMBRE
 	</select>
 	
+	<select id="getIngredientesFiltrados" resultMap="ingrediente">
+		SELECT I.ID AS ID_INGREDIENTE,
+			I.NOMBRE AS NOMBRE_INGREDIENTE,
+			G.ID AS ID_GRUPO,
+			G.NOMBRE AS NOMBRE_GRUPO,
+			G.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM INGREDIENTES I
+		JOIN GRUPO_INGREDIENTE G ON I.GRUPO = G.ID
+		<bind name="name" value="'%' + term + '%'" />
+		WHERE (#{idGrupo} IS NULL OR I.GRUPO = #{idGrupo})
+		AND I.NOMBRE like #{name}
+		ORDER BY I.NOMBRE
+	</select>
+	
 	<select id="getIngredientesByGrupo" resultMap="ingrediente">
 		SELECT I.ID AS ID_INGREDIENTE,
 			I.NOMBRE AS NOMBRE_INGREDIENTE,

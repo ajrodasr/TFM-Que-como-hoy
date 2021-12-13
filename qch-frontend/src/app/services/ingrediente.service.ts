@@ -13,8 +13,34 @@ const BACK_URL = environment.APIEndpoint;
 export class IngredienteService {
   constructor(private http: HttpClient) {}
 
-  public getAllIngredientes(): Observable<Ingrediente[]> {
-    return this.http.get<Ingrediente[]>(BACK_URL + 'api/ingredientes');
+  public getAllIngredientes(
+    idGrupo: number = -1,
+    term: string = '',
+    pageNum: number = 0
+  ): Observable<any> {
+    const parametros: string[] = [];
+
+    if (term !== '') {
+      parametros.push(`term=${term}&`);
+    }
+
+    if (idGrupo >= 0) {
+      parametros.push(`idGrupo=${idGrupo}&`);
+    }
+
+    if (pageNum !== 0) {
+      parametros.push(`pageNum=${pageNum}&`);
+    }
+
+    let urlConsulta = BACK_URL + 'api/ingredientes';
+
+    if (parametros.length > 0) {
+      urlConsulta += '?';
+      parametros.forEach((parametro) => {
+        urlConsulta += parametro;
+      });
+    }
+    return this.http.get<any>(urlConsulta);
   }
 
   public getIngredientesById(idIngrediente: number): Observable<Ingrediente> {

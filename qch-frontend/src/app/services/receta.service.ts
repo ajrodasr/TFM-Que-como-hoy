@@ -73,7 +73,6 @@ export class RecetaService {
         urlConsulta += parametro;
       });
     }
-    console.log(urlConsulta);
     return this.http.get<any>(urlConsulta);
   }
 

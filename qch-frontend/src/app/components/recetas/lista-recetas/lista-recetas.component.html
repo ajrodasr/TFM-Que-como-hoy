@@ -5,7 +5,7 @@
       <div class="accordion-item">
         <h2 class="accordion-header" id="formHeader">
           <button
-            class="accordion-button collapsed border"
+            class="accordion-button collapsed border shadow-none"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#flush-collapseOne"
@@ -41,7 +41,13 @@
                     </option>
                   </select>
                 </div>
-                <div class="col-12 col-sm-4 col-lg-2 mt-1 mt-sm-3 mt-lg-0">
+                <div
+                  class="
+                    col-12 col-sm-4 col-lg-2
+                    mt-1 mt-sm-3 mt-lg-0
+                    position-relative
+                  "
+                >
                   <input
                     #searchBoxUsuario
                     type="text"
@@ -54,7 +60,10 @@
                     (input)="filterUsuario(searchBoxUsuario.value)"
                   />
 
-                  <div *ngIf="usuariosRecetas" class="list-group">
+                  <div
+                    *ngIf="usuariosRecetas"
+                    class="list-group position-absolute z-index-top"
+                  >
                     <button
                       *ngFor="let usuario of usuariosRecetas"
                       (click)="onSelectUsuario(usuario.id)"
@@ -95,7 +104,13 @@
                   />
                 </div>
 
-                <div class="col-12 col-sm-4 col-lg-3 mt-1 mt-sm-0">
+                <div
+                  class="
+                    col-12 col-sm-4 col-lg-3
+                    mt-1 mt-sm-0
+                    position-relative
+                  "
+                >
                   <input
                     #searchBoxIngrediente
                     type="text"
@@ -107,7 +122,10 @@
                     (input)="filterIngrediente(searchBoxIngrediente.value)"
                   />
 
-                  <div *ngIf="ingredientes" class="list-group">
+                  <div
+                    *ngIf="ingredientes"
+                    class="list-group position-absolute z-index-top"
+                  >
                     <button
                       *ngFor="let ingrediente of ingredientes"
                       (click)="onSelectIngrediente(ingrediente)"
@@ -178,7 +196,7 @@
     class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3"
   >
     <div *ngFor="let receta of recetas" class="p-1">
-      <div class="card p-0">
+      <div class="col card animate__animated animate__bounce animate__fadeIn">
         <a
           [routerLink]="['/receta', receta.id]"
           class="center-cropped"
@@ -264,29 +282,45 @@
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
         <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
-          <a class="page-link" (click)="onFilter(paginador.primeraPagina)"
-            ><<</a
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.primeraPagina)"
           >
+            <<
+          </button>
         </li>
         <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
-          <a class="page-link" (click)="onFilter(paginador.anteriorPagina)"
-            ><</a
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.anteriorPagina)"
           >
+            <
+          </button>
         </li>
         <li
           *ngFor="let pagina of paginador.paginas"
           [ngClass]="{ active: pagina === paginador.paginaActual }"
           class="page-item"
         >
-          <a class="page-link" (click)="onFilter(pagina)">{{ pagina }}</a>
+          <button class="page-link shadow-none" (click)="onFilter(pagina)">
+            {{ pagina }}
+          </button>
         </li>
         <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
-          <a class="page-link" (click)="onFilter(paginador.siguientePagina)"
-            >></a
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.siguientePagina)"
           >
+            >
+          </button>
         </li>
         <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
-          <a class="page-link" (click)="onFilter(paginador.ultimaPagina)">>></a>
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.ultimaPagina)"
+          >
+            >>
+          </button>
         </li>
       </ul>
     </nav>

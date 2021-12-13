@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.uoc.tfm.qch.ingredientes.domain.GrupoIngrediente;
 import com.uoc.tfm.qch.ingredientes.dto.IngredienteDTO;
 import com.uoc.tfm.qch.ingredientes.service.IngredienteService;
@@ -28,14 +31,16 @@ public class IngredienteController {
 	IngredienteService ingredienteService;
 	
 	@GetMapping
-	public ResponseEntity<List<IngredienteDTO>> getIngredientesByGrupo(@RequestParam(required = false, defaultValue = "-1") int idGrupo) {
-		List<IngredienteDTO> ingredientes = new ArrayList<IngredienteDTO>();
-		if(idGrupo == -1) {
-			ingredientes = ingredienteService.getIngredientes();
-		} else {
-			ingredientes = ingredienteService.getIngredientesByGrupo(idGrupo);
-		}
-		return new ResponseEntity<List<IngredienteDTO>>(ingredientes, HttpStatus.OK);
+	public ResponseEntity<PageInfo<IngredienteDTO>> getIngredientesByGrupo(
+			@RequestParam(required = false) Integer idGrupo,
+			@RequestParam(required = false, defaultValue = "") String term,
+			@RequestParam(required = false, defaultValue = "1") int pageNum,
+			@RequestParam(required = false, defaultValue = "16") int pageSize) {
+		
+		PageHelper.startPage(pageNum, pageSize);
+		Page<IngredienteDTO> ingredientes = ingredienteService.getIngredientesFiltrados(idGrupo, term);
+		PageInfo<IngredienteDTO> info = new PageInfo<IngredienteDTO>(ingredientes);
+		return new ResponseEntity<PageInfo<IngredienteDTO>>(info, HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

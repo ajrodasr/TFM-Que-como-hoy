@@ -154,7 +154,7 @@ export class ListaRecetasComponent implements OnInit {
     }
   }
 
-  onSelectUsuario(idUsuario: string) {
+  onSelectUsuario(idUsuario: string): void {
     this.idUsuarioFiltro.setValue(idUsuario);
     this.usuariosRecetas = null;
   }
@@ -177,7 +177,7 @@ export class ListaRecetasComponent implements OnInit {
       });
   }
 
-  onResetForm() {
+  onResetForm(): void {
     this.tituloReceta.setValue('');
     this.tipoReceta.setValue(-1);
     this.idUsuarioFiltro.setValue('');
@@ -185,6 +185,12 @@ export class ListaRecetasComponent implements OnInit {
     this.comensales.setValue('');
     this.tiempo.setValue('');
     this.ingredientesSeleccionados = [];
+    const ingredientesInput = document.getElementById(
+      'ingrediente'
+    ) as HTMLInputElement;
+    ingredientesInput.value = '';
+    this.ingredientes = [];
+    this.usuariosRecetas = [];
     this.onFilter();
   }
 }

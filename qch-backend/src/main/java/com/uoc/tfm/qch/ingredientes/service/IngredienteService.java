@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.Page;
 import com.uoc.tfm.qch.ingredientes.domain.GrupoIngrediente;
 import com.uoc.tfm.qch.ingredientes.domain.Ingrediente;
 import com.uoc.tfm.qch.ingredientes.dto.IngredienteDTO;
@@ -27,6 +28,10 @@ public class IngredienteService {
 			}
 		}
 		return ingredientes;
+	}
+	
+	public Page<IngredienteDTO> getIngredientesFiltrados(Integer idGrupo, String term){
+		return ingredienteRepository.getIngredientesFiltrados(idGrupo, term);
 	}
 	
 	public IngredienteDTO getIngredienteById(int idIngrediente) {

@@ -1,17 +1,7 @@
 <div class="container p-5">
   <div class="row">
-    <div class="col-12 col-sm-8">
+    <div class="col-12">
       <h1>Ingredientes</h1>
-    </div>
-    <div class="col-12 col-md-4 text-end">
-      <button
-        type="button"
-        class="btn btn-primary w-100"
-        routerLink="/ingredientes/nuevo"
-        title="Añadir ingrediente"
-      >
-        <i class="fas fa-plus"></i> Nuevo ingrediente
-      </button>
     </div>
   </div>
   <div class="row mt-3">
@@ -54,10 +44,29 @@
     </form>
   </div>
   <div *ngIf="paginador" class="row mt-3">
-    <small
-      >Mostrando del elemento {{ paginador.primerElemento }} al
-      {{ paginador.ultimoElemento }} de {{ paginador.total }} totales</small
+    <div
+      class="
+        col-12 col-md-8 col-lg-9
+        align-self-end
+        order-2 order-md-1
+        mt-3 mt-md-0
+      "
     >
+      <small
+        >Mostrando del elemento {{ paginador.primerElemento }} al
+        {{ paginador.ultimoElemento }} de {{ paginador.total }} totales</small
+      >
+    </div>
+    <div class="col-12 col-md-4 col-lg-3 text-end order-1 order-md-2">
+      <button
+        type="button"
+        class="btn btn-success w-100 w-md-auto"
+        data-toggle="modal"
+        data-target="#nuevoIngredienteModal"
+      >
+        <i class="fas fa-plus"></i> Nuevo ingrediente
+      </button>
+    </div>
   </div>
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mt-3">
     <div *ngFor="let ingrediente of ingredientes" class="p-1">
@@ -134,5 +143,107 @@
         </li>
       </ul>
     </nav>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="nuevoIngredienteModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="nuevoIngredienteModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form
+        [formGroup]="nuevoIngredienteForm"
+        (ngSubmit)="onCreateIngrediente()"
+      >
+        <div class="modal-header">
+          <h5 class="modal-title" id="nuevoIngredienteModalLongTitle">
+            Nuevo ingrediente
+          </h5>
+        </div>
+
+        <div class="modal-body">
+          <div
+            *ngIf="errorIngrediente && mensajeIngrediente"
+            class="alert alert-danger"
+            role="alert"
+          >
+            {{ mensajeIngrediente }}
+          </div>
+          <div
+            *ngIf="!errorIngrediente && mensajeIngrediente"
+            class="alert alert-success"
+            role="alert"
+          >
+            {{ mensajeIngrediente }}
+          </div>
+
+          <div class="form-group m-3">
+            <label for="idUsuario">Nombre</label>
+            <input
+              type="text"
+              name="nombreIng"
+              class="form-control input-lg"
+              [formControl]="nombreIng"
+            />
+            <span
+              class="text-danger"
+              *ngIf="
+                nuevoIngredienteForm.get('nombreIng').errors &&
+                (nuevoIngredienteForm.get('nombreIng').touched ||
+                  nuevoIngredienteForm.get('nombreIng').dirty)
+              "
+            >
+              <span
+                class="text-danger"
+                *ngIf="nombreIng.invalid && nombreIng.errors.required"
+                >El campo es obligatorio</span
+              >
+            </span>
+          </div>
+          <div class="form-group m-3">
+            <label for="grupo">Grupo de alimentos</label>
+            <select class="form-select" formControlName="idGrupoIng">
+              <option [value]="null" disabled>Selecciona grupo...</option>
+              <option *ngFor="let grupo of grupos" [value]="grupo.id">
+                {{ grupo.nombre }}
+              </option>
+            </select>
+            <span
+              class="text-danger"
+              *ngIf="
+                nuevoIngredienteForm.get('idGrupoIng').errors &&
+                (nuevoIngredienteForm.get('idGrupoIng').touched ||
+                  nuevoIngredienteForm.get('idGrupoIng').dirty)
+              "
+            >
+              <span
+                class="text-danger"
+                *ngIf="idGrupoIng.invalid && idGrupoIng.errors.required"
+                >El campo es obligatorio</span
+              >
+            </span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            Cancelar
+          </button>
+          <button
+            class="btn btn-success"
+            [disabled]="!nuevoIngredienteForm.valid"
+            type="submit"
+          >
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

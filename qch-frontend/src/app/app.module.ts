@@ -16,7 +16,6 @@ import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuar
 import { interceptorProvider } from './interceptors/auth-interceptor.service';
 import { IngredienteComponent } from './components/ingredientes/ingrediente/ingrediente.component';
 import { ListaIngredientesComponent } from './components/ingredientes/lista-ingredientes/lista-ingredientes.component';
-import { NuevoIngredienteComponent } from './components/ingredientes/nuevo-ingrediente/nuevo-ingrediente.component';
 import { ListaRecetasComponent } from './components/recetas/lista-recetas/lista-recetas.component';
 import { RecetaComponent } from './components/recetas/receta/receta.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -38,7 +37,6 @@ import { environment } from '../environments/environment';
     PerfilUsuarioComponent,
     IngredienteComponent,
     ListaIngredientesComponent,
-    NuevoIngredienteComponent,
     ListaRecetasComponent,
     RecetaComponent,
     FooterComponent,
@@ -56,7 +54,7 @@ import { environment } from '../environments/environment';
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

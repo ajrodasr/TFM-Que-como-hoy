@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { GrupoIngrediente } from 'src/app/models/grupo-ingrediente';
 import { Ingrediente } from 'src/app/models/ingrediente';
@@ -22,6 +27,17 @@ export class ListaIngredientesComponent implements OnInit {
   grupo: FormControl;
   filtroForm: FormGroup;
 
+  // Nuevo ingrediente
+  nuevoIngrediente = new Ingrediente();
+
+  nombreIng: FormControl;
+  idGrupoIng: FormControl;
+
+  nuevoIngredienteForm: FormGroup;
+
+  mensajeIngrediente = '';
+  errorIngrediente = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private ingredienteService: IngredienteService,
@@ -38,12 +54,22 @@ export class ListaIngredientesComponent implements OnInit {
       this.grupos = data[1];
     });
 
+    // Filtro
     this.nombreIngrediente = new FormControl('');
     this.grupo = new FormControl(-1);
 
     this.filtroForm = this.formBuilder.group({
       nombreIngrediente: this.nombreIngrediente,
       grupo: this.grupo,
+    });
+
+    // Nuevo ingrediente
+    this.nombreIng = new FormControl('', [Validators.required]);
+    this.idGrupoIng = new FormControl(null, [Validators.required]);
+
+    this.nuevoIngredienteForm = this.formBuilder.group({
+      nombreIng: this.nombreIng,
+      idGrupoIng: this.idGrupoIng,
     });
   }
   isAdmin(): boolean {
@@ -67,5 +93,23 @@ export class ListaIngredientesComponent implements OnInit {
     this.nombreIngrediente.setValue('');
     this.grupo.setValue(-1);
     this.onFilter();
+  }
+
+  onCreateIngrediente(): void {
+    this.nuevoIngrediente.nombre = this.nombreIng.value;
+    this.nuevoIngrediente.grupo.id = this.idGrupoIng.value;
+
+    this.ingredienteService.nuevoIngrediente(this.nuevoIngrediente).subscribe(
+      (data) => {
+        this.errorIngrediente = false;
+        this.mensajeIngrediente = data.mensaje;
+        this.nombreIng.reset();
+        this.idGrupoIng.reset();
+      },
+      (err) => {
+        this.errorIngrediente = true;
+        this.mensajeIngrediente = err.error;
+      }
+    );
   }
 }

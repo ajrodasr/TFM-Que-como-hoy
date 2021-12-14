@@ -5,7 +5,6 @@ import { EmailPasswordComponent } from './components/email-password/email-passwo
 import { IndexComponent } from './components/index/index.component';
 import { IngredienteComponent } from './components/ingredientes/ingrediente/ingrediente.component';
 import { ListaIngredientesComponent } from './components/ingredientes/lista-ingredientes/lista-ingredientes.component';
-import { NuevoIngredienteComponent } from './components/ingredientes/nuevo-ingrediente/nuevo-ingrediente.component';
 import { LoginComponent } from './components/login/login.component';
 import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuario.component';
 import { EditarRecetaComponent } from './components/recetas/editar-receta/editar-receta.component';
@@ -18,7 +17,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
-  { path: '', component: IndexComponent },
+  { path: '', component: IndexComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
   { path: 'registro', component: RegistroComponent, canActivate: [LoginGuard] },
   {
@@ -44,11 +43,6 @@ const routes: Routes = [
   {
     path: 'ingrediente/:idIngrediente',
     component: IngredienteComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'ingredientes/nuevo',
-    component: NuevoIngredienteComponent,
     canActivate: [AuthGuard],
   },
   {

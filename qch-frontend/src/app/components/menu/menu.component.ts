@@ -27,15 +27,17 @@ export class MenuComponent implements OnInit {
     window.location.reload();
   }
 
-  closeOnClick(): void{
+  closeOnClick(): void {
     document.addEventListener('DOMContentLoaded', (event) => {
       const links = document.querySelectorAll('nav a');
-      const buttonClose = document.querySelector('.navbar-toggler') as HTMLElement;
+      const buttonClose = document.querySelector(
+        '.navbar-toggler'
+      ) as HTMLElement;
       links.forEach((a) => {
         a.addEventListener('click', () => {
-            if (buttonClose.getAttribute('aria-expanded') === 'true'){
-              buttonClose.click();
-            }
+          if (buttonClose.getAttribute('aria-expanded') === 'true') {
+            buttonClose.click();
+          }
         });
       });
     });

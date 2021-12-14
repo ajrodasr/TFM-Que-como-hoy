@@ -23,7 +23,9 @@ public interface RecetaRepository {
 			String dificultad,
 			Integer comensales,
 			Integer tiempo,
-			List<Integer> ingredientes);
+			List<Integer> ingredientes,
+			Integer orderBy,
+			Boolean desc);
 	List<Receta> getRecetasByTipo(int idTipoReceta);
 	List<Receta> getRecetasByUsuario(String idUsuario);
 	void saveReceta(Receta receta);

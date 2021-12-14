@@ -211,7 +211,10 @@
 		<bind name="size" value="ingredientes.size" />
 		HAVING COUNT(*) = #{size}
 		</if>
-		
+		ORDER BY #{orderBy}
+		<if test="desc">
+		 DESC
+		</if>
 	</select>
 	
 	<select id="getRecetasByTipo" resultMap="receta">

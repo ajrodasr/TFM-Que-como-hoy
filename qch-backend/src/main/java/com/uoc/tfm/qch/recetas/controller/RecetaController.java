@@ -48,9 +48,11 @@ public class RecetaController {
 			@RequestParam(required = false) Integer tiempo,
 			@RequestParam(required = false, defaultValue = "", value="ingrediente") Integer[] ingredientes,
 			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "10") Integer pageSize,
+			@RequestParam(required = false, defaultValue = "5") Integer order,
+			@RequestParam(required = false, defaultValue = "true") Boolean desc) {
 		PageHelper.startPage(pageNum, pageSize);
-		Page<RecetaFiltradaDTO> recetas = recetaService.getRecetasPublicadasPaginadas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, Arrays.asList(ingredientes));
+		Page<RecetaFiltradaDTO> recetas = recetaService.getRecetasPublicadasPaginadas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, Arrays.asList(ingredientes), order, desc);
 		PageInfo<RecetaFiltradaDTO> info = new PageInfo<RecetaFiltradaDTO>(recetas);
 		return new ResponseEntity<PageInfo<RecetaFiltradaDTO>>(info, HttpStatus.OK);
 	}

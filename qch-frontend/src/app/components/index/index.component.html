@@ -1,1 +1,210 @@
-<p>index works!</p>
+<div class="portada d-flex align-items-center justify-content-center row g-0">
+  <div class="col-8 col-lg-6 position-relative">
+    <input
+      #searchBoxReceta
+      type="text"
+      id="searchReceta"
+      class="form-control input-lg"
+      autocomplete="off"
+      placeholder="¿Te apetece algo en especial?"
+      (input)="onFilter(searchBoxReceta.value)"
+    />
+    <div *ngIf="recetas" class="list-group position-absolute z-index-top w-100">
+      <a
+        *ngFor="let receta of recetas"
+        type="button"
+        class="list-group-item list-group-item-action"
+        aria-current="true"
+        [routerLink]="['/receta', receta.id]"
+      >
+        {{ receta.titulo }}
+      </a>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row mt-5">
+    <div class="row text-center">
+      <h2>RECETAS MEJOR VALORADAS</h2>
+    </div>
+    <div
+      *ngIf="recetasValoradas"
+      class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3"
+    >
+      <div *ngFor="let receta of recetasValoradas" class="p-1">
+        <div class="col card animate__animated animate__bounce animate__fadeIn">
+          <a
+            [routerLink]="['/receta', receta.id]"
+            class="center-cropped"
+            [style]="
+              'background-image: url(' +
+              BACK_URL_IMAGES +
+              receta.imagen +
+              '), url(' +
+              BACK_URL_IMAGES +
+              'default.jpg)'
+            "
+          ></a>
+          <div class="card-body">
+            <h5 class="card-title">
+              <a [routerLink]="['/receta', receta.id]">{{ receta.titulo }}</a>
+            </h5>
+            <div class="row">
+              <div class="col-6">
+                <small class="text-muted">{{ receta.usuario.id }}</small>
+              </div>
+              <div class="col-6 text-end">
+                <small class="badge bg-secondary">{{
+                  receta.tipoReceta.nombre
+                }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-4" title="Minutos de elaboración">
+                <i class="far fa-clock"></i>
+                {{ receta.tiempo }}
+              </div>
+              <div class="col-4" title="Comensales">
+                <i class="fas fa-male"></i> {{ receta.comensales }}
+              </div>
+              <div class="col-4">
+                <i
+                  *ngIf="receta.dificultad === 'DIFICIL'"
+                  class="text-danger fas fa-thermometer-three-quarters"
+                  title="Dificultad: alta"
+                ></i>
+                <i
+                  *ngIf="receta.dificultad === 'MEDIO'"
+                  title="Dificultad: media"
+                  class="text-warning fas fa-thermometer-half"
+                ></i>
+                <i
+                  *ngIf="receta.dificultad === 'FACIL'"
+                  class="text-success fas fa-thermometer-quarter"
+                  title="Dificultad: baja"
+                ></i>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <ng-template [ngIf]="like(receta.id)" [ngIfElse]="notLike">
+              <button
+                (click)="onDislike(receta.id)"
+                class="btn btn-block text-danger"
+                title="Dislike"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
+            </ng-template>
+
+            <ng-template #notLike>
+              <button
+                (click)="onLike(receta.id)"
+                class="btn btn-block text-danger"
+                title="Like"
+              >
+                <i class="far fa-heart"></i>
+              </button>
+            </ng-template>
+            <small *ngIf="receta.likes > 0"> {{ receta.likes }} me gusta</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="row text-center">
+      <h2>ÚLTIMAS RECETAS AÑADIDAS</h2>
+    </div>
+    <div
+      *ngIf="recetasRecientes"
+      class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3"
+    >
+      <div *ngFor="let receta of recetasRecientes" class="p-1">
+        <div class="col card animate__animated animate__bounce animate__fadeIn">
+          <a
+            [routerLink]="['/receta', receta.id]"
+            class="center-cropped"
+            [style]="
+              'background-image: url(' +
+              BACK_URL_IMAGES +
+              receta.imagen +
+              '), url(' +
+              BACK_URL_IMAGES +
+              'default.jpg)'
+            "
+          ></a>
+          <div class="card-body">
+            <h5 class="card-title">
+              <a [routerLink]="['/receta', receta.id]">{{ receta.titulo }}</a>
+            </h5>
+            <div class="row">
+              <div class="col-6">
+                <small class="text-muted">{{ receta.usuario.id }}</small>
+              </div>
+              <div class="col-6 text-end">
+                <small class="badge bg-secondary">{{
+                  receta.tipoReceta.nombre
+                }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-4" title="Minutos de elaboración">
+                <i class="far fa-clock"></i>
+                {{ receta.tiempo }}
+              </div>
+              <div class="col-4" title="Comensales">
+                <i class="fas fa-male"></i> {{ receta.comensales }}
+              </div>
+              <div class="col-4">
+                <i
+                  *ngIf="receta.dificultad === 'DIFICIL'"
+                  class="text-danger fas fa-thermometer-three-quarters"
+                  title="Dificultad: alta"
+                ></i>
+                <i
+                  *ngIf="receta.dificultad === 'MEDIO'"
+                  title="Dificultad: media"
+                  class="text-warning fas fa-thermometer-half"
+                ></i>
+                <i
+                  *ngIf="receta.dificultad === 'FACIL'"
+                  class="text-success fas fa-thermometer-quarter"
+                  title="Dificultad: baja"
+                ></i>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <ng-template [ngIf]="like(receta.id)" [ngIfElse]="notLike">
+              <button
+                (click)="onDislike(receta.id)"
+                class="btn btn-block text-danger"
+                title="Dislike"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
+            </ng-template>
+
+            <ng-template #notLike>
+              <button
+                (click)="onLike(receta.id)"
+                class="btn btn-block text-danger"
+                title="Like"
+              >
+                <i class="far fa-heart"></i>
+              </button>
+            </ng-template>
+            <small *ngIf="receta.likes > 0"> {{ receta.likes }} me gusta</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

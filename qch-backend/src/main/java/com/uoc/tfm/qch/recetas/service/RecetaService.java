@@ -64,8 +64,10 @@ public class RecetaService {
 			String dificultad,
 			Integer comensales,
 			Integer tiempo,
-			List<Integer> ingredientes){
-		return recetaRepository.getRecetasFiltradas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, ingredientes);
+			List<Integer> ingredientes,
+			Integer order,
+			Boolean desc){
+		return recetaRepository.getRecetasFiltradas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, ingredientes, order, desc);
 	}
 	
 	public List<UsuarioRecetaDTO> getUsuariosRecetasFilter(String term){

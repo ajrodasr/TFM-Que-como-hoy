@@ -76,6 +76,48 @@ export class RecetaService {
     return this.http.get<any>(urlConsulta);
   }
 
+  public getRecetasMasValoradas(pageSize: number = 0): Observable<any> {
+    const parametros: string[] = [];
+
+    if (pageSize !== 0) {
+      parametros.push(`pageSize=${pageSize}&`);
+    }
+
+    parametros.push(`order=${10}&`);
+    parametros.push(`desc=${true}&`);
+
+    let urlConsulta = BACK_URL + 'api/recetas';
+
+    if (parametros.length > 0) {
+      urlConsulta += '?';
+      parametros.forEach((parametro) => {
+        urlConsulta += parametro;
+      });
+    }
+    return this.http.get<any>(urlConsulta);
+  }
+
+  public getRecetasRecientes(pageSize: number = 0): Observable<any> {
+    const parametros: string[] = [];
+
+    if (pageSize !== 0) {
+      parametros.push(`pageSize=${pageSize}&`);
+    }
+
+    parametros.push(`order=${5}&`);
+    parametros.push(`desc=${true}&`);
+
+    let urlConsulta = BACK_URL + 'api/recetas';
+
+    if (parametros.length > 0) {
+      urlConsulta += '?';
+      parametros.forEach((parametro) => {
+        urlConsulta += parametro;
+      });
+    }
+    return this.http.get<any>(urlConsulta);
+  }
+
   public getReceta(idReceta: number): Observable<Receta> {
     return this.http.get<Receta>(
       BACK_URL + 'api/recetas/receta?idReceta=' + idReceta

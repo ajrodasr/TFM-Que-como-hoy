@@ -63,6 +63,7 @@
         class="btn btn-success w-100 w-md-auto"
         data-toggle="modal"
         data-target="#nuevoIngredienteModal"
+        (click)="onNuevoIngrediente()"
       >
         <i class="fas fa-plus"></i> Nuevo ingrediente
       </button>
@@ -85,12 +86,16 @@
           </div>
           <div class="col-2">
             <div *ngIf="isAdmin()" class="card-body p-sm-1">
-              <a
-                class="text-primary"
-                [routerLink]="['/ingrediente', ingrediente.id]"
+              <button
+                type="button"
+                class="btn text-primary"
+                data-toggle="modal"
+                data-target="#nuevoIngredienteModal"
                 title="Editar"
-                ><i class="fas fa-edit"></i
-              ></a>
+                (click)="onEditarIngrediente(ingrediente)"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -157,10 +162,7 @@
 >
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <form
-        [formGroup]="nuevoIngredienteForm"
-        (ngSubmit)="onCreateIngrediente()"
-      >
+      <form [formGroup]="nuevoIngredienteForm" (ngSubmit)="onSaveIngrediente()">
         <div class="modal-header">
           <h5 class="modal-title" id="nuevoIngredienteModalLongTitle">
             Nuevo ingrediente
@@ -182,6 +184,8 @@
           >
             {{ mensajeIngrediente }}
           </div>
+
+          <input type="hidden" name="idIng" [formControl]="idIng" />
 
           <div class="form-group m-3">
             <label for="idUsuario">Nombre</label>

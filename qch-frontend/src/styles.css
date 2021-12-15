@@ -1,4 +1,8 @@
 /* CUSTOM STYLES */
+body {
+  background-color: #e9ecef;
+}
+
 .portada {
   height: 60vh;
   background-image: url("/assets/images/portada.jpg");
@@ -7,15 +11,38 @@
   background-size: cover;
 }
 
-.h-100vh{
+.h-100vh {
   height: 100vh;
 }
 
-.bg-principal{
+.max-h55 {
+  max-height: 50px;
+}
+
+.bg-principal {
   background-color: #c0a58d;
 }
 
-.rounded-left{
+a {
+  color: #212529;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #c0a58d;
+}
+
+.page-link,
+.page-link:hover {
+  color: #c0a58d;
+}
+
+.page-item.active .page-link {
+  background-color: #c0a58d;
+  border-color: #c0a58d;
+}
+
+.rounded-left {
   border-radius: 0;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;

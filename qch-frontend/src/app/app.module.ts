@@ -14,7 +14,6 @@ import { EmailPasswordComponent } from './components/email-password/email-passwo
 import { CambiarPasswordComponent } from './components/cambiar-password/cambiar-password.component';
 import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuario.component';
 import { interceptorProvider } from './interceptors/auth-interceptor.service';
-import { IngredienteComponent } from './components/ingredientes/ingrediente/ingrediente.component';
 import { ListaIngredientesComponent } from './components/ingredientes/lista-ingredientes/lista-ingredientes.component';
 import { ListaRecetasComponent } from './components/recetas/lista-recetas/lista-recetas.component';
 import { RecetaComponent } from './components/recetas/receta/receta.component';
@@ -35,7 +34,6 @@ import { environment } from '../environments/environment';
     EmailPasswordComponent,
     CambiarPasswordComponent,
     PerfilUsuarioComponent,
-    IngredienteComponent,
     ListaIngredientesComponent,
     ListaRecetasComponent,
     RecetaComponent,

@@ -83,7 +83,7 @@ public class IngredienteController {
 			return new ResponseEntity("El ingrediente no existe", HttpStatus.BAD_REQUEST);
 		}
 		IngredienteDTO ing = ingredienteService.getIngredienteByNombre(ingrediente.getNombre());
-		if(ingrediente.getId() != ing.getId()) {
+		if(ing != null && ingrediente.getId() != ing.getId()) {
 			return new ResponseEntity("El ingrediente ya existe", HttpStatus.BAD_REQUEST);
 		}
 		ingredienteService.updateIngrediente(ingrediente);

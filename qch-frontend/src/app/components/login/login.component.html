@@ -1,13 +1,10 @@
-<div class="d-flex h-100vh align-items-center justify-content-center bg-info">
-  <div class="card col-8 col-md-5 col-lg-5 col-xl-3 shadow-lg">
+<div class="d-flex h-100vh align-items-center justify-content-center">
+  <div class="card col-11 col-md-5 col-lg-5 col-xl-3 shadow-lg">
     <div class="card-body">
       <div class="row d-flex justify-content-center">
-        <div class="col-3 rounded-circle bg-principal">
-          <img src="assets/images/logo-blanco.png" alt="QCH" class="w-100">
+        <div class="col-3">
+          <img src="assets/images/logo.png" alt="QCH" class="w-100" />
         </div>
-      </div>
-      <div class="text-center">
-        <h3>Iniciar sesión</h3>
       </div>
       <div *ngIf="mensaje" class="alert alert-danger" role="alert">
         {{ mensaje }}
@@ -16,7 +13,9 @@
         <div class="form-group m-3">
           <div class="input-group mb-2">
             <div class="input-group-prepend">
-              <div class="input-group-text h-100 rounded-left"><i class="fas fa-user"></i></div>
+              <div class="input-group-text h-100 rounded-left">
+                <i class="fas fa-user"></i>
+              </div>
             </div>
             <input
               type="text"
@@ -44,17 +43,19 @@
         <div class="form-group m-3">
           <div class="input-group mb-2">
             <div class="input-group-prepend">
-              <div class="input-group-text h-100 rounded-left"><i class="fas fa-key"></i></div>
+              <div class="input-group-text h-100 rounded-left">
+                <i class="fas fa-key"></i>
+              </div>
             </div>
             <input
-            type="password"
-            name="password"
-            class="form-control"
-            placeholder="Contraseña"
-            [formControl]="password"
-          />
+              type="password"
+              name="password"
+              class="form-control"
+              placeholder="Contraseña"
+              [formControl]="password"
+            />
           </div>
-         
+
           <span
             class="text-danger"
             *ngIf="

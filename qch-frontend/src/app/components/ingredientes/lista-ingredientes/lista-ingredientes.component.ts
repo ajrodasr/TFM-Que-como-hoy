@@ -30,6 +30,7 @@ export class ListaIngredientesComponent implements OnInit {
   // Nuevo ingrediente
   nuevoIngrediente = new Ingrediente();
 
+  idIng: FormControl;
   nombreIng: FormControl;
   idGrupoIng: FormControl;
 
@@ -64,10 +65,12 @@ export class ListaIngredientesComponent implements OnInit {
     });
 
     // Nuevo ingrediente
+    this.idIng = new FormControl(-1);
     this.nombreIng = new FormControl('', [Validators.required]);
     this.idGrupoIng = new FormControl(null, [Validators.required]);
 
     this.nuevoIngredienteForm = this.formBuilder.group({
+      idIng: this.idIng,
       nombreIng: this.nombreIng,
       idGrupoIng: this.idGrupoIng,
     });
@@ -95,12 +98,24 @@ export class ListaIngredientesComponent implements OnInit {
     this.onFilter();
   }
 
+  onSaveIngrediente(): void {
+    const idIngrediente = this.idIng.value;
+    if (idIngrediente >= 0) {
+      this.onUpdateIngrediente();
+    }
+
+    if (idIngrediente < 0) {
+      this.onCreateIngrediente();
+    }
+  }
+
   onCreateIngrediente(): void {
     this.nuevoIngrediente.nombre = this.nombreIng.value;
     this.nuevoIngrediente.grupo.id = this.idGrupoIng.value;
 
     this.ingredienteService.nuevoIngrediente(this.nuevoIngrediente).subscribe(
       (data) => {
+        this.onFilter();
         this.errorIngrediente = false;
         this.mensajeIngrediente = data.mensaje;
         this.nombreIng.reset();
@@ -111,5 +126,43 @@ export class ListaIngredientesComponent implements OnInit {
         this.mensajeIngrediente = err.error;
       }
     );
+  }
+
+  onUpdateIngrediente(): void {
+    const ingEditar = new Ingrediente();
+    ingEditar.id = this.idIng.value;
+    ingEditar.nombre = this.nombreIng.value;
+    ingEditar.grupo.id = this.idGrupoIng.value;
+
+    this.ingredienteService.actualizarIngrediente(ingEditar).subscribe(
+      (data) => {
+        this.errorIngrediente = false;
+        this.mensajeIngrediente = data.mensaje;
+        this.onFilter();
+      },
+      (err) => {
+        this.errorIngrediente = true;
+        this.mensajeIngrediente = err.error;
+      }
+    );
+  }
+
+  onEditarIngrediente(ingrediente: Ingrediente): void {
+    this.idIng.setValue(ingrediente.id);
+    this.nombreIng.setValue(ingrediente.nombre);
+    this.idGrupoIng.setValue(ingrediente.grupo.id);
+    this.mensajeIngrediente = '';
+    this.errorIngrediente = false;
+  }
+
+  onNuevoIngrediente(): void {
+    this.idIng.reset();
+    this.nombreIng.reset();
+    this.idGrupoIng.reset();
+    this.idIng.setValue(-1);
+    this.nombreIng.setValue('');
+    this.idGrupoIng.setValue(null);
+    this.mensajeIngrediente = '';
+    this.errorIngrediente = false;
   }
 }

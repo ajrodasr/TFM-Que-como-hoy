@@ -7,6 +7,20 @@
   background-size: cover;
 }
 
+.h-100vh{
+  height: 100vh;
+}
+
+.bg-principal{
+  background-color: #c0a58d;
+}
+
+.rounded-left{
+  border-radius: 0;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
 .center-cropped {
   height: 200px;
   background-position: center center;

@@ -20,7 +20,7 @@ import com.uoc.tfm.qch.security.dto.PerfilUsuarioDTO;
 import com.uoc.tfm.qch.security.service.UsuarioService;
 
 @RestController
-@RequestMapping("/perfil-usuario")
+@RequestMapping("/api/perfil-usuario")
 @CrossOrigin
 public class UsuarioController {
 

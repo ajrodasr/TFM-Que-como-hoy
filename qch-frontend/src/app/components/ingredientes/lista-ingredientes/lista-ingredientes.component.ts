@@ -138,7 +138,7 @@ export class ListaIngredientesComponent implements OnInit {
       (data) => {
         this.errorIngrediente = false;
         this.mensajeIngrediente = data.mensaje;
-        this.onFilter();
+        this.onFilter(this.paginador.paginaActual);
       },
       (err) => {
         this.errorIngrediente = true;

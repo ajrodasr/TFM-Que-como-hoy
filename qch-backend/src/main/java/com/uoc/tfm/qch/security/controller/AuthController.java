@@ -84,9 +84,15 @@ public class AuthController {
 	}
 	
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/login")
 	public ResponseEntity<JwtDto> login (@RequestBody LoginUsuario loginUsuario){
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getId(), loginUsuario.getPassword()));
+		Authentication authentication = null;
+		try {
+			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getId(), loginUsuario.getPassword()));
+		} catch (Exception e) {
+			return new ResponseEntity(Collections.singletonMap("mensaje", "Credenciales incorrectas"), HttpStatus.BAD_REQUEST);
+		}
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtProvider.generateToken(authentication);
 		JwtDto jwtDto = new JwtDto(jwt);

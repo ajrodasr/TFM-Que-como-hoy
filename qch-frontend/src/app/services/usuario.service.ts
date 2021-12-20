@@ -15,7 +15,7 @@ export class UsuarioService {
 
   public getPerfilUsuario(idUsuario: string): Observable<any> {
     const param = new HttpParams().append('idUsuario', idUsuario);
-    return this.http.get<PerfilUsuario>(BACK_URL + 'perfil-usuario', {
+    return this.http.get<PerfilUsuario>(BACK_URL + 'api/perfil-usuario', {
       params: param,
     });
   }
@@ -24,7 +24,7 @@ export class UsuarioService {
     perfilUsuario: PerfilUsuario
   ): Observable<any> {
     return this.http.post<PerfilUsuario>(
-      BACK_URL + 'perfil-usuario/actualizar-datos',
+      BACK_URL + 'api/perfil-usuario/actualizar-datos',
       perfilUsuario
     );
   }
@@ -33,7 +33,7 @@ export class UsuarioService {
     cambiarPasswordPerfil: CambiarPasswordPerfil
   ): Observable<any> {
     return this.http.post<PerfilUsuario>(
-      BACK_URL + 'perfil-usuario/cambiar-password',
+      BACK_URL + 'api/perfil-usuario/cambiar-password',
       cambiarPasswordPerfil
     );
   }

@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
         window.location.href = '/';
       },
       (err) => {
-        let msg = err.error.message;
+        let msg = err.error.mensaje;
         if (!msg) {
           msg =
             'Ha ocurrido un error de conexión, vuelva a intentarlo mas tarde';

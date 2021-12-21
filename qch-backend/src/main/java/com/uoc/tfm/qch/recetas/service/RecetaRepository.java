@@ -8,6 +8,7 @@ import com.github.pagehelper.Page;
 import com.uoc.tfm.qch.recetas.domain.Receta;
 import com.uoc.tfm.qch.recetas.domain.TipoReceta;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.RecetaConsumidaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaFiltradaDTO;
 import com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO;
 
@@ -26,9 +27,12 @@ public interface RecetaRepository {
 			List<Integer> ingredientes,
 			Integer orderBy,
 			Boolean desc);
+	List<RecetaFiltradaDTO> getUltimasRecetasConsumidas(String idUsuario);
+	List<RecetaFiltradaDTO> getRecetasMasConsumidasUsuario(String idUsuario);
 	List<Receta> getRecetasByTipo(int idTipoReceta);
 	List<Receta> getRecetasByUsuario(String idUsuario);
 	void saveReceta(Receta receta);
+	void saveRecetaConsumida(RecetaConsumidaDTO recetaConsumida);
 	void publicarReceta(int idReceta);
 	void despublicarReceta(int idReceta);
 	void updateReceta(Receta receta);

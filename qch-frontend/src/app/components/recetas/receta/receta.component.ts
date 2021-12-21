@@ -1,8 +1,16 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GrupoIngrediente } from 'src/app/models/grupo-ingrediente';
 import { LikeReceta } from 'src/app/models/like-receta';
 import { Receta } from 'src/app/models/receta';
+import { RecetaConsumida } from 'src/app/models/receta-consumida';
 import { AuthService } from 'src/app/services/auth.service';
 import { RecetaService } from 'src/app/services/receta.service';
 import { environment } from 'src/environments/environment';
@@ -17,11 +25,18 @@ export class RecetaComponent implements OnInit {
   receta: Receta;
   idUsuario: string;
 
+  fechaConsumicion: FormControl;
+  consumicionForm: FormGroup;
+
+  mensajeConsumida: string;
+  errorConsumida = false;
+
   constructor(
     private recetaService: RecetaService,
     private authService: AuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +54,15 @@ export class RecetaComponent implements OnInit {
         this.router.navigate(['/recetas']);
       }
     );
+
+    this.fechaConsumicion = new FormControl(
+      formatDate(new Date(), 'yyyy-MM-dd', 'en'),
+      Validators.required
+    );
+
+    this.consumicionForm = this.formBuilder.group({
+      fechaConsumicion: this.fechaConsumicion,
+    });
   }
 
   getRecomendacion(): string {
@@ -103,6 +127,24 @@ export class RecetaComponent implements OnInit {
     this.recetaService.despublicar(idReceta).subscribe((data) => {
       this.receta.publicada = false;
     });
+  }
+
+  onConsumir(): void {
+    const recetaConsumida = new RecetaConsumida(
+      this.idUsuario,
+      this.receta.id,
+      this.fechaConsumicion.value
+    );
+    this.recetaService.anadirConsumida(recetaConsumida).subscribe(
+      (data) => {
+        this.mensajeConsumida = data.mensaje;
+        this.errorConsumida = false;
+      },
+      (err) => {
+        this.mensajeConsumida = err.error;
+        this.errorConsumida = true;
+      }
+    );
   }
 
   miReceta(): boolean {

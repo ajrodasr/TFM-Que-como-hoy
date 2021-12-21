@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.Page;
 import com.uoc.tfm.qch.ingredientes.domain.GrupoIngrediente;
 import com.uoc.tfm.qch.ingredientes.domain.Ingrediente;
+import com.uoc.tfm.qch.ingredientes.dto.GrupoIngredienteConsumidoDTO;
 import com.uoc.tfm.qch.ingredientes.dto.IngredienteDTO;
 
 @Service
@@ -65,8 +66,23 @@ public class IngredienteService {
 		return ingredientes;
 	}
 	
+	public List<IngredienteDTO> getIngredientesMasUsadosUsuario(String idUsuario){
+		List<Ingrediente> ing = ingredienteRepository.getIngredientesMasUsadosUsuario(idUsuario);
+		List<IngredienteDTO> ingredientes = new ArrayList<IngredienteDTO>();
+		if(!ing.isEmpty()) {
+			for (Ingrediente ingrediente : ing) {
+				ingredientes.add(new IngredienteDTO(ingrediente.getId(), ingrediente.getNombre(), ingrediente.getGrupo()));
+			}
+		}
+		return ingredientes;
+	}
+	
 	public List<GrupoIngrediente> getGrupos(){
 		return ingredienteRepository.getGrupos();
+	}
+	
+	public List<GrupoIngredienteConsumidoDTO> getGruposConsumidos(String idUsuario){
+		return ingredienteRepository.getGruposConsumidos(idUsuario);
 	}
 	
 	public void saveIngrediente (IngredienteDTO ingrediente) {

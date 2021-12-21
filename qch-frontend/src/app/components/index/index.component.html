@@ -22,16 +22,15 @@
     </div>
   </div>
 </div>
-<div class="container p-5">
+<div class="container mt-5 mb-5 p-5 p-md-3">
   <div class="row text-center">
     <h2>RECETAS MEJOR VALORADAS</h2>
   </div>
-  <div
-    *ngIf="recetasValoradas"
-    class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3"
-  >
+  <div *ngIf="recetasValoradas" class="row row-cols-1 row-cols-md-3 mt-3">
     <div *ngFor="let receta of recetasValoradas" class="p-1">
-      <div class="col card animate__animated animate__bounce animate__fadeIn">
+      <div
+        class="col card animate__animated animate__bounce animate__fadeIn h-100"
+      >
         <a
           [routerLink]="['/receta', receta.id]"
           class="center-cropped"
@@ -117,12 +116,11 @@
   <div class="row text-center mt-5">
     <h2>ÚLTIMAS RECETAS AÑADIDAS</h2>
   </div>
-  <div
-    *ngIf="recetasRecientes"
-    class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3"
-  >
+  <div *ngIf="recetasRecientes" class="row row-cols-1 row-cols-md-3 mt-3">
     <div *ngFor="let receta of recetasRecientes" class="p-1">
-      <div class="col card animate__animated animate__bounce animate__fadeIn">
+      <div
+        class="col card animate__animated animate__bounce animate__fadeIn h-100"
+      >
         <a
           [routerLink]="['/receta', receta.id]"
           class="center-cropped"

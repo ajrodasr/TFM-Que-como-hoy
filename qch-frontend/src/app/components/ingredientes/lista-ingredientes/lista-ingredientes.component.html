@@ -1,7 +1,7 @@
-<div class="container p-5">
+<div class="container mt-5 p-5 p-sm-3">
   <div class="row">
     <div class="col-12">
-      <h1>Ingredientes</h1>
+      <h1 class="text-center">INGREDIENTES</h1>
     </div>
   </div>
   <div class="row mt-3">
@@ -71,7 +71,9 @@
   </div>
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mt-3">
     <div *ngFor="let ingrediente of ingredientes" class="p-1">
-      <div class="col card animate__animated animate__bounce animate__fadeIn">
+      <div
+        class="col card animate__animated animate__bounce animate__fadeIn h-100"
+      >
         <div class="row g-0">
           <div class="col-10">
             <div class="card-body">
@@ -88,7 +90,7 @@
             <div *ngIf="isAdmin()" class="card-body p-sm-1">
               <button
                 type="button"
-                class="btn text-primary"
+                class="btn text-primary p-0"
                 data-toggle="modal"
                 data-target="#nuevoIngredienteModal"
                 title="Editar"

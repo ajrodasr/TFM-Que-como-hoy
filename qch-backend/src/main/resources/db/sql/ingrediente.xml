@@ -18,6 +18,14 @@
 		<result column="RACIONES_SEMANA_GRUPO" property="racionesSemana" />
 	</resultMap>
 	
+	<resultMap id="grupoConsumido" type="com.uoc.tfm.qch.ingredientes.dto.GrupoIngredienteConsumidoDTO">
+		<id column="ID" property="id" />
+		<result column="NOMBRE" property="nombre" />
+		<result column="RACIONES_SEMANA" property="racionesSemana" />
+		<result column="RACIONES_CONSUMIDAS" property="racionesConsumidas" />
+		<result column="PORCENTAJE_CONSUMIDO" property="porcentajeConsumido" />
+	</resultMap>
+	
 	<select id="getIngredientes" resultMap="ingrediente">
 		SELECT I.ID AS ID_INGREDIENTE,
 			I.NOMBRE AS NOMBRE_INGREDIENTE,
@@ -92,6 +100,22 @@
 		ORDER BY I.NOMBRE
 	</select>
 	
+	<select id="getIngredientesMasUsadosUsuario" resultMap="ingrediente">
+		SELECT i.ID AS ID_INGREDIENTE,
+			i.NOMBRE AS NOMBRE_INGREDIENTE,
+			g.ID AS ID_GRUPO,
+			g.NOMBRE AS NOMBRE_GRUPO,
+			g.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
+		FROM INGREDIENTES i
+		LEFT JOIN INGREDIENTE_RECETA ir ON ir.INGREDIENTE = i.ID 
+		LEFT JOIN GRUPO_INGREDIENTE g ON I.GRUPO = G.ID
+		LEFT JOIN USUARIO_RECETA_CONSUMIDA urc ON urc.RECETA = ir.RECETA
+		WHERE ir.RECETA IS NOT NULL AND urc.USUARIO = #{idUsuario}
+		GROUP BY i.ID
+		ORDER BY count(i.ID) DESC
+		LIMIT 4
+	</select>
+	
 	<insert id="saveIngrediente">
 		INSERT INTO INGREDIENTES (NOMBRE, GRUPO) VALUES (#{nombre},#{grupo.id})
 	</insert>
@@ -118,6 +142,21 @@
 		FROM GRUPO_INGREDIENTE
 		WHERE ID = #{idGrupoIngrediente}
 		ORDER BY I.NOMBRE
+	</select>
+	
+	<select id="getGruposConsumidos" resultMap="grupoConsumido">
+		SELECT g.ID AS ID,
+			g.NOMBRE AS NOMBRE,
+			g.RACIONES_SEMANA AS RACIONES_SEMANA,
+			count(g.ID) AS RACIONES_CONSUMIDAS,
+			IF((round(count(g.ID) * 100 / g.RACIONES_SEMANA) > 100), 100, (round(count(g.ID) * 100 / g.RACIONES_SEMANA))) AS PORCENTAJE_CONSUMIDO
+		FROM GRUPO_INGREDIENTE g
+		LEFT JOIN INGREDIENTES i ON i.GRUPO = g.ID
+		LEFT JOIN INGREDIENTE_RECETA ir ON ir.INGREDIENTE = i.ID 
+		LEFT JOIN USUARIO_RECETA_CONSUMIDA urc ON urc.RECETA = ir.RECETA
+		WHERE ir.RECETA IS NOT NULL AND urc.FECHA >= DATE(NOW()) - INTERVAL 7 DAY AND urc.USUARIO = #{idUsuario}
+		GROUP BY g.ID
+		ORDER BY g.ID
 	</select>
 
 	<insert id="saveGrupoIngrediente">

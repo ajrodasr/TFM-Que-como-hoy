@@ -6,6 +6,8 @@ import { Ingrediente } from '../models/ingrediente';
 import { IngredienteReceta } from '../models/ingrediente-receta';
 import { LikeReceta } from '../models/like-receta';
 import { Receta } from '../models/receta';
+import { RecetaConsumida } from '../models/receta-consumida';
+import { RecetaLista } from '../models/receta-lista';
 import { TipoReceta } from '../models/tipo-receta';
 import { UsuarioReceta } from '../models/usuario-receta';
 
@@ -124,6 +126,30 @@ export class RecetaService {
     );
   }
 
+  public getUltimasRecetasConsumidas(
+    idUsuario: string
+  ): Observable<RecetaLista[]> {
+    const param = new HttpParams().append('idUsuario', idUsuario);
+    return this.http.get<RecetaLista[]>(
+      BACK_URL + 'api/recetas/ultimas-consumidas',
+      {
+        params: param,
+      }
+    );
+  }
+
+  public getRecetasMasConsumidasUsuario(
+    idUsuario: string
+  ): Observable<RecetaLista[]> {
+    const param = new HttpParams().append('idUsuario', idUsuario);
+    return this.http.get<RecetaLista[]>(
+      BACK_URL + 'api/recetas/mas-consumidas-usuario',
+      {
+        params: param,
+      }
+    );
+  }
+
   public getRecetasByUsuario(idUsuario: string): Observable<Receta[]> {
     const param = new HttpParams().append('idUsuario', idUsuario);
     return this.http.get<Receta[]>(BACK_URL + 'api/recetas/usuario', {
@@ -211,6 +237,13 @@ export class RecetaService {
     return this.http.post<any>(
       BACK_URL + 'api/recetas/delete-image?idReceta=' + idReceta,
       {}
+    );
+  }
+
+  public anadirConsumida(recetaConsumida: RecetaConsumida): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/recetas/receta-consumida',
+      recetaConsumida
     );
   }
 }

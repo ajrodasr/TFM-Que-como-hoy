@@ -23,6 +23,7 @@ import { NuevaRecetaComponent } from './components/recetas/nueva-receta/nueva-re
 import { EditarRecetaComponent } from './components/recetas/editar-receta/editar-receta.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { MiAlimentacionComponent } from './components/mi-alimentacion/mi-alimentacion.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { environment } from '../environments/environment';
     MisRecetasComponent,
     NuevaRecetaComponent,
     EditarRecetaComponent,
+    MiAlimentacionComponent,
   ],
   imports: [
     BrowserModule,

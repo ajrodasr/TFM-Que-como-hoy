@@ -5,6 +5,7 @@ import { EmailPasswordComponent } from './components/email-password/email-passwo
 import { IndexComponent } from './components/index/index.component';
 import { ListaIngredientesComponent } from './components/ingredientes/lista-ingredientes/lista-ingredientes.component';
 import { LoginComponent } from './components/login/login.component';
+import { MiAlimentacionComponent } from './components/mi-alimentacion/mi-alimentacion.component';
 import { PerfilUsuarioComponent } from './components/perfil-usuario/perfil-usuario.component';
 import { EditarRecetaComponent } from './components/recetas/editar-receta/editar-receta.component';
 import { ListaRecetasComponent } from './components/recetas/lista-recetas/lista-recetas.component';
@@ -32,6 +33,11 @@ const routes: Routes = [
   {
     path: 'perfil-usuario',
     component: PerfilUsuarioComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'mi-alimentacion',
+    component: MiAlimentacionComponent,
     canActivate: [AuthGuard],
   },
   {

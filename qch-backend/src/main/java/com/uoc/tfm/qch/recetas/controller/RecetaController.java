@@ -24,6 +24,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.RecetaConsumidaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaFiltradaDTO;
 import com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO;
@@ -57,6 +58,18 @@ public class RecetaController {
 		return new ResponseEntity<PageInfo<RecetaFiltradaDTO>>(info, HttpStatus.OK);
 	}
 	
+	@GetMapping("ultimas-consumidas")
+	public ResponseEntity<List<RecetaFiltradaDTO>> getUltimasRecetasConsumidas(@RequestParam String idUsuario) {
+		List<RecetaFiltradaDTO> recetas = recetaService.getUltimasRecetasConsumidas(idUsuario);
+		return new ResponseEntity<List<RecetaFiltradaDTO>>(recetas, HttpStatus.OK);
+	}
+	
+	@GetMapping("mas-consumidas-usuario")
+	public ResponseEntity<List<RecetaFiltradaDTO>> getRecetasMasConsumidasUsuario(@RequestParam String idUsuario) {
+		List<RecetaFiltradaDTO> recetas = recetaService.getRecetasMasConsumidasUsuario(idUsuario);
+		return new ResponseEntity<List<RecetaFiltradaDTO>>(recetas, HttpStatus.OK);
+	}
+	
 	@GetMapping("usuario")
 	public ResponseEntity<List<RecetaDTO>> getRecetasByUsuario(@RequestParam String idUsuario) {
 		List<RecetaDTO> recetas = recetaService.getRecetasByUsuario(idUsuario);
@@ -87,6 +100,21 @@ public class RecetaController {
 		} 
 		recetaService.saveReceta(receta);
 		return new ResponseEntity(Collections.singletonMap("Mensaje", "Receta guardada correctamente"), HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("receta-consumida")
+	public ResponseEntity<?> saveRecetaConsumida(@RequestBody RecetaConsumidaDTO recetaConsumida) {
+		RecetaDTO receta = recetaService.getRecetaById(recetaConsumida.getIdReceta());
+		if(receta == null) {
+			return new ResponseEntity("Esta receta no existe", HttpStatus.BAD_REQUEST);
+		} 
+		try {
+			recetaService.saveRecetaConsumida(recetaConsumida);
+		} catch (Exception e) {
+			return new ResponseEntity("Esta receta ya se ha añadido a esta fecha", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity(Collections.singletonMap("Mensaje", "Receta añadida a 'consumidas'"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

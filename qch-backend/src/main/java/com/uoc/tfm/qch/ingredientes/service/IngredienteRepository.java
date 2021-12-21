@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.github.pagehelper.Page;
 import com.uoc.tfm.qch.ingredientes.domain.GrupoIngrediente;
 import com.uoc.tfm.qch.ingredientes.domain.Ingrediente;
+import com.uoc.tfm.qch.ingredientes.dto.GrupoIngredienteConsumidoDTO;
 import com.uoc.tfm.qch.ingredientes.dto.IngredienteDTO;
 
 @Mapper
@@ -17,11 +18,13 @@ public interface IngredienteRepository {
 	Page<IngredienteDTO> getIngredientesFiltrados(Integer idGrupo, String term);
 	List<Ingrediente> getIngredientes();
 	List<Ingrediente> getIngredientesByGrupo(int idGrupo);
+	List<Ingrediente> getIngredientesMasUsadosUsuario(String idUsuario);
 	void saveIngrediente(Ingrediente ingrediente);
 	void updateIngrediente(Ingrediente ingrediente);
 	
 	List<GrupoIngrediente> getGrupos();
 	GrupoIngrediente getGrupoIngredienteById(int idGrupoIngrediente);
+	List<GrupoIngredienteConsumidoDTO> getGruposConsumidos(String idUsuario);
 	void saveGrupoIngrediente(GrupoIngrediente grupoIngrediente);
 	void updateGrupoIngrediente(GrupoIngrediente grupoIngrediente);
 }

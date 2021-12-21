@@ -33,9 +33,7 @@
             </button>
           </ng-template>
           <a
-            btn
-            btn-block
-            text-primary
+            class="btn btn-block text-primary"
             [routerLink]="'/receta/editar/' + receta.id"
             title="Editar receta"
             ><i class="fas fa-edit"></i
@@ -88,6 +86,21 @@
             class="text-success fas fa-thermometer-quarter"
             title="Dificultad: baja"
           ></i>
+        </div>
+      </div>
+      <div class="row mt-3 justify-content-center">
+        <div class="col-12 col-sm-6 col-lg-12">
+          <form [formGroup]="consumicionForm" (ngSubmit)="onConsumir()">
+            <input
+              type="date"
+              name="fechaConsumicion"
+              class="form-control text-center"
+              [formControl]="fechaConsumicion"
+            />
+            <button class="btn btn-success btn-block w-100 mt-1" type="submit">
+              Añadir a consumidos
+            </button>
+          </form>
         </div>
       </div>
       <div class="row mt-3">

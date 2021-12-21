@@ -1,0 +1,182 @@
+<div class="container mt-5">
+  <h1 class="text-center">MI ALIMENTACIÓN</h1>
+  <div class="row mt-5">
+    <h3>Últimas recetas consumidas</h3>
+    <div
+      *ngIf="ultimasRecetasConsumidas"
+      class="row row-cols-1 row-cols-md-3 mt-3 g-0"
+    >
+      <div *ngFor="let receta of ultimasRecetasConsumidas" class="p-1">
+        <div
+          class="
+            col
+            card
+            animate__animated animate__bounce animate__fadeIn
+            h-100
+          "
+        >
+          <a
+            [routerLink]="['/receta', receta.id]"
+            class="center-cropped"
+            [style]="
+              'background-image: url(' +
+              BACK_URL_IMAGES +
+              receta.imagen +
+              '), url(' +
+              BACK_URL_IMAGES +
+              'default.jpg)'
+            "
+          ></a>
+          <div class="card-body">
+            <h5 class="card-title">
+              <a [routerLink]="['/receta', receta.id]">{{ receta.titulo }}</a>
+            </h5>
+            <div class="row">
+              <div class="col-6">
+                <small class="text-muted">{{ receta.usuario.id }}</small>
+              </div>
+              <div class="col-6 text-end">
+                <small class="badge bg-secondary">{{
+                  receta.tipoReceta.nombre
+                }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-4" title="Minutos de elaboración">
+                <i class="far fa-clock"></i>
+                {{ receta.tiempo }}
+              </div>
+              <div class="col-4" title="Comensales">
+                <i class="fas fa-male"></i> {{ receta.comensales }}
+              </div>
+              <div class="col-4">
+                <i
+                  *ngIf="receta.dificultad === 'DIFICIL'"
+                  class="text-danger fas fa-thermometer-three-quarters"
+                  title="Dificultad: alta"
+                ></i>
+                <i
+                  *ngIf="receta.dificultad === 'MEDIO'"
+                  title="Dificultad: media"
+                  class="text-warning fas fa-thermometer-half"
+                ></i>
+                <i
+                  *ngIf="receta.dificultad === 'FACIL'"
+                  class="text-success fas fa-thermometer-quarter"
+                  title="Dificultad: baja"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <h3>Recetas más consumidas</h3>
+    <div
+      *ngIf="recetasMasConsumidas"
+      class="row row-cols-1 row-cols-md-3 mt-3 g-0"
+    >
+      <div *ngFor="let receta of recetasMasConsumidas" class="p-1">
+        <div
+          class="
+            col
+            card
+            animate__animated animate__bounce animate__fadeIn
+            h-100
+          "
+        >
+          <a
+            [routerLink]="['/receta', receta.id]"
+            class="center-cropped"
+            [style]="
+              'background-image: url(' +
+              BACK_URL_IMAGES +
+              receta.imagen +
+              '), url(' +
+              BACK_URL_IMAGES +
+              'default.jpg)'
+            "
+          ></a>
+          <div class="card-body">
+            <h5 class="card-title">
+              <a [routerLink]="['/receta', receta.id]">{{ receta.titulo }}</a>
+            </h5>
+            <div class="row">
+              <div class="col-6">
+                <small class="text-muted">{{ receta.usuario.id }}</small>
+              </div>
+              <div class="col-6 text-end">
+                <small class="badge bg-secondary">{{
+                  receta.tipoReceta.nombre
+                }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-4" title="Minutos de elaboración">
+                <i class="far fa-clock"></i>
+                {{ receta.tiempo }}
+              </div>
+              <div class="col-4" title="Comensales">
+                <i class="fas fa-male"></i> {{ receta.comensales }}
+              </div>
+              <div class="col-4">
+                <i
+                  *ngIf="receta.dificultad === 'DIFICIL'"
+                  class="text-danger fas fa-thermometer-three-quarters"
+                  title="Dificultad: alta"
+                ></i>
+                <i
+                  *ngIf="receta.dificultad === 'MEDIO'"
+                  title="Dificultad: media"
+                  class="text-warning fas fa-thermometer-half"
+                ></i>
+                <i
+                  *ngIf="receta.dificultad === 'FACIL'"
+                  class="text-success fas fa-thermometer-quarter"
+                  title="Dificultad: baja"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <h3>Ingredientes más usados</h3>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-3 g-0">
+      <div *ngFor="let ingrediente of ingredientesMasUsados" class="p-1">
+        <div
+          class="
+            col
+            card
+            animate__animated animate__bounce animate__fadeIn
+            h-100
+          "
+        >
+          <div class="card-body">
+            <h5 class="card-title">{{ ingrediente.nombre }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              {{ ingrediente.grupo.nombre }}
+            </h6>
+            <p class="card-text">
+              ({{ ingrediente.grupo.racionesSemana }} raciones/semana)
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <h3>Ingredientes en los últimos 7 días</h3>
+  </div>
+</div>

@@ -12,6 +12,7 @@ import com.uoc.tfm.qch.recetas.domain.Receta;
 import com.uoc.tfm.qch.recetas.domain.TipoReceta;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
+import com.uoc.tfm.qch.recetas.dto.RecetaConsumidaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaFiltradaDTO;
 import com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO;
@@ -70,8 +71,20 @@ public class RecetaService {
 		return recetaRepository.getRecetasFiltradas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, ingredientes, order, desc);
 	}
 	
+	public List<RecetaFiltradaDTO> getUltimasRecetasConsumidas(String idUsuario){
+		return recetaRepository.getUltimasRecetasConsumidas(idUsuario);
+	}
+	
+	public List<RecetaFiltradaDTO> getRecetasMasConsumidasUsuario(String idUsuario){
+		return recetaRepository.getRecetasMasConsumidasUsuario(idUsuario);
+	}
+	
 	public List<UsuarioRecetaDTO> getUsuariosRecetasFilter(String term){
 		return recetaRepository.getUsuariosRecetasFilter(term);
+	}
+	
+	public void saveRecetaConsumida(RecetaConsumidaDTO recetaConsumida) {
+		recetaRepository.saveRecetaConsumida(recetaConsumida);
 	}
 	
 	@Transactional
@@ -82,6 +95,7 @@ public class RecetaService {
 			recetaRepository.saveIngredientesReceta(rec.getId(), rec.getIngredientes());
 		}
 	}
+	
 	
 	public void updateReceta(RecetaDTO receta) {
 		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada());

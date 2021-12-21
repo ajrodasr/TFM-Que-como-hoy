@@ -1,9 +1,13 @@
-<div class="container bg-white mt-3 mb-3 p-3">
-  <h1>Nueva receta</h1>
+<div class="container mt-5 mb-5">
+  <h1 class="text-center">Nueva receta</h1>
   <div *ngIf="mensaje" class="alert alert-danger" role="alert">
     {{ mensaje }}
   </div>
-  <form [formGroup]="recetaForm" (ngSubmit)="onNuevaReceta()">
+  <form
+    class="bg-white p-3"
+    [formGroup]="recetaForm"
+    (ngSubmit)="onNuevaReceta()"
+  >
     <div class="form-group m-3">
       <label for="titulo">Titulo</label>
       <input

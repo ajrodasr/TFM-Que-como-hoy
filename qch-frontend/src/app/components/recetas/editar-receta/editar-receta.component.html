@@ -1,9 +1,10 @@
-<div class="container">
-  <h1>Nueva receta</h1>
+<div class="container mt-5 mb-5">
+  <h1 class="text-center">Editar receta</h1>
   <div *ngIf="mensaje" class="alert alert-danger" role="alert">
     {{ mensaje }}
   </div>
   <form
+    class="bg-white p-3"
     *ngIf="receta.id !== -1"
     [formGroup]="recetaForm"
     (ngSubmit)="onEditarReceta()"

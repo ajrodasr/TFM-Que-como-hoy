@@ -1,6 +1,5 @@
 package com.uoc.tfm.qch.ingredientes.controller;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,6 +18,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.uoc.tfm.qch.ingredientes.domain.GrupoIngrediente;
+import com.uoc.tfm.qch.ingredientes.dto.GrupoIngredienteConsumidoDTO;
 import com.uoc.tfm.qch.ingredientes.dto.IngredienteDTO;
 import com.uoc.tfm.qch.ingredientes.service.IngredienteService;
 
@@ -59,11 +59,22 @@ public class IngredienteController {
 		return new ResponseEntity<List<IngredienteDTO>>(ingredientes, HttpStatus.OK);
 	}
 	
+	@GetMapping("/mas-usados-usuario")
+	public ResponseEntity<List<IngredienteDTO>> getIngredientesMasUsadosUsuario(@RequestParam String idUsuario) {
+		List<IngredienteDTO> ingredientes = ingredienteService.getIngredientesMasUsadosUsuario(idUsuario);
+		return new ResponseEntity<List<IngredienteDTO>>(ingredientes, HttpStatus.OK);
+	}
+	
 	@GetMapping("/grupos")
 	public ResponseEntity<List<GrupoIngrediente>> getGrupos() {
-		List<GrupoIngrediente> grupos = new ArrayList<GrupoIngrediente>();
-		grupos = ingredienteService.getGrupos();
+		List<GrupoIngrediente> grupos = ingredienteService.getGrupos();
 		return new ResponseEntity<List<GrupoIngrediente>>(grupos, HttpStatus.OK);
+	}
+	
+	@GetMapping("/grupos-consumidos")
+	public ResponseEntity<List<GrupoIngredienteConsumidoDTO>> getGruposConsumidos(@RequestParam String idUsuario) {
+		List<GrupoIngredienteConsumidoDTO> grupos = ingredienteService.getGruposConsumidos(idUsuario);
+		return new ResponseEntity<List<GrupoIngredienteConsumidoDTO>>(grupos, HttpStatus.OK);
 	}
 	
 	@PostMapping("nuevo")

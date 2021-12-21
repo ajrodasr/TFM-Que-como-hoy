@@ -67,3 +67,7 @@ a:hover {
 .z-index-top {
   z-index: 99;
 }
+
+.accordion-button:not(.collapsed) {
+  background-color: white;
+}

@@ -44,4 +44,47 @@ export class MiAlimentacionComponent implements OnInit {
       console.log(this.gruposConsumidos);
     });
   }
+
+  getPorcentaje(idGrupo: number): number {
+    const grupo = this.gruposConsumidos.find(
+      (grupoEncontrado) => grupoEncontrado.id === idGrupo
+    );
+    if (grupo.racionesSemana === 7) {
+      return 100;
+    }
+    return grupo.porcentajeConsumido;
+  }
+
+  getColor(idGrupo): string {
+    const grupo = this.gruposConsumidos.find(
+      (grupoEncontrado) => grupoEncontrado.id === idGrupo
+    );
+
+    if (grupo.racionesSemana === 7 || grupo.porcentajeConsumido < 60) {
+      return '#28a745';
+    }
+
+    if (grupo.porcentajeConsumido > 60 && grupo.porcentajeConsumido < 100) {
+      return '#ffc107';
+    }
+
+    if (grupo.porcentajeConsumido === 100) {
+      return '#dc3545';
+    }
+  }
+
+  getSubtitle(idGrupo): string {
+    const grupo = this.gruposConsumidos.find(
+      (grupoEncontrado) => grupoEncontrado.id === idGrupo
+    );
+
+    const racionesConsumidas: string = grupo.racionesConsumidas.toString();
+    let racionesSemana: string = grupo.racionesSemana.toString();
+
+    if (grupo.racionesSemana === 7) {
+      racionesSemana = '&#8734;';
+    }
+
+    return `Raciones ${racionesConsumidas}/${racionesSemana}`;
+  }
 }

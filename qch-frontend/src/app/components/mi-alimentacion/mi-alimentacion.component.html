@@ -176,7 +176,32 @@
       </div>
     </div>
   </div>
-  <div class="row mt-5">
-    <h3>Ingredientes en los últimos 7 días</h3>
+  <div class="row mt-5 mb-5 d-flex justify-content-center">
+    <h3 class="mb-3">Ingredientes en los últimos 7 días</h3>
+    <div class="col-4 col-md-3 col-lg-2" *ngFor="let grupo of gruposConsumidos">
+      <circle-progress
+        class="w-100"
+        [percent]="getPorcentaje(grupo.id)"
+        [showUnits]="false"
+        [radius]="100"
+        [outerStrokeWidth]="16"
+        [innerStrokeWidth]="8"
+        [outerStrokeColor]="getColor(grupo.id)"
+        [showInnerStroke]="false"
+        [animation]="true"
+        [animationDuration]="300"
+        [responsive]="true"
+        [showTitle]="true"
+        [title]="grupo.nombre"
+        [titleFontSize]="30"
+        [subtitle]="
+          'Raciones ' +
+          grupo.racionesConsumidas +
+          '/' +
+          (grupo.racionesSemana === 7 ? '&#8734;' : grupo.racionesSemana)
+        "
+        [subtitleFontSize]="25"
+      ></circle-progress>
+    </div>
   </div>
 </div>

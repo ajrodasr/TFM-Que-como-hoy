@@ -24,6 +24,7 @@ import { EditarRecetaComponent } from './components/recetas/editar-receta/editar
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MiAlimentacionComponent } from './components/mi-alimentacion/mi-alimentacion.component';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MiAlimentacionComponent } from './components/mi-alimentacion/mi-aliment
     HttpClientModule,
     ReactiveFormsModule,
     AngularEditorModule,
+    NgCircleProgressModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable

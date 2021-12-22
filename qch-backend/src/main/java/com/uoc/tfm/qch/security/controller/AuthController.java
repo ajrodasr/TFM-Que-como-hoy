@@ -79,7 +79,11 @@ public class AuthController {
 		}
 		usuario.setRoles(roles);
 		usuarioService.save(usuario);
-		authService.enviarEmailBienvenida(usuario.getEmail());
+		try {
+			authService.enviarEmailBienvenida(usuario.getEmail());
+		} catch (Exception e) {
+			System.out.println("Error enviando correo: "+e.getMessage());
+		}
 		return new ResponseEntity(Collections.singletonMap("mensaje", "Usuario creado"), HttpStatus.CREATED);
 	}
 	
@@ -115,6 +119,7 @@ public class AuthController {
 	@PostMapping("/email-password")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ResponseEntity<?> sendEmailTemplate(@RequestBody EmailPasswordDTO dto) {
+		try {
 		Usuario usuario = usuarioService.getUsuarioByIdOrEmail(dto.getEmail());
 		if(usuario == null) {
 			return new ResponseEntity("No existe un usuario con esas credenciales", HttpStatus.BAD_REQUEST);
@@ -128,6 +133,10 @@ public class AuthController {
 		dto.setTokenPassword(tokenPassword);
 		authService.enviarEmailPassword(dto);
 		return new ResponseEntity(Collections.singletonMap("mensaje", "Correo enviado"), HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println("Error enviando correo: "+e.getMessage());
+			return new ResponseEntity(Collections.singletonMap("mensaje", "No se ha podido enviar el correo"), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

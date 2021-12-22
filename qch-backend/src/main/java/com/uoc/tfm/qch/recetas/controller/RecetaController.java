@@ -27,6 +27,7 @@ import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaConsumidaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaFiltradaDTO;
+import com.uoc.tfm.qch.recetas.dto.RecetaHistoricoDTO;
 import com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO;
 import com.uoc.tfm.qch.recetas.service.RecetaService;
@@ -49,7 +50,7 @@ public class RecetaController {
 			@RequestParam(required = false) Integer tiempo,
 			@RequestParam(required = false, defaultValue = "", value="ingrediente") Integer[] ingredientes,
 			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-			@RequestParam(required = false, defaultValue = "10") Integer pageSize,
+			@RequestParam(required = false, defaultValue = "9") Integer pageSize,
 			@RequestParam(required = false, defaultValue = "5") Integer order,
 			@RequestParam(required = false, defaultValue = "true") Boolean desc) {
 		PageHelper.startPage(pageNum, pageSize);
@@ -58,10 +59,15 @@ public class RecetaController {
 		return new ResponseEntity<PageInfo<RecetaFiltradaDTO>>(info, HttpStatus.OK);
 	}
 	
-	@GetMapping("ultimas-consumidas")
-	public ResponseEntity<List<RecetaFiltradaDTO>> getUltimasRecetasConsumidas(@RequestParam String idUsuario) {
-		List<RecetaFiltradaDTO> recetas = recetaService.getUltimasRecetasConsumidas(idUsuario);
-		return new ResponseEntity<List<RecetaFiltradaDTO>>(recetas, HttpStatus.OK);
+	@GetMapping("historico-recetas")
+	public ResponseEntity<PageInfo<RecetaHistoricoDTO>> getHistoricoRecetas(
+			@RequestParam String idUsuario, 
+			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+			@RequestParam(required = false, defaultValue = "9") Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		Page<RecetaHistoricoDTO> recetas = recetaService.getHistoricoRecetas(idUsuario);
+		PageInfo<RecetaHistoricoDTO> info = new PageInfo<RecetaHistoricoDTO>(recetas);
+		return new ResponseEntity<PageInfo<RecetaHistoricoDTO>>(info, HttpStatus.OK);
 	}
 	
 	@GetMapping("mas-consumidas-usuario")
@@ -99,7 +105,7 @@ public class RecetaController {
 			return new ResponseEntity("Error al guardar la receta", HttpStatus.BAD_REQUEST);
 		} 
 		recetaService.saveReceta(receta);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Receta guardada correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Receta guardada correctamente"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -114,7 +120,7 @@ public class RecetaController {
 		} catch (Exception e) {
 			return new ResponseEntity("Esta receta ya se ha añadido a esta fecha", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Receta añadida a 'consumidas'"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Receta añadida a 'consumidas'"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -125,7 +131,7 @@ public class RecetaController {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
 		recetaService.publicarReceta(idReceta);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Receta publicada correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Receta publicada correctamente"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -136,7 +142,7 @@ public class RecetaController {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
 		recetaService.despublicarReceta(idReceta);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Receta despublicada correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Receta despublicada correctamente"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -147,7 +153,7 @@ public class RecetaController {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
 		recetaService.updateReceta(receta);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Receta actualizada correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Receta actualizada correctamente"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -158,7 +164,7 @@ public class RecetaController {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
 		recetaService.deleteReceta(idReceta);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Receta eliminada correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Receta eliminada correctamente"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -175,7 +181,7 @@ public class RecetaController {
 			}
 		}
 		recetaService.saveIngredienteReceta(idReceta, ingrediente);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Ingrediente añadido correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Ingrediente añadido correctamente"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -186,7 +192,7 @@ public class RecetaController {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
 		recetaService.deleteIngredienteReceta(idReceta, idIngrediente);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Ingrediente eliminado correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Ingrediente eliminado correctamente"), HttpStatus.OK);
 	}
 	
 	@GetMapping("likes-usuario")
@@ -203,7 +209,7 @@ public class RecetaController {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
 		recetaService.saveLike(like);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Like añadido correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Like añadido correctamente"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -214,7 +220,7 @@ public class RecetaController {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
 		recetaService.deleteLike(like);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Like eliminado correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Like eliminado correctamente"), HttpStatus.OK);
 	}
 	
 	@GetMapping("tipos")
@@ -228,7 +234,7 @@ public class RecetaController {
 	public ResponseEntity<?> uplaodImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
 		Path path = Path.of("src", "main","resources","static","images",file.getOriginalFilename());
 		Files.write(path, file.getBytes());
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Imagen subida correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Imagen subida correctamente"), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -240,7 +246,7 @@ public class RecetaController {
 		} 
 		Path path = Path.of("src", "main","resources","static","images",dto.getImagen());
 		Files.delete(path);
-		return new ResponseEntity(Collections.singletonMap("Mensaje", "Imagen eliminada correctamente"), HttpStatus.OK);
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Imagen eliminada correctamente"), HttpStatus.OK);
 	}
 	
 	

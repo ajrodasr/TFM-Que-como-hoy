@@ -7,6 +7,7 @@ import { IngredienteReceta } from '../models/ingrediente-receta';
 import { LikeReceta } from '../models/like-receta';
 import { Receta } from '../models/receta';
 import { RecetaConsumida } from '../models/receta-consumida';
+import { RecetaHistorico } from '../models/receta-historico';
 import { RecetaLista } from '../models/receta-lista';
 import { TipoReceta } from '../models/tipo-receta';
 import { UsuarioReceta } from '../models/usuario-receta';
@@ -126,16 +127,25 @@ export class RecetaService {
     );
   }
 
-  public getUltimasRecetasConsumidas(
-    idUsuario: string
-  ): Observable<RecetaLista[]> {
-    const param = new HttpParams().append('idUsuario', idUsuario);
-    return this.http.get<RecetaLista[]>(
-      BACK_URL + 'api/recetas/ultimas-consumidas',
-      {
-        params: param,
-      }
-    );
+  public getUltimasRecetasConsumidas(idUsuario: string): Observable<any> {
+    const param = new HttpParams()
+      .append('idUsuario', idUsuario)
+      .append('pageSize', '3');
+    return this.http.get<any>(BACK_URL + 'api/recetas/historico-recetas', {
+      params: param,
+    });
+  }
+
+  public getHistoricoRecetas(
+    idUsuario: string,
+    pageNum: number = 1
+  ): Observable<any> {
+    const param = new HttpParams()
+      .append('idUsuario', idUsuario)
+      .append('pageNum', pageNum.toString());
+    return this.http.get<any>(BACK_URL + 'api/recetas/historico-recetas', {
+      params: param,
+    });
   }
 
   public getRecetasMasConsumidasUsuario(

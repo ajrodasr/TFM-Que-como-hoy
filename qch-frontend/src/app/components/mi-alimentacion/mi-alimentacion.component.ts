@@ -3,6 +3,7 @@ import { forkJoin } from 'rxjs';
 import { GrupoIngredienteConsumido } from 'src/app/models/grupo-ingrediente-consumido';
 import { Ingrediente } from 'src/app/models/ingrediente';
 import { LikeReceta } from 'src/app/models/like-receta';
+import { RecetaHistorico } from 'src/app/models/receta-historico';
 import { RecetaLista } from 'src/app/models/receta-lista';
 import { AuthService } from 'src/app/services/auth.service';
 import { IngredienteService } from 'src/app/services/ingrediente.service';
@@ -18,7 +19,7 @@ export class MiAlimentacionComponent implements OnInit {
   BACK_URL_IMAGES = environment.APIEndpoint + 'images/';
 
   idUsuario: string;
-  ultimasRecetasConsumidas: RecetaLista[];
+  ultimasRecetasConsumidas: RecetaHistorico[];
   recetasMasConsumidas: RecetaLista[];
   ingredientesMasUsados: Ingrediente[];
   gruposConsumidos: GrupoIngredienteConsumido[];
@@ -37,7 +38,7 @@ export class MiAlimentacionComponent implements OnInit {
       this.ingredienteService.getIngredientesMasUsadosUsuario(this.idUsuario),
       this.ingredienteService.getGruposConsumidos(this.idUsuario),
     ]).subscribe((data) => {
-      this.ultimasRecetasConsumidas = data[0];
+      this.ultimasRecetasConsumidas = data[0].list;
       this.recetasMasConsumidas = data[1];
       this.ingredientesMasUsados = data[2];
       this.gruposConsumidos = data[3];
@@ -73,18 +74,25 @@ export class MiAlimentacionComponent implements OnInit {
     }
   }
 
-  getSubtitle(idGrupo): string {
-    const grupo = this.gruposConsumidos.find(
-      (grupoEncontrado) => grupoEncontrado.id === idGrupo
-    );
-
-    const racionesConsumidas: string = grupo.racionesConsumidas.toString();
-    let racionesSemana: string = grupo.racionesSemana.toString();
-
-    if (grupo.racionesSemana === 7) {
-      racionesSemana = '&#8734;';
-    }
-
-    return `Raciones ${racionesConsumidas}/${racionesSemana}`;
+  getFechaConsumicion(idReceta: number, fechaConsumicionReceta: Date): string {
+    const receta = this.ultimasRecetasConsumidas.find((recetaEncontrada) => {
+      if (
+        recetaEncontrada.id === idReceta &&
+        recetaEncontrada.fechaConsumicion === fechaConsumicionReceta
+      ) {
+        return recetaEncontrada;
+      }
+    });
+    console.log(receta.fechaConsumicion);
+    const fechaConsumicion = receta.fechaConsumicion;
+    return `Receta consumida el ${fechaConsumicion[2]}/${fechaConsumicion[1]}/${
+      fechaConsumicion[0]
+    } a las ${fechaConsumicion[3].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })}:${fechaConsumicion[4].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })}`;
   }
 }

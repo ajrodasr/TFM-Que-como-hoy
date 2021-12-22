@@ -41,9 +41,6 @@ export class ListaRecetasComponent implements OnInit {
   //Paginador
   paginador: Paginador;
 
-  loading = true;
-
-  mensaje: string;
   idUsuario: string;
 
   constructor(

@@ -89,10 +89,18 @@
         </div>
       </div>
       <div class="row mt-3 justify-content-center">
+        <div
+          *ngIf="mensajeConsumida"
+          class="alert mt-3"
+          [ngClass]="errorConsumida ? 'alert-danger' : 'alert-success'"
+        >
+          {{ mensajeConsumida }}
+        </div>
+
         <div class="col-12 col-sm-6 col-lg-12">
           <form [formGroup]="consumicionForm" (ngSubmit)="onConsumir()">
             <input
-              type="date"
+              type="datetime-local"
               name="fechaConsumicion"
               class="form-control text-center"
               [formControl]="fechaConsumicion"

@@ -56,7 +56,7 @@ export class RecetaComponent implements OnInit {
     );
 
     this.fechaConsumicion = new FormControl(
-      formatDate(new Date(), 'yyyy-MM-dd', 'en'),
+      formatDate(new Date(), 'yyyy-MM-ddTHH:mm', 'en'),
       Validators.required
     );
 

@@ -25,6 +25,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MiAlimentacionComponent } from './components/mi-alimentacion/mi-alimentacion.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { HistoricoRecetasComponent } from './components/recetas/historico-recetas/historico-recetas.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     NuevaRecetaComponent,
     EditarRecetaComponent,
     MiAlimentacionComponent,
+    HistoricoRecetasComponent,
   ],
   imports: [
     BrowserModule,

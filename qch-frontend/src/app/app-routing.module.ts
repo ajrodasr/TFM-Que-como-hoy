@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CambiarPasswordComponent } from './components/cambiar-password/cambiar-password.component';
 import { EmailPasswordComponent } from './components/email-password/email-password.component';
+import { HistoricoRecetasComponent } from './components/recetas/historico-recetas/historico-recetas.component';
 import { IndexComponent } from './components/index/index.component';
 import { ListaIngredientesComponent } from './components/ingredientes/lista-ingredientes/lista-ingredientes.component';
 import { LoginComponent } from './components/login/login.component';
@@ -38,6 +39,11 @@ const routes: Routes = [
   {
     path: 'mi-alimentacion',
     component: MiAlimentacionComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'historico-recetas',
+    component: HistoricoRecetasComponent,
     canActivate: [AuthGuard],
   },
   {

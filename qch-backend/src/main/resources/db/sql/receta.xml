@@ -73,6 +73,30 @@
 		</association>
 	</resultMap>
 	
+	<resultMap id="recetaHistorico" type="com.uoc.tfm.qch.recetas.dto.RecetaHistoricoDTO">
+		<id column="FECHA_CONSUMICION_RECETA" property="fechaConsumicion" />
+		<id column="ID_RECETA" property="id" />
+		<result column="TITULO_RECETA" property="titulo" />
+		<result column="IMAGEN_RECETA" property="imagen" />
+		<result column="INSTRUCCIONES_RECETA" property="instrucciones" />
+		<result column="FECHA_CREACION_RECETA" property="fechaCreacion" />
+		<result column="TIEMPO_RECETA" property="tiempo" />
+		<result column="COMENSALES_RECETA" property="comensales" />
+		<result column="DIFICULTAD_RECETA" property="dificultad" />
+		<result column="PUBLICADA_RECETA" property="publicada" />
+		<result column="LIKES_RECETA" property="likes" />
+		<association property="usuario" javaType="com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO">
+			<id column="ID_USUARIO" property="id" />
+			<result column="NOMBRE_USUARIO" property="nombre" />
+			<result column="APELLIDO1_USUARIO" property="apellido1" />
+			<result column="APELLIDO2_USUARIO" property="apellido2" />
+		</association>
+		<association property="tipoReceta" javaType="com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO">
+			<id column="ID_TIPO_RECETA" property="id" />
+			<result column="NOMBRE_TIPO_RECETA" property="nombre" />
+		</association>
+	</resultMap>
+	
 	<select id="getRecetaById" resultMap="receta">
 		SELECT r.ID AS ID_RECETA,
 			r.TITULO AS TITULO_RECETA,
@@ -217,7 +241,7 @@
 		</if>
 	</select>
 	
-	<select id="getUltimasRecetasConsumidas" resultMap="recetaFiltrada">
+	<select id="getHistoricoRecetas" resultMap="recetaHistorico">
 		SELECT r.ID AS ID_RECETA,
 			r.TITULO AS TITULO_RECETA,
 			r.IMAGEN AS IMAGEN_RECETA,
@@ -233,15 +257,14 @@
 			u.APELLIDO1 AS APELLIDO1_USUARIO,
 			u.APELLIDO2 AS APELLIDO2_USUARIO,
 			tr.ID AS ID_TIPO_RECETA,
-			tr.NOMBRE AS NOMBRE_TIPO_RECETA
+			tr.NOMBRE AS NOMBRE_TIPO_RECETA,
+			urc.FECHA AS FECHA_CONSUMICION_RECETA
 		FROM RECETAS r
 		LEFT JOIN USUARIOS u ON u.ID = r.USUARIO 
 		LEFT JOIN TIPO_RECETA tr ON tr.ID = r.TIPO 
 		LEFT JOIN USUARIO_RECETA_CONSUMIDA urc ON urc.RECETA = r.ID
 		WHERE R.PUBLICADA = 1 AND urc.USUARIO = #{idUSuario}
-		GROUP BY r.ID, urc.FECHA
 		ORDER BY urc.FECHA DESC
-		LIMIT 3
 	</select>
 	
 	<select id="getRecetasMasConsumidasUsuario" resultMap="recetaFiltrada">

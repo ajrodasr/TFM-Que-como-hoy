@@ -1,6 +1,6 @@
 package com.uoc.tfm.qch.recetas.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -10,21 +10,21 @@ public class RecetaConsumidaDTO {
 	
 	private String idUsuario;
 	private Integer idReceta;
-	private LocalDate fechaConsumicion;
+	private LocalDateTime fechaConsumicion;
 	
 	public RecetaConsumidaDTO() {}
 	
 	@JsonCreator
 	public RecetaConsumidaDTO(@JsonProperty ("idUsuario") String idUsuario, @JsonProperty ("idReceta") Integer idReceta, @JsonProperty ("fechaConsumicion") String fechaConsumicion) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate date = LocalDate.parse(fechaConsumicion, formatter);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+		LocalDateTime date = LocalDateTime.parse(fechaConsumicion, formatter);
 		
 		this.idUsuario = idUsuario;
 		this.idReceta = idReceta;
 		this.fechaConsumicion = date;
 	}
 
-	public RecetaConsumidaDTO(String idUsuario, Integer idReceta, LocalDate fechaConsumicion) {
+	public RecetaConsumidaDTO(String idUsuario, Integer idReceta, LocalDateTime fechaConsumicion) {
 		this.idUsuario = idUsuario;
 		this.idReceta = idReceta;
 		this.fechaConsumicion = fechaConsumicion;
@@ -46,11 +46,11 @@ public class RecetaConsumidaDTO {
 		this.idReceta = idReceta;
 	}
 
-	public LocalDate getFechaConsumicion() {
+	public LocalDateTime getFechaConsumicion() {
 		return fechaConsumicion;
 	}
 
-	public void setFechaConsumicion(LocalDate fechaConsumicion) {
+	public void setFechaConsumicion(LocalDateTime fechaConsumicion) {
 		this.fechaConsumicion = fechaConsumicion;
 	}
 	

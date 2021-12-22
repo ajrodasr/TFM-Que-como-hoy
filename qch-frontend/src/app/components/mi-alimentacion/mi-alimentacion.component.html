@@ -71,8 +71,18 @@
               </div>
             </div>
           </div>
+          <div class="card-footer">
+            <small>{{
+              getFechaConsumicion(receta.id, receta.fechaConsumicion)
+            }}</small>
+          </div>
         </div>
       </div>
+    </div>
+    <div class="text-end mt-3">
+      <a routerLink="/historico-recetas" class="btn btn-primary"
+        >Ver histórico completo</a
+      >
     </div>
   </div>
   <div class="row mt-5">
@@ -185,8 +195,8 @@
         [showUnits]="false"
         [radius]="100"
         [outerStrokeWidth]="16"
-        [innerStrokeWidth]="8"
         [outerStrokeColor]="getColor(grupo.id)"
+        [background]="'#6c757d'"
         [showInnerStroke]="false"
         [animation]="true"
         [animationDuration]="300"

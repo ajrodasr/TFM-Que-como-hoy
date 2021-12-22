@@ -10,6 +10,7 @@ import com.uoc.tfm.qch.recetas.domain.TipoReceta;
 import com.uoc.tfm.qch.recetas.dto.IngredienteRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaConsumidaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaFiltradaDTO;
+import com.uoc.tfm.qch.recetas.dto.RecetaHistoricoDTO;
 import com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO;
 
 @Mapper
@@ -27,7 +28,7 @@ public interface RecetaRepository {
 			List<Integer> ingredientes,
 			Integer orderBy,
 			Boolean desc);
-	List<RecetaFiltradaDTO> getUltimasRecetasConsumidas(String idUsuario);
+	Page<RecetaHistoricoDTO> getHistoricoRecetas(String idUsuario);
 	List<RecetaFiltradaDTO> getRecetasMasConsumidasUsuario(String idUsuario);
 	List<Receta> getRecetasByTipo(int idTipoReceta);
 	List<Receta> getRecetasByUsuario(String idUsuario);

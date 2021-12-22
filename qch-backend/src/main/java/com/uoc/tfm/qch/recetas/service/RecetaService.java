@@ -15,6 +15,7 @@ import com.uoc.tfm.qch.recetas.dto.LikeRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaConsumidaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.RecetaFiltradaDTO;
+import com.uoc.tfm.qch.recetas.dto.RecetaHistoricoDTO;
 import com.uoc.tfm.qch.recetas.dto.TipoRecetaDTO;
 import com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO;
 
@@ -71,8 +72,8 @@ public class RecetaService {
 		return recetaRepository.getRecetasFiltradas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, ingredientes, order, desc);
 	}
 	
-	public List<RecetaFiltradaDTO> getUltimasRecetasConsumidas(String idUsuario){
-		return recetaRepository.getUltimasRecetasConsumidas(idUsuario);
+	public Page<RecetaHistoricoDTO> getHistoricoRecetas(String idUsuario){
+		return recetaRepository.getHistoricoRecetas(idUsuario);
 	}
 	
 	public List<RecetaFiltradaDTO> getRecetasMasConsumidasUsuario(String idUsuario){

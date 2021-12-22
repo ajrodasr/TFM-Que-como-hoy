@@ -1,0 +1,129 @@
+<div class="container mt-5 p-5 p-sm-3">
+  <h1 class="text-center">RECETAS</h1>
+
+  <div *ngIf="paginador" class="row mt-3">
+    <small
+      >Mostrando del elemento {{ paginador.primerElemento }} al
+      {{ paginador.ultimoElemento }} de {{ paginador.total }} totales</small
+    >
+  </div>
+  <div
+    *ngIf="recetas && likes"
+    class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3"
+  >
+    <div *ngFor="let receta of recetas" class="p-1">
+      <div
+        class="col card animate__animated animate__bounce animate__fadeIn h-100"
+      >
+        <a
+          [routerLink]="['/receta', receta.id]"
+          class="center-cropped"
+          [style]="
+            'background-image: url(' +
+            BACK_URL_IMAGES +
+            receta.imagen +
+            '), url(' +
+            BACK_URL_IMAGES +
+            'default.jpg)'
+          "
+        ></a>
+        <div class="card-body">
+          <h5 class="card-title">
+            <a [routerLink]="['/receta', receta.id]">{{ receta.titulo }}</a>
+          </h5>
+          <div class="row">
+            <div class="col-6">
+              <small class="text-muted">{{ receta.usuario.id }}</small>
+            </div>
+            <div class="col-6 text-end">
+              <small class="badge bg-secondary">{{
+                receta.tipoReceta.nombre
+              }}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-4" title="Minutos de elaboración">
+              <i class="far fa-clock"></i>
+              {{ receta.tiempo }}
+            </div>
+            <div class="col-4" title="Comensales">
+              <i class="fas fa-male"></i> {{ receta.comensales }}
+            </div>
+            <div class="col-4">
+              <i
+                *ngIf="receta.dificultad === 'DIFICIL'"
+                class="text-danger fas fa-thermometer-three-quarters"
+                title="Dificultad: alta"
+              ></i>
+              <i
+                *ngIf="receta.dificultad === 'MEDIO'"
+                title="Dificultad: media"
+                class="text-warning fas fa-thermometer-half"
+              ></i>
+              <i
+                *ngIf="receta.dificultad === 'FACIL'"
+                class="text-success fas fa-thermometer-quarter"
+                title="Dificultad: baja"
+              ></i>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <small>{{
+            getFechaConsumicion(receta.id, receta.fechaConsumicion)
+          }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="paginador" class="row mt-3">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.primeraPagina)"
+          >
+            <<
+          </button>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.anteriorPagina)"
+          >
+            <
+          </button>
+        </li>
+        <li
+          *ngFor="let pagina of paginador.paginas"
+          [ngClass]="{ active: pagina === paginador.paginaActual }"
+          class="page-item"
+        >
+          <button class="page-link shadow-none" (click)="onFilter(pagina)">
+            {{ pagina }}
+          </button>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.siguientePagina)"
+          >
+            >
+          </button>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.ultimaPagina)"
+          >
+            >>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

@@ -86,7 +86,6 @@ export class HistoricoRecetasComponent implements OnInit {
         return recetaEncontrada;
       }
     });
-    console.log(receta.fechaConsumicion);
     const fechaConsumicion = receta.fechaConsumicion;
     return `Receta consumida el ${fechaConsumicion[2]}/${fechaConsumicion[1]}/${
       fechaConsumicion[0]

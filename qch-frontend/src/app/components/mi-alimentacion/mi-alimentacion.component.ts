@@ -42,7 +42,6 @@ export class MiAlimentacionComponent implements OnInit {
       this.recetasMasConsumidas = data[1];
       this.ingredientesMasUsados = data[2];
       this.gruposConsumidos = data[3];
-      console.log(this.gruposConsumidos);
     });
   }
 
@@ -83,7 +82,6 @@ export class MiAlimentacionComponent implements OnInit {
         return recetaEncontrada;
       }
     });
-    console.log(receta.fechaConsumicion);
     const fechaConsumicion = receta.fechaConsumicion;
     return `Receta consumida el ${fechaConsumicion[2]}/${fechaConsumicion[1]}/${
       fechaConsumicion[0]

@@ -15,6 +15,13 @@
     </div>
   </div>
   <div
+    *ngIf="!recetas || recetas.length <= 0"
+    class="row alert alert-primary mt-5"
+  >
+    Aún no ha creado ninguna receta. Pulse en 'Nueva receta' para crear una
+    receta propia, que aparecerá en este listado.
+  </div>
+  <div
     *ngIf="recetas && likes"
     class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3"
   >

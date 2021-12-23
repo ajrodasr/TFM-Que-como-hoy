@@ -44,7 +44,7 @@ public class RecetaController {
 	public ResponseEntity<PageInfo<RecetaFiltradaDTO>> getRecetasFiltradas(
 			@RequestParam(required = false, defaultValue = "") String tituloReceta,
 			@RequestParam(required = false) Integer tipoReceta,
-			@RequestParam(required = false) String idUsuario,
+			@RequestParam(required = false) String idCreador,
 			@RequestParam(required = false) String dificultad,
 			@RequestParam(required = false) Integer comensales,
 			@RequestParam(required = false) Integer tiempo,
@@ -54,7 +54,27 @@ public class RecetaController {
 			@RequestParam(required = false, defaultValue = "5") Integer order,
 			@RequestParam(required = false, defaultValue = "true") Boolean desc) {
 		PageHelper.startPage(pageNum, pageSize);
-		Page<RecetaFiltradaDTO> recetas = recetaService.getRecetasPublicadasPaginadas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, Arrays.asList(ingredientes), order, desc);
+		Page<RecetaFiltradaDTO> recetas = recetaService.getRecetasPublicadasPaginadas(tituloReceta, tipoReceta, idCreador, dificultad, comensales, tiempo, Arrays.asList(ingredientes), order, desc);
+		PageInfo<RecetaFiltradaDTO> info = new PageInfo<RecetaFiltradaDTO>(recetas);
+		return new ResponseEntity<PageInfo<RecetaFiltradaDTO>>(info, HttpStatus.OK);
+	}
+	
+	@GetMapping("recomendadas")
+	public ResponseEntity<PageInfo<RecetaFiltradaDTO>> getRecetasRecomendadas(
+			@RequestParam String idUsuario,
+			@RequestParam(required = false, defaultValue = "") String tituloReceta,
+			@RequestParam(required = false) Integer tipoReceta,
+			@RequestParam(required = false) String idCreador,
+			@RequestParam(required = false) String dificultad,
+			@RequestParam(required = false) Integer comensales,
+			@RequestParam(required = false) Integer tiempo,
+			@RequestParam(required = false, defaultValue = "", value="ingrediente") Integer[] ingredientes,
+			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+			@RequestParam(required = false, defaultValue = "9") Integer pageSize,
+			@RequestParam(required = false, defaultValue = "10") Integer order,
+			@RequestParam(required = false, defaultValue = "true") Boolean desc) {
+		PageHelper.startPage(pageNum, pageSize);
+		Page<RecetaFiltradaDTO> recetas = recetaService.getRecetasRecomendadasPaginadas(idUsuario, tituloReceta, tipoReceta, idCreador, dificultad, comensales, tiempo, Arrays.asList(ingredientes), order, desc);
 		PageInfo<RecetaFiltradaDTO> info = new PageInfo<RecetaFiltradaDTO>(recetas);
 		return new ResponseEntity<PageInfo<RecetaFiltradaDTO>>(info, HttpStatus.OK);
 	}

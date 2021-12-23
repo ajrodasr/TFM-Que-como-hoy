@@ -1,6 +1,12 @@
 <div class="container mt-5 p-5 p-sm-3">
-  <h1 class="text-center">RECETAS</h1>
+  <h1 class="text-center">RECETAS RECOMENDADAS</h1>
   <div class="row mt-5">
+    <div class="alert alert-info">
+      A continuación se muestra la lista de recetas recomendadas teniendo en
+      cuenta su historial de alimentación en los ultimos 7 días.
+    </div>
+  </div>
+  <div class="row mt-3">
     <div class="accordion accordion-flush p-0" id="formularioFiltrar">
       <div class="accordion-item">
         <h2 class="accordion-header" id="formHeader">
@@ -49,15 +55,15 @@
                   "
                 >
                   <input
-                    #searchBoxUsuario
+                    #searchBoxCreador
                     type="text"
-                    name="idUsuarioFiltro"
+                    name="idCreadorFiltro"
                     class="form-control input-lg"
-                    id="idUsuarioFiltro"
+                    id="idCreadorFiltro"
                     autocomplete="off"
-                    placeholder="Usuario"
-                    [formControl]="idUsuarioFiltro"
-                    (input)="filterUsuario(searchBoxUsuario.value)"
+                    placeholder="Creador"
+                    [formControl]="idCreadorFiltro"
+                    (input)="filterCreador(searchBoxCreador.value)"
                   />
 
                   <div
@@ -65,13 +71,13 @@
                     class="list-group position-absolute z-index-top"
                   >
                     <button
-                      *ngFor="let usuario of usuariosRecetas"
-                      (click)="onSelectUsuario(usuario.id)"
+                      *ngFor="let creador of usuariosRecetas"
+                      (click)="onSelectCreador(creador.id)"
                       type="button"
                       class="list-group-item list-group-item-action"
                       aria-current="true"
                     >
-                      {{ usuario.id }}
+                      {{ creador.id }}
                     </button>
                   </div>
                 </div>
@@ -190,6 +196,19 @@
       >Mostrando del elemento {{ paginador.primerElemento }} al
       {{ paginador.ultimoElemento }} de {{ paginador.total }} totales</small
     >
+  </div>
+  <div
+    *ngIf="!recetas || recetas.length <= 0"
+    class="row mt-3 alert alert-info"
+  >
+    <p>
+      No se ha encontrado ninguna receta <b>recomendada</b> que cumpla con sus
+      criterios de busqueda. Puede probar a buscar en el apartado donde se
+      encuentran todas las recetas.
+    </p>
+    <div class="mt-3 text-center">
+      <a routerLink="/recetas" class="btn btn-primary">Todas las recetas</a>
+    </div>
   </div>
   <div
     *ngIf="recetas && likes"

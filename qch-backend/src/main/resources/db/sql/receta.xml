@@ -218,7 +218,101 @@
 		LEFT JOIN INGREDIENTE_RECETA ir ON ir.RECETA = r.ID 
 		WHERE R.PUBLICADA = 1 
 		AND (#{tipoReceta} IS NULL OR tr.ID = #{tipoReceta})
-		AND (#{idUsuario} IS NULL OR u.ID = #{idUsuario})
+		AND (#{idCreador} IS NULL OR u.ID = #{idCreador})
+		AND (#{dificultad} IS NULL OR r.DIFICULTAD = #{dificultad})
+		AND (#{comensales} IS NULL OR r.COMENSALES = #{comensales})
+		AND (#{tiempo} IS NULL OR #{tiempo} >= r.TIEMPO)
+		<bind name="titulo" value="'%' + tituloReceta + '%'" />
+		AND R.TITULO LIKE #{titulo}
+		<if test="ingredientes.size > 0">
+		AND INGREDIENTE IN 
+		<foreach collection="ingredientes" item="element" index="index" open="(" separator=","  close=")">
+		  #{element}
+		</foreach>
+		</if>
+		GROUP BY R.ID 
+		<if test="ingredientes.size > 0">
+		<bind name="size" value="ingredientes.size" />
+		HAVING COUNT(*) = #{size}
+		</if>
+		ORDER BY #{orderBy}
+		<if test="desc">
+		 DESC
+		</if>
+	</select>
+	
+	<select id="getRecetasRecomendadas" resultMap="recetaFiltrada">
+		WITH GRUPOS_RECETA AS (
+			SELECT DISTINCT (g.ID) AS ID_GRUPO,
+				g.NOMBRE AS NOMBRE_GRUPO,
+				g.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO,
+				ir.RECETA AS ID_RECETA
+			FROM GRUPO_INGREDIENTE g
+			LEFT JOIN INGREDIENTES i ON i.GRUPO = g.ID
+			LEFT JOIN INGREDIENTE_RECETA ir ON ir.INGREDIENTE = i.ID 
+		), 
+		GRUPOS_CONSUMIDOS AS (
+			SELECT gr.ID_GRUPO AS ID,
+				gr.NOMBRE_GRUPO AS NOMBRE,
+				gr.RACIONES_SEMANA_GRUPO AS RACIONES_SEMANA,
+				count(gr.ID_GRUPO) AS RACIONES_CONSUMIDAS,
+				IF((round(count(gr.ID_GRUPO) * 100 / gr.RACIONES_SEMANA_GRUPO) > 100), 100, (round(count(gr.ID_GRUPO) * 100 / gr.RACIONES_SEMANA_GRUPO))) AS PORCENTAJE_CONSUMIDO
+			FROM GRUPOS_RECETA gr
+			LEFT JOIN USUARIO_RECETA_CONSUMIDA urc ON urc.RECETA = gr.ID_RECETA
+			WHERE urc.FECHA >= DATE(NOW()) - INTERVAL 7 DAY AND urc.USUARIO = #{idUsuario}
+			GROUP BY gr.ID_GRUPO
+		),
+		HISTORICO_GRUPOS AS (
+			SELECT gi.ID AS ID,
+				gi.NOMBRE AS NOMBRE,
+				gi.RACIONES_SEMANA AS RACIONES_SEMANA,
+				IFNULL(gc.RACIONES_CONSUMIDAS, 0) AS RACIONES_CONSUMIDAS,
+				IFNULL(gc.PORCENTAJE_CONSUMIDO, 0) AS PORCENTAJE_CONSUMIDO
+			FROM GRUPOS_CONSUMIDOS gc
+			RIGHT JOIN GRUPO_INGREDIENTE gi ON gi.ID = gc.ID
+		),
+		GRUPOS_FILTRADOS AS (
+			SELECT r.ID AS ID_RECETA,
+				count(r.ID) AS GRUPOS
+			FROM RECETAS r
+			LEFT JOIN GRUPOS_RECETA gr ON gr.ID_RECETA = r.ID 
+			LEFT JOIN HISTORICO_GRUPOS hg ON hg.ID = gr.ID_GRUPO
+			WHERE hg.RACIONES_SEMANA = 7 OR <![CDATA[ hg.PORCENTAJE_CONSUMIDO < 70 ]]>
+			GROUP BY r.ID
+		),
+		RECETAS_FILTRADAS AS (
+			SELECT gr.ID_RECETA,
+				count(gr.ID_RECETA),
+				gf.GRUPOS
+			FROM GRUPOS_FILTRADOS gf
+			LEFT JOIN GRUPOS_RECETA gr ON gr.ID_RECETA = gf.ID_RECETA
+			GROUP BY gr.ID_RECETA
+			HAVING count(gr.ID_RECETA) = gf.GRUPOS
+		)
+		SELECT r.ID AS ID_RECETA,
+			r.TITULO AS TITULO_RECETA,
+			r.IMAGEN AS IMAGEN_RECETA,
+			r.INSTRUCCIONES AS INSTRUCCIONES_RECETA,
+			r.FECHA_CREACION AS FECHA_CREACION_RECETA,
+			r.TIEMPO AS TIEMPO_RECETA,
+			r.COMENSALES AS COMENSALES_RECETA,
+			r.DIFICULTAD AS DIFICULTAD_RECETA,
+			r.PUBLICADA AS PUBLICADA_RECETA,
+			(SELECT COUNT(*) FROM LIKE_RECETA WHERE RECETA = R.ID) AS LIKES_RECETA,
+			u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			tr.ID AS ID_TIPO_RECETA,
+			tr.NOMBRE AS NOMBRE_TIPO_RECETA
+		FROM RECETAS r
+		LEFT JOIN USUARIOS u ON u.ID = r.USUARIO 
+		LEFT JOIN TIPO_RECETA tr ON tr.ID = r.TIPO 
+		LEFT JOIN INGREDIENTE_RECETA ir ON ir.RECETA = r.ID 
+		LEFT JOIN RECETAS_FILTRADAS rf ON rf.ID_RECETA = r.ID 
+		WHERE R.PUBLICADA = 1 AND rf.ID_RECETA IS NOT NULL
+		AND (#{tipoReceta} IS NULL OR tr.ID = #{tipoReceta})
+		AND (#{idCreador} IS NULL OR u.ID = #{idCreador})
 		AND (#{dificultad} IS NULL OR r.DIFICULTAD = #{dificultad})
 		AND (#{comensales} IS NULL OR r.COMENSALES = #{comensales})
 		AND (#{tiempo} IS NULL OR #{tiempo} >= r.TIEMPO)

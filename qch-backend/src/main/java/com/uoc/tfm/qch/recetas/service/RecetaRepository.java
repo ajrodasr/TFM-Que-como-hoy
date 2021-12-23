@@ -21,7 +21,18 @@ public interface RecetaRepository {
 	Page<RecetaFiltradaDTO> getRecetasFiltradas(
 			String tituloReceta, 
 			Integer tipoReceta,
+			String idCreador,
+			String dificultad,
+			Integer comensales,
+			Integer tiempo,
+			List<Integer> ingredientes,
+			Integer orderBy,
+			Boolean desc);
+	Page<RecetaFiltradaDTO> getRecetasRecomendadas(
 			String idUsuario,
+			String tituloReceta, 
+			Integer tipoReceta,
+			String idCreador,
 			String dificultad,
 			Integer comensales,
 			Integer tiempo,

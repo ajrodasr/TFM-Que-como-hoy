@@ -62,14 +62,28 @@ public class RecetaService {
 	public Page<RecetaFiltradaDTO> getRecetasPublicadasPaginadas(
 			String tituloReceta, 
 			Integer tipoReceta,
-			String idUsuario,
+			String idCreador,
 			String dificultad,
 			Integer comensales,
 			Integer tiempo,
 			List<Integer> ingredientes,
 			Integer order,
 			Boolean desc){
-		return recetaRepository.getRecetasFiltradas(tituloReceta, tipoReceta, idUsuario, dificultad, comensales, tiempo, ingredientes, order, desc);
+		return recetaRepository.getRecetasFiltradas(tituloReceta, tipoReceta, idCreador, dificultad, comensales, tiempo, ingredientes, order, desc);
+	}
+	
+	public Page<RecetaFiltradaDTO> getRecetasRecomendadasPaginadas(
+			String idUsuario,
+			String tituloReceta, 
+			Integer tipoReceta,
+			String idCreador,
+			String dificultad,
+			Integer comensales,
+			Integer tiempo,
+			List<Integer> ingredientes,
+			Integer order,
+			Boolean desc){
+		return recetaRepository.getRecetasRecomendadas(idUsuario, tituloReceta, tipoReceta, idCreador, dificultad, comensales, tiempo, ingredientes, order, desc);
 	}
 	
 	public Page<RecetaHistoricoDTO> getHistoricoRecetas(String idUsuario){

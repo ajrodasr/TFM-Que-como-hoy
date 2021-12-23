@@ -23,7 +23,7 @@ export class RecetaService {
   public getAllRecetas(
     tituloReceta: string = '',
     tipoReceta: number = -1,
-    idUsuario: string = '',
+    idCreador: string = '',
     dificultad: string = '',
     comensales: number = null,
     tiempo: number = null,
@@ -40,8 +40,8 @@ export class RecetaService {
       parametros.push(`tipoReceta=${tipoReceta}&`);
     }
 
-    if (idUsuario !== '') {
-      parametros.push(`idUsuario=${idUsuario}&`);
+    if (idCreador !== '') {
+      parametros.push(`idCreador=${idCreador}&`);
     }
 
     if (dificultad !== '') {
@@ -69,6 +69,70 @@ export class RecetaService {
     }
 
     let urlConsulta = BACK_URL + 'api/recetas';
+
+    if (parametros.length > 0) {
+      urlConsulta += '?';
+      parametros.forEach((parametro) => {
+        urlConsulta += parametro;
+      });
+    }
+    return this.http.get<any>(urlConsulta);
+  }
+
+  public getRecetasRecomendadas(
+    idUsuario: string,
+    tituloReceta: string = '',
+    tipoReceta: number = -1,
+    idCreador: string = '',
+    dificultad: string = '',
+    comensales: number = null,
+    tiempo: number = null,
+    ingredientes: Ingrediente[] = [],
+    pageNum: number = 0
+  ): Observable<any> {
+    const parametros: string[] = [];
+
+    if (idUsuario) {
+      parametros.push(`idUsuario=${idUsuario}&`);
+    }
+
+    if (tituloReceta !== '') {
+      parametros.push(`tituloReceta=${tituloReceta}&`);
+    }
+
+    if (tipoReceta >= 0) {
+      parametros.push(`tipoReceta=${tipoReceta}&`);
+    }
+
+    if (idCreador !== '') {
+      parametros.push(`idCreador=${idCreador}&`);
+    }
+
+    if (dificultad !== '') {
+      parametros.push(`dificultad=${dificultad}&`);
+    }
+
+    if (comensales) {
+      parametros.push(`comensales=${comensales}&`);
+    }
+
+    if (tiempo) {
+      parametros.push(`tiempo=${tiempo}&`);
+    }
+
+    if (ingredientes.length > 0) {
+      let ing = '';
+      ingredientes.forEach((ingrediente) => {
+        ing += `ingrediente=${ingrediente.id}&`;
+      });
+      parametros.push(ing);
+    }
+
+    if (pageNum !== 0) {
+      parametros.push(`pageNum=${pageNum}&`);
+    }
+
+    let urlConsulta = BACK_URL + 'api/recetas/recomendadas';
 
     if (parametros.length > 0) {
       urlConsulta += '?';

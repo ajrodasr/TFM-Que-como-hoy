@@ -17,6 +17,8 @@ import { RegistroComponent } from './components/registro/registro.component';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { RecomendadasRecetasComponent } from './components/recetas/recomendadas-recetas/recomendadas-recetas.component';
+import { ListaUsuariosComponent } from './components/admin/lista-usuarios/lista-usuarios.component';
+import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
   { path: '', component: IndexComponent, canActivate: [AuthGuard] },
@@ -81,6 +83,11 @@ const routes: Routes = [
     path: 'mis-recetas',
     component: MisRecetasComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin/usuarios',
+    component: ListaUsuariosComponent,
+    canActivate: [AdminGuard],
   },
 ];
 

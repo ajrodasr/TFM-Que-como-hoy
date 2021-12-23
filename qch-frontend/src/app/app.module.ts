@@ -27,6 +27,7 @@ import { MiAlimentacionComponent } from './components/mi-alimentacion/mi-aliment
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { HistoricoRecetasComponent } from './components/recetas/historico-recetas/historico-recetas.component';
 import { RecomendadasRecetasComponent } from './components/recetas/recomendadas-recetas/recomendadas-recetas.component';
+import { ListaUsuariosComponent } from './components/admin/lista-usuarios/lista-usuarios.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { RecomendadasRecetasComponent } from './components/recetas/recomendadas-
     MiAlimentacionComponent,
     HistoricoRecetasComponent,
     RecomendadasRecetasComponent,
+    ListaUsuariosComponent,
   ],
   imports: [
     BrowserModule,

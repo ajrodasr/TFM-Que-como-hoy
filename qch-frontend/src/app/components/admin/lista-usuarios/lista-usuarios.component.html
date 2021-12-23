@@ -1,0 +1,119 @@
+<div class="container mt-5 p-5 p-sm-3">
+  <h1 class="text-center">LISTA DE USUARIOS</h1>
+  <div *ngIf="paginador && usuarios" class="row mt-5">
+    <div class="col-4">
+      <input
+        type="text"
+        name="term"
+        id="term"
+        class="form-control input-lg"
+        autocomplete="off"
+        placeholder="Buscar"
+        [formControl]="term"
+        (input)="onFilter()"
+      />
+    </div>
+  </div>
+  <div *ngIf="paginador && usuarios" class="row mt-3 g-0">
+    <div class="table-responsive-md">
+      <table class="table table-striped table-hover bg-white">
+        <caption>
+          Mostrando del elemento
+          {{
+            paginador.primerElemento
+          }}
+          al
+          {{
+            paginador.ultimoElemento
+          }}
+          de
+          {{
+            paginador.total
+          }}
+          totales
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Email</th>
+            <th scope="col">Administrador</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios" class="align-middle">
+            <th scope="row">{{ usuario.id }}</th>
+            <td>
+              {{ usuario.nombre }} {{ usuario.apellido1 }}
+              {{ usuario.apellido2 }}
+            </td>
+            <td>{{ usuario.email }}</td>
+            <td class="text-center">
+              <a
+                *ngIf="usuario.admin"
+                class="btn text-success"
+                title="Quitar administrador"
+                (click)="deleteAdmin(usuario.id)"
+                ><i class="fas fa-check-circle"></i
+              ></a>
+              <a
+                *ngIf="!usuario.admin"
+                class="btn text-danger"
+                title="Hacer administrador"
+                (click)="setAdmin(usuario.id)"
+                ><i class="far fa-check-circle"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="paginador && usuarios" class="row mt-3">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.primeraPagina)"
+          >
+            <<
+          </button>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.anteriorPagina)"
+          >
+            <
+          </button>
+        </li>
+        <li
+          *ngFor="let pagina of paginador.paginas"
+          [ngClass]="{ active: pagina === paginador.paginaActual }"
+          class="page-item"
+        >
+          <button class="page-link shadow-none" (click)="onFilter(pagina)">
+            {{ pagina }}
+          </button>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.siguientePagina)"
+          >
+            >
+          </button>
+        </li>
+        <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
+          <button
+            class="page-link shadow-none"
+            (click)="onFilter(paginador.ultimaPagina)"
+          >
+            >>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

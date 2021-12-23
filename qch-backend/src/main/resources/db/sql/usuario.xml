@@ -17,6 +17,15 @@
 		<id column="ID_ROL" property="id" />
 		<result column="NOMBRE_ROL" property="rolNombre" />
 	</resultMap>
+	
+	<resultMap id="usuarioListado" type="com.uoc.tfm.qch.security.dto.UsuarioListadoDTO">
+		<id column="ID_USUARIO" property="id" />
+		<result column="NOMBRE_USUARIO" property="nombre" />
+		<result column="APELLIDO1_USUARIO" property="apellido1" />
+		<result column="APELLIDO2_USUARIO" property="apellido2" />
+		<result column="EMAIL_USUARIO" property="email" />
+		<result column="ADMIN_USUARIO" property="admin" />
+	</resultMap>
 
 	<select id="getUsuarioById" resultMap="usuario">
 		SELECT u.ID AS ID_USUARIO,
@@ -80,6 +89,22 @@
 		JOIN usuario_rol ur ON ur.USUARIO = u.ID
 		JOIN roles r ON r.ID = ur.ROL
 		WHERE u.TOKEN_PASSWORD = #{tokenPassword}
+	</select>
+	
+	<select id="getUsuarios" resultMap="usuarioListado">
+		SELECT u.ID AS ID_USUARIO,
+			u.NOMBRE AS NOMBRE_USUARIO,
+			u.APELLIDO1 AS APELLIDO1_USUARIO,
+			u.APELLIDO2 AS APELLIDO2_USUARIO,
+			u.EMAIL AS EMAIL_USUARIO,
+			(SELECT COUNT(*) 
+			FROM USUARIO_ROL ur
+			LEFT JOIN ROLES r ON r.ID = ur.ROL 
+			WHERE USUARIO = u.ID AND r.NOMBRE LIKE '%ADMIN%') AS ADMIN_USUARIO
+		FROM USUARIOS u
+		<bind name="term" value="'%' + term + '%'" />
+		WHERE CONCAT (u.ID, ' ',u.NOMBRE, ' ', u.APELLIDO1, ' ', u.APELLIDO2, ' ', u.EMAIL) LIKE #{term}
+		ORDER BY u.ID
 	</select>
 
 	<insert id="saveUsuario">

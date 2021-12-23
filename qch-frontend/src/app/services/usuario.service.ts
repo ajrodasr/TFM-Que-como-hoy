@@ -15,16 +15,19 @@ export class UsuarioService {
 
   public getPerfilUsuario(idUsuario: string): Observable<any> {
     const param = new HttpParams().append('idUsuario', idUsuario);
-    return this.http.get<PerfilUsuario>(BACK_URL + 'api/perfil-usuario', {
-      params: param,
-    });
+    return this.http.get<PerfilUsuario>(
+      BACK_URL + 'api/usuario/perfil-usuario',
+      {
+        params: param,
+      }
+    );
   }
 
   public actualizarPerfilUsuario(
     perfilUsuario: PerfilUsuario
   ): Observable<any> {
     return this.http.post<PerfilUsuario>(
-      BACK_URL + 'api/perfil-usuario/actualizar-datos',
+      BACK_URL + 'api/usuario/actualizar-datos',
       perfilUsuario
     );
   }
@@ -33,8 +36,17 @@ export class UsuarioService {
     cambiarPasswordPerfil: CambiarPasswordPerfil
   ): Observable<any> {
     return this.http.post<PerfilUsuario>(
-      BACK_URL + 'api/perfil-usuario/cambiar-password',
+      BACK_URL + 'api/usuario/cambiar-password',
       cambiarPasswordPerfil
     );
+  }
+
+  public getUsuarios(term: string = '', pageNum: number = 1): Observable<any> {
+    const param = new HttpParams()
+      .append('term', term)
+      .append('pageNum', pageNum.toString());
+    return this.http.get<any>(BACK_URL + 'api/usuario/usuarios', {
+      params: param,
+    });
   }
 }

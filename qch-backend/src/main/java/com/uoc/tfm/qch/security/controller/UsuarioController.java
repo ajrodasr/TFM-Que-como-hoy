@@ -14,13 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.uoc.tfm.qch.security.domain.Usuario;
 import com.uoc.tfm.qch.security.dto.CambiarPasswordPerfilDTO;
 import com.uoc.tfm.qch.security.dto.PerfilUsuarioDTO;
+import com.uoc.tfm.qch.security.dto.UsuarioListadoDTO;
 import com.uoc.tfm.qch.security.service.UsuarioService;
 
 @RestController
-@RequestMapping("/api/perfil-usuario")
+@RequestMapping("/api/usuario")
 @CrossOrigin
 public class UsuarioController {
 
@@ -30,7 +34,7 @@ public class UsuarioController {
 	@Autowired
 	UsuarioService usuarioService;
 	
-	@GetMapping
+	@GetMapping("perfil-usuario")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ResponseEntity<PerfilUsuarioDTO> getPerfilUsuario(@RequestParam String idUsuario) {
 		PerfilUsuarioDTO perfil = usuarioService.getPerfilUsuario(idUsuario);
@@ -40,7 +44,19 @@ public class UsuarioController {
 		return new ResponseEntity<PerfilUsuarioDTO>(perfil, HttpStatus.OK);
 	}
 	
-	@PostMapping("/actualizar-datos")
+	@GetMapping("usuarios")
+	public ResponseEntity<PageInfo<UsuarioListadoDTO>> getRecetasFiltradas(
+			@RequestParam(required = false, defaultValue = "") String term,
+			@RequestParam(required = false, defaultValue = "1") int pageNum,
+			@RequestParam(required = false, defaultValue = "10") int pageSize
+			){
+		PageHelper.startPage(pageNum, pageSize);
+		Page<UsuarioListadoDTO> usuarios = usuarioService.getUsuarios(term);
+		PageInfo<UsuarioListadoDTO> info = new PageInfo<UsuarioListadoDTO>(usuarios);
+		return new ResponseEntity<PageInfo<UsuarioListadoDTO>>(info, HttpStatus.OK);
+	}
+	
+	@PostMapping("actualizar-datos")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ResponseEntity<?> getPerfilUsuario(@RequestBody PerfilUsuarioDTO perfilUsuario) {
 		if (!usuarioService.existsUsuarioById(perfilUsuario.getId())) {
@@ -51,7 +67,7 @@ public class UsuarioController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping("/cambiar-password")
+	@PostMapping("cambiar-password")
 	public ResponseEntity<?> changePassword(@RequestBody CambiarPasswordPerfilDTO dto){
 		
 		if(!dto.getPassword().equals(dto.getConfirmPassword())) {

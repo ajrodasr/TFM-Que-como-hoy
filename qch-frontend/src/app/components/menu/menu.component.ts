@@ -9,11 +9,13 @@ import { AuthService } from 'src/app/services/auth.service';
 export class MenuComponent implements OnInit {
   isLogged = false;
   idUsuario = '';
+  isAdmin = false;
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.isLogged = this.authService.isLogged();
+    this.isAdmin = this.authService.isAdmin();
     if (this.isLogged) {
       this.idUsuario = this.authService.getUsername();
     }

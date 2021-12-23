@@ -32,6 +32,21 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="recetas-recomendadas">Qué como hoy</a>
         </li>
+        <li *ngIf="isLogged && isAdmin" class="nav-item dropdown">
+          <button
+            class="nav-link dropdown-toggle border-0 bg-transparent w-100"
+            href="#"
+            id="navbarDropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Administrador
+          </button>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" routerLink="admin/usuarios">Usuarios</a>
+          </div>
+        </li>
       </ul>
       <div>
         <ul *ngIf="isLogged" class="navbar-nav mb-2 mb-lg-0">

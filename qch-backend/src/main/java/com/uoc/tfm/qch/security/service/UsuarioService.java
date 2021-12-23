@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.Page;
 import com.uoc.tfm.qch.security.domain.Usuario;
 import com.uoc.tfm.qch.security.dto.PerfilUsuarioDTO;
+import com.uoc.tfm.qch.security.dto.UsuarioListadoDTO;
 
 @Service
 @Transactional
@@ -40,6 +42,10 @@ public class UsuarioService {
 	
 	public Usuario getUsuarioByTokenPassword (String tokenPassword) {
 		return usuarioRepository.getUsuarioByTokenPassword(tokenPassword);
+	}
+	
+	public Page<UsuarioListadoDTO> getUsuarios(String term){
+		return usuarioRepository.getUsuarios(term);
 	}
 	
 	public PerfilUsuarioDTO getPerfilUsuario(String idUsuario) {

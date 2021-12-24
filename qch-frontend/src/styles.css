@@ -15,12 +15,20 @@ body {
   height: 100vh;
 }
 
-.max-h55 {
+.max-h50 {
   max-height: 50px;
+}
+
+.max-h35 {
+  max-height: 35px;
 }
 
 .bg-principal {
   background-color: #c0a58d;
+}
+
+.text-principal {
+  color: #c0a58d;
 }
 
 a {

@@ -85,7 +85,7 @@
         <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
           <button
             class="page-link shadow-none"
-            (click)="onFilter(paginador.primeraPagina)"
+            (click)="onNavigate(paginador.primeraPagina)"
           >
             <<
           </button>
@@ -93,7 +93,7 @@
         <li [ngClass]="{ disabled: paginador.esPrimera }" class="page-item">
           <button
             class="page-link shadow-none"
-            (click)="onFilter(paginador.anteriorPagina)"
+            (click)="onNavigate(paginador.anteriorPagina)"
           >
             <
           </button>
@@ -103,14 +103,14 @@
           [ngClass]="{ active: pagina === paginador.paginaActual }"
           class="page-item"
         >
-          <button class="page-link shadow-none" (click)="onFilter(pagina)">
+          <button class="page-link shadow-none" (click)="onNavigate(pagina)">
             {{ pagina }}
           </button>
         </li>
         <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
           <button
             class="page-link shadow-none"
-            (click)="onFilter(paginador.siguientePagina)"
+            (click)="onNavigate(paginador.siguientePagina)"
           >
             >
           </button>
@@ -118,7 +118,7 @@
         <li [ngClass]="{ disabled: paginador.esUltima }" class="page-item">
           <button
             class="page-link shadow-none"
-            (click)="onFilter(paginador.ultimaPagina)"
+            (click)="onNavigate(paginador.ultimaPagina)"
           >
             >>
           </button>

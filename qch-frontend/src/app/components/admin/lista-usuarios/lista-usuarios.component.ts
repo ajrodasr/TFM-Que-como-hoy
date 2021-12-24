@@ -19,6 +19,9 @@ export class ListaUsuariosComponent implements OnInit {
   term: FormControl;
   filtroForm: FormGroup;
 
+  error = false;
+  mensaje: string;
+
   constructor(
     private usuariosService: UsuarioService,
     private formBuilder: FormBuilder
@@ -41,5 +44,41 @@ export class ListaUsuariosComponent implements OnInit {
         this.usuarios = data.list;
         this.paginador = new Paginador(data);
       });
+  }
+
+  setAdminUsuario(idUsuario: string): void {
+    this.usuariosService.setAdminUsuario(idUsuario).subscribe(
+      (data) => {
+        this.usuarios.forEach((usuario) => {
+          if (usuario.id === idUsuario) {
+            usuario.admin = true;
+          }
+        });
+        this.error = false;
+        this.mensaje = data.mensaje;
+      },
+      (err) => {
+        this.error = true;
+        this.mensaje = err.error;
+      }
+    );
+  }
+
+  unsetAdminUsuario(idUsuario: string): void {
+    this.usuariosService.unsetAdminUsuario(idUsuario).subscribe(
+      (data) => {
+        this.usuarios.forEach((usuario) => {
+          if (usuario.id === idUsuario) {
+            usuario.admin = false;
+          }
+        });
+        this.error = false;
+        this.mensaje = data.mensaje;
+      },
+      (err) => {
+        this.error = true;
+        this.mensaje = err.error;
+      }
+    );
   }
 }

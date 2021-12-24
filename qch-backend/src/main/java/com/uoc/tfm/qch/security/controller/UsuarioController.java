@@ -85,4 +85,33 @@ public class UsuarioController {
 		usuarioService.update(usuario);
 		return new ResponseEntity(Collections.singletonMap("mensaje", "Contraseña actualizada"), HttpStatus.OK);
 	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("set-admin")
+	public ResponseEntity<?> setAdmin(@RequestParam String idUsuario){
+		
+		if (!usuarioService.existsUsuarioById(idUsuario)) {
+			return new ResponseEntity("El usuario no existe", HttpStatus.BAD_REQUEST);
+		}
+		try {
+			usuarioService.setAdminUsuario(idUsuario);
+		} catch (Exception e) {
+			return new ResponseEntity("No se ha podido establecer el rol al usuario", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Rol establecido correctamente"), HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("unset-admin")
+	public ResponseEntity<?> unsetAdmin(@RequestParam String idUsuario){
+		if (!usuarioService.existsUsuarioById(idUsuario)) {
+			return new ResponseEntity("El usuario no existe", HttpStatus.BAD_REQUEST);
+		}
+		try {
+			usuarioService.unsetAdminUsuario(idUsuario);
+		} catch (Exception e) {
+			return new ResponseEntity("No se ha podido eliminar el rol al usuario", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Rol eliminado correctamente"), HttpStatus.OK);
+	}
 }

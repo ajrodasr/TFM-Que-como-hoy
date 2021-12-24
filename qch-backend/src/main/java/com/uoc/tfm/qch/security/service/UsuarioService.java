@@ -61,6 +61,10 @@ public class UsuarioService {
 		usuarioRepository.saveRolUsuario(usuario.getId(), usuario.getRoles());
 	}
 	
+	public void setAdminUsuario(String idUsuario) {
+		usuarioRepository.setAdminUsuario(idUsuario);
+	}
+	
 	public void updatePerfilUsuario(PerfilUsuarioDTO perfilUsuario) {
 		Usuario usuario = usuarioRepository.getUsuarioById(perfilUsuario.getId());
 		usuario.setNombre(perfilUsuario.getNombre());
@@ -68,6 +72,10 @@ public class UsuarioService {
 		usuario.setApellido2(perfilUsuario.getApellido2());
 		usuario.setEmail(perfilUsuario.getEmail());
 		usuarioRepository.updateUsuario(usuario);
+	}
+	
+	public void unsetAdminUsuario(String idUsuario) {
+		usuarioRepository.unsetAdminUsuario(idUsuario);
 	}
 	
 }

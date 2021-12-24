@@ -1,5 +1,12 @@
 <div class="container mt-5 p-5 p-sm-3">
   <h1 class="text-center">LISTA DE USUARIOS</h1>
+  <div
+    *ngIf="mensaje"
+    class="alert mt-3"
+    [ngClass]="error ? 'alert-danger' : 'alert-success'"
+  >
+    {{ mensaje }}
+  </div>
   <div *ngIf="paginador && usuarios" class="row mt-5">
     <div class="col-4">
       <input
@@ -53,14 +60,14 @@
                 *ngIf="usuario.admin"
                 class="btn text-success"
                 title="Quitar administrador"
-                (click)="deleteAdmin(usuario.id)"
+                (click)="unsetAdminUsuario(usuario.id)"
                 ><i class="fas fa-check-circle"></i
               ></a>
               <a
                 *ngIf="!usuario.admin"
                 class="btn text-danger"
                 title="Hacer administrador"
-                (click)="setAdmin(usuario.id)"
+                (click)="setAdminUsuario(usuario.id)"
                 ><i class="far fa-check-circle"></i
               ></a>
             </td>

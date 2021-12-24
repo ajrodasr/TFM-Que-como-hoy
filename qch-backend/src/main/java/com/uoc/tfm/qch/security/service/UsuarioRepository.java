@@ -11,13 +11,14 @@ import com.uoc.tfm.qch.security.dto.UsuarioListadoDTO;
 
 @Mapper
 public interface UsuarioRepository {
-	
 	Usuario getUsuarioById(String idUsuario);
 	Usuario getUsuarioByEmail(String email);
 	Usuario getUsuarioByIdOrEmail(String idOrEmail);
 	Usuario getUsuarioByTokenPassword(String tokenPassword);
 	Page<UsuarioListadoDTO> getUsuarios(String term);
 	void saveUsuario(Usuario usuario);
+	void setAdminUsuario(String idUsuario);
 	void updateUsuario(Usuario usuario);
 	void saveRolUsuario(String idUsuario, List<Rol> roles);
+	void unsetAdminUsuario(String idUsuario);
 }

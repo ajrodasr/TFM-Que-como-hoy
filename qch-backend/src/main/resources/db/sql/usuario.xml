@@ -124,6 +124,14 @@
 		</foreach>
 	</insert>
 	
+	<insert id="setAdminUsuario">
+		INSERT INTO USUARIO_ROL (USUARIO,ROL) 
+		VALUES ( 
+				#{idUsuario},
+				(SELECT ID FROM ROLES WHERE NOMBRE = 'ROLE_ADMIN')
+		)
+	</insert>
+	
 	<update id="updateUsuario">
 	    UPDATE USUARIOS SET
 	        NOMBRE = #{nombre},
@@ -134,5 +142,9 @@
 	        TOKEN_PASSWORD = #{tokenPassword}
 	    WHERE ID=#{id}
 	</update>
+	
+	<delete id="unsetAdminUsuario">
+		DELETE FROM USUARIO_ROL WHERE USUARIO = #{idUsuario} AND ROL = (SELECT ID FROM ROLES WHERE NOMBRE = 'ROLE_ADMIN');
+	</delete>
 
 </mapper>

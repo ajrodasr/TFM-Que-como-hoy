@@ -49,4 +49,18 @@ export class UsuarioService {
       params: param,
     });
   }
+
+  public setAdminUsuario(idUsuario: string): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/usuario/set-admin?idUsuario=' + idUsuario,
+      {}
+    );
+  }
+
+  public unsetAdminUsuario(idUsuario: string): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/usuario/unset-admin?idUsuario=' + idUsuario,
+      {}
+    );
+  }
 }

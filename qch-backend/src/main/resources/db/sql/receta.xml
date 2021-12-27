@@ -479,6 +479,15 @@
 		INSERT INTO USUARIO_RECETA_CONSUMIDA (USUARIO, RECETA, FECHA) VALUES (#{idUsuario},#{idReceta},#{fechaConsumicion})
 	</insert>
 	
+	<update id="updateRecetaConsumida">
+		UPDATE USUARIO_RECETA_CONSUMIDA SET FECHA = #{nuevaFecha}
+		WHERE USUARIO = #{recetaConsumida.idUsuario} AND RECETA = #{recetaConsumida.idReceta} AND FECHA = #{recetaConsumida.fechaConsumicion}
+	</update>
+	
+	<delete id="deleteRecetaConsumida">
+		DELETE FROM USUARIO_RECETA_CONSUMIDA WHERE USUARIO = #{idUsuario} AND FECHA = #{fechaConsumicion} AND RECETA = #{idReceta}
+	</delete>
+	
 	<update id="updateReceta">
 	    UPDATE RECETAS SET 
 			TITULO = #{titulo}, 

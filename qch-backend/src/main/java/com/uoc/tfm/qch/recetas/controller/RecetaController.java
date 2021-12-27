@@ -144,6 +144,36 @@ public class RecetaController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("receta-consumida/update")
+	public ResponseEntity<?> updateRecetaConsumida(@RequestBody RecetaConsumidaDTO recetaConsumida, @RequestParam String nuevaFecha) {
+		RecetaDTO receta = recetaService.getRecetaById(recetaConsumida.getIdReceta());
+		if(receta == null) {
+			return new ResponseEntity("Esta receta no existe", HttpStatus.BAD_REQUEST);
+		} 
+		try {
+			recetaService.updateRecetaConsumida(recetaConsumida, nuevaFecha);
+		} catch (Exception e) {
+			return new ResponseEntity("Esta receta ya se ha añadido a esta fecha", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Fecha de consumición actualizada"), HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("receta-consumida/delete")
+	public ResponseEntity<?> deleteRecetaConsumida(@RequestBody RecetaConsumidaDTO recetaConsumida) {
+		RecetaDTO receta = recetaService.getRecetaById(recetaConsumida.getIdReceta());
+		if(receta == null) {
+			return new ResponseEntity("Esta receta no existe", HttpStatus.BAD_REQUEST);
+		} 
+		try {
+			recetaService.deleteRecetaConsumida(recetaConsumida);
+		} catch (Exception e) {
+			return new ResponseEntity("No existe esta receta con esta fecha", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity(Collections.singletonMap("mensaje", "Receta eliminada del historico de consumición"), HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("publicar")
 	public ResponseEntity<?> publicarReceta(@RequestParam int idReceta) {
 		RecetaDTO dto = recetaService.getRecetaById(idReceta);

@@ -1,5 +1,6 @@
 package com.uoc.tfm.qch.recetas.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -45,6 +46,8 @@ public interface RecetaRepository {
 	List<Receta> getRecetasByUsuario(String idUsuario);
 	void saveReceta(Receta receta);
 	void saveRecetaConsumida(RecetaConsumidaDTO recetaConsumida);
+	void updateRecetaConsumida(RecetaConsumidaDTO recetaConsumida, LocalDateTime nuevaFecha);
+	void deleteRecetaConsumida(RecetaConsumidaDTO recetaConsumida);
 	void publicarReceta(int idReceta);
 	void despublicarReceta(int idReceta);
 	void updateReceta(Receta receta);

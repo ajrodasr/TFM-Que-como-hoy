@@ -1,5 +1,7 @@
 package com.uoc.tfm.qch.recetas.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,6 +102,16 @@ public class RecetaService {
 	
 	public void saveRecetaConsumida(RecetaConsumidaDTO recetaConsumida) {
 		recetaRepository.saveRecetaConsumida(recetaConsumida);
+	}
+	
+	public void updateRecetaConsumida(RecetaConsumidaDTO recetaConsumida, String nuevaFecha) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+		LocalDateTime date = LocalDateTime.parse(nuevaFecha, formatter);
+		recetaRepository.updateRecetaConsumida(recetaConsumida, date);
+	}
+	
+	public void deleteRecetaConsumida(RecetaConsumidaDTO recetaConsumida) {
+		recetaRepository.deleteRecetaConsumida(recetaConsumida);
 	}
 	
 	@Transactional

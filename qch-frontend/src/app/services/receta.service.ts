@@ -320,4 +320,21 @@ export class RecetaService {
       recetaConsumida
     );
   }
+
+  public updateConsumida(
+    recetaConsumida: RecetaConsumida,
+    nuevaFecha: string
+  ): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/recetas/receta-consumida/update?nuevaFecha=' + nuevaFecha,
+      recetaConsumida
+    );
+  }
+
+  public deleteConsumida(recetaConsumida: RecetaConsumida): Observable<any> {
+    return this.http.post<any>(
+      BACK_URL + 'api/recetas/receta-consumida/delete',
+      recetaConsumida
+    );
+  }
 }

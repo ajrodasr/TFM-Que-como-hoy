@@ -1,7 +1,10 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { LikeReceta } from 'src/app/models/like-receta';
 import { Paginador } from 'src/app/models/paginador';
+import { RecetaConsumida } from 'src/app/models/receta-consumida';
 import { RecetaHistorico } from 'src/app/models/receta-historico';
 import { AuthService } from 'src/app/services/auth.service';
 import { RecetaService } from 'src/app/services/receta.service';
@@ -20,10 +23,21 @@ export class HistoricoRecetasComponent implements OnInit {
   // Recetas
   recetas: RecetaHistorico[];
   likes: number[];
-  //Paginador
+  // Paginador
   paginador: Paginador;
 
+  // Formulario
+  idReceta: FormControl;
+  fecha: FormControl;
+  nuevaFecha: FormControl;
+  editarHistoricoForm: FormGroup;
+
+  mensaje: string;
+  mensajeEliminado: string;
+  error = false;
+
   constructor(
+    private formBuilder: FormBuilder,
     private recetaService: RecetaService,
     private authService: AuthService
   ) {}
@@ -37,6 +51,20 @@ export class HistoricoRecetasComponent implements OnInit {
       this.recetas = data[0].list;
       this.paginador = new Paginador(data[0]);
       this.likes = data[1];
+    });
+
+    this.idReceta = new FormControl('');
+    this.fecha = new FormControl(
+      formatDate(new Date(), 'yyyy-MM-ddTHH:mm', 'en')
+    );
+    this.nuevaFecha = new FormControl(
+      formatDate(new Date(), 'yyyy-MM-ddTHH:mm', 'en')
+    );
+
+    this.editarHistoricoForm = this.formBuilder.group({
+      idReceta: this.idReceta,
+      fecha: this.fecha,
+      nuevaFecha: this.nuevaFecha,
     });
   }
 
@@ -87,14 +115,93 @@ export class HistoricoRecetasComponent implements OnInit {
       }
     });
     const fechaConsumicion = receta.fechaConsumicion;
-    return `Receta consumida el ${fechaConsumicion[2]}/${fechaConsumicion[1]}/${
-      fechaConsumicion[0]
-    } a las ${fechaConsumicion[3].toLocaleString('en-US', {
+    return `Consumida el ${fechaConsumicion[2].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })}/${fechaConsumicion[1].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })}/${fechaConsumicion[0].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })} a las ${fechaConsumicion[3].toLocaleString('en-US', {
       minimumIntegerDigits: 2,
       useGrouping: false,
     })}:${fechaConsumicion[4].toLocaleString('en-US', {
       minimumIntegerDigits: 2,
       useGrouping: false,
     })}`;
+  }
+
+  formatFechaToInput(fecha: Date): string {
+    return `${fecha[0].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })}-${fecha[1].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })}-${fecha[2].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })}T${fecha[3].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })}:${fecha[4].toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false,
+    })}`;
+  }
+
+  onSetForm(idReceta: number, fechaConsumicionReceta: Date): void {
+    this.mensaje = '';
+    this.mensajeEliminado = '';
+    this.error = false;
+    this.idReceta.setValue(idReceta);
+    this.fecha.setValue(this.formatFechaToInput(fechaConsumicionReceta));
+    this.nuevaFecha.setValue(this.formatFechaToInput(fechaConsumicionReceta));
+  }
+
+  onSaveHistorico(): void {
+    const recetaConsumida = new RecetaConsumida(
+      this.idUsuario,
+      this.idReceta.value,
+      this.fecha.value
+    );
+    this.recetaService
+      .updateConsumida(recetaConsumida, this.nuevaFecha.value)
+      .subscribe(
+        (data) => {
+          this.mensaje = data.mensaje;
+          this.error = false;
+          this.onNavigate(this.paginador.paginaActual);
+        },
+        (err) => {
+          this.mensaje = err.error;
+          this.error = true;
+        }
+      );
+  }
+
+  onDeleteHistorico(): void {
+    if (
+      confirm('¿Seguro de que desea eliminar esta consumición de su historico?')
+    ) {
+      const recetaConsumida = new RecetaConsumida(
+        this.idUsuario,
+        this.idReceta.value,
+        this.fecha.value
+      );
+      this.recetaService.deleteConsumida(recetaConsumida).subscribe(
+        (data) => {
+          this.mensajeEliminado = data.mensaje;
+          this.error = false;
+          this.onNavigate(this.paginador.paginaActual);
+        },
+        (err) => {
+          this.mensajeEliminado = err.error;
+          this.error = true;
+        }
+      );
+    }
   }
 }

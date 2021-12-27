@@ -1,5 +1,10 @@
 <div class="container mt-5 p-5 p-sm-3">
   <h1 class="text-center">HISTORICO DE RECETAS CONSUMIDAS</h1>
+  <div class="row">
+    <div *ngIf="mensajeEliminado && !error" class="alert mt-3 alert-success">
+      {{ mensajeEliminado }}
+    </div>
+  </div>
 
   <div *ngIf="paginador" class="row mt-3">
     <small
@@ -72,6 +77,15 @@
           </div>
         </div>
         <div class="card-footer">
+          <a
+            type="button"
+            class="btn text-primary"
+            data-toggle="modal"
+            data-target="#editarHistoricoModal"
+            (click)="onSetForm(receta.id, receta.fechaConsumicion)"
+          >
+            <i class="fas fa-edit"></i>
+          </a>
           <small>{{
             getFechaConsumicion(receta.id, receta.fechaConsumicion)
           }}</small>
@@ -125,5 +139,76 @@
         </li>
       </ul>
     </nav>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="editarHistoricoModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editarHistoricoModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form [formGroup]="editarHistoricoForm" (ngSubmit)="onSaveHistorico()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editarHistoricoModalLongTitle">
+            Editar historico
+          </h5>
+        </div>
+
+        <div class="modal-body">
+          <div
+            *ngIf="mensajeEliminado && error"
+            class="alert mt-3 alert-danger"
+          >
+            {{ mensajeEliminado }}
+          </div>
+          <div
+            *ngIf="mensaje"
+            class="alert mt-3"
+            [ngClass]="error ? 'alert-danger' : 'alert-success'"
+          >
+            {{ mensaje }}
+          </div>
+          <input type="hidden" name="idReceta" [formControl]="idReceta" />
+          <input type="hidden" name="fecha" [formControl]="fecha" />
+
+          <div class="form-group m-3">
+            <input
+              type="datetime-local"
+              name="nuevaFecha"
+              class="form-control text-center"
+              placeholder="Fecha de consumición"
+              [formControl]="nuevaFecha"
+            />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="btn btn-warning"
+            data-dismiss="modal"
+            (click)="onDeleteHistorico()"
+          >
+            Eliminar
+          </button>
+          <button
+            class="btn btn-success"
+            [disabled]="!editarHistoricoForm.valid"
+            type="submit"
+          >
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

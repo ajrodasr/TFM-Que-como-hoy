@@ -43,6 +43,7 @@
               name="ingrediente"
               class="form-control input-lg"
               autocomplete="off"
+              placeholder="Nombre"
               (input)="filter(searchBox.value)"
               [formControl]="nombre"
             />
@@ -69,6 +70,7 @@
             <input
               type="text"
               class="form-control input-lg"
+              placeholder="Cantidad"
               [formControl]="cantidad"
             />
           </div>

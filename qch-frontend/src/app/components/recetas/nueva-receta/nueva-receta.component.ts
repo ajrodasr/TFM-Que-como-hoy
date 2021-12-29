@@ -286,7 +286,7 @@ export class NuevaRecetaComponent implements OnInit {
   }
 
   onCreateIngrediente(): void {
-    this.nuevoIngrediente.nombre = this.nombre.value;
+    this.nuevoIngrediente.nombre = this.nombreIngrediente.value;
     this.nuevoIngrediente.grupo.id = this.idGrupo.value;
 
     this.ingredienteService.nuevoIngrediente(this.nuevoIngrediente).subscribe(

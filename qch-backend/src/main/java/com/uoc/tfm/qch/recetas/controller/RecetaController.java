@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -39,6 +42,9 @@ public class RecetaController {
 
 	@Autowired
 	RecetaService recetaService;
+	
+	@Autowired
+	Cloudinary cloudinary;
 	
 	@GetMapping
 	public ResponseEntity<PageInfo<RecetaFiltradaDTO>> getRecetasFiltradas(
@@ -124,7 +130,12 @@ public class RecetaController {
 		if(receta == null) {
 			return new ResponseEntity("Error al guardar la receta", HttpStatus.BAD_REQUEST);
 		} 
-		recetaService.saveReceta(receta);
+		try {
+			recetaService.saveReceta(receta);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity("Error al guardar la receta", HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity(Collections.singletonMap("mensaje", "Receta guardada correctamente"), HttpStatus.OK);
 	}
 	
@@ -202,7 +213,11 @@ public class RecetaController {
 		if(dto == null) {
 			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
 		} 
-		recetaService.updateReceta(receta);
+		try {
+			recetaService.updateReceta(receta);
+		} catch (IOException e) {
+			return new ResponseEntity("Error al editar la receta", HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity(Collections.singletonMap("mensaje", "Receta actualizada correctamente"), HttpStatus.OK);
 	}
 	
@@ -284,7 +299,10 @@ public class RecetaController {
 	public ResponseEntity<?> uplaodImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
 		Path path = Path.of("src", "main","resources","static","images",file.getOriginalFilename());
 		Files.write(path, file.getBytes());
-		return new ResponseEntity(Collections.singletonMap("mensaje", "Imagen subida correctamente"), HttpStatus.OK);
+		Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
+				  ObjectUtils.emptyMap());
+		String publicId = uploadResult.get("public_id").toString();
+		return new ResponseEntity(Collections.singletonMap("publicID", publicId), HttpStatus.OK);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

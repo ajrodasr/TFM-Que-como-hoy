@@ -21,7 +21,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./receta.component.css'],
 })
 export class RecetaComponent implements OnInit {
-  BACK_URL_IMAGES = environment.APIEndpoint + 'images/';
+  BACK_URL_IMAGES = 'https://res.cloudinary.com/tfm-qch/image/upload/';
   receta: Receta;
   idUsuario: string;
 
@@ -155,6 +155,6 @@ export class RecetaComponent implements OnInit {
   }
 
   handleMissingImage(event): void {
-    event.target.src = this.BACK_URL_IMAGES + 'default.jpg';
+    event.target.src = this.BACK_URL_IMAGES + 'default_kkahr5';
   }
 }

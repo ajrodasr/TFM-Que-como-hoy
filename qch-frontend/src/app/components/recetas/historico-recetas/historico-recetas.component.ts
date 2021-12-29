@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./historico-recetas.component.css'],
 })
 export class HistoricoRecetasComponent implements OnInit {
-  BACK_URL_IMAGES = environment.APIEndpoint + 'images/';
+  BACK_URL_IMAGES = 'https://res.cloudinary.com/tfm-qch/image/upload/';
 
   idUsuario: string;
 

@@ -71,6 +71,12 @@
 			<artifactId>pagehelper-spring-boot-starter</artifactId>
 			<version>1.4.1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44 -->
+		<dependency>
+		    <groupId>com.cloudinary</groupId>
+		    <artifactId>cloudinary-http44</artifactId>
+		    <version>1.29.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

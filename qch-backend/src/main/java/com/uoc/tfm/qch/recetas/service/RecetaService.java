@@ -1,5 +1,6 @@
 package com.uoc.tfm.qch.recetas.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.github.pagehelper.Page;
 import com.uoc.tfm.qch.recetas.domain.Receta;
 import com.uoc.tfm.qch.recetas.domain.TipoReceta;
@@ -27,6 +30,9 @@ public class RecetaService {
 	
 	@Autowired
 	RecetaRepository recetaRepository;
+	
+	@Autowired
+	Cloudinary cloudinary;
 	
 	public RecetaDTO getRecetaById(int idReceta) {
 		Receta receta = recetaRepository.getRecetaById(idReceta);
@@ -115,7 +121,7 @@ public class RecetaService {
 	}
 	
 	@Transactional
-	public void saveReceta(RecetaDTO receta) {
+	public void saveReceta(RecetaDTO receta) throws Exception {
 		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada());
 		recetaRepository.saveReceta(rec);
 		if(!rec.getIngredientes().isEmpty()) {
@@ -123,9 +129,16 @@ public class RecetaService {
 		}
 	}
 	
-	
-	public void updateReceta(RecetaDTO receta) {
-		Receta rec = new Receta(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada());
+	public void updateReceta(RecetaDTO receta) throws IOException {
+		Receta recBD = recetaRepository.getRecetaById(receta.getId());
+		String publicId = recBD.getImagen(); 
+		if(receta.getImagen() != null) {
+			cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+			publicId = receta.getImagen();
+		}
+		
+		
+		Receta rec = new Receta(receta.getId(), receta.getTitulo(), publicId, receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(), receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada());
 		recetaRepository.updateReceta(rec);
 	}
 	

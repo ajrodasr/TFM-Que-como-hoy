@@ -18,7 +18,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./lista-recetas.component.css'],
 })
 export class ListaRecetasComponent implements OnInit {
-  BACK_URL_IMAGES = environment.APIEndpoint + 'images/';
+  BACK_URL_IMAGES = 'https://res.cloudinary.com/tfm-qch/image/upload/';
 
   // Filtro
   tituloReceta: FormControl;

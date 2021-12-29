@@ -193,18 +193,9 @@ export class NuevaRecetaComponent implements OnInit {
       this.nuevaReceta.imagen
     );
 
-    this.recetaService
-      .uploadImage(uploadImageData)
-      .pipe(
-        mergeMap((data1) => this.recetaService.nuevaReceta(this.nuevaReceta)),
-        catchError((err) => {
-          console.log(err);
-          this.mensaje = err.error;
-          this.error = true;
-          return err;
-        })
-      )
-      .subscribe(
+    this.recetaService.uploadImage(uploadImageData).subscribe((data) => {
+      this.nuevaReceta.imagen = data.publicID;
+      this.recetaService.nuevaReceta(this.nuevaReceta).subscribe(
         (res) => {
           console.log(res);
           this.router.navigate(['mis-recetas']);
@@ -215,6 +206,7 @@ export class NuevaRecetaComponent implements OnInit {
           this.error = true;
         }
       );
+    });
   }
 
   onChange(event: any): void {
@@ -301,5 +293,12 @@ export class NuevaRecetaComponent implements OnInit {
         this.mensajeIngrediente = err.error;
       }
     );
+  }
+
+  resetForm(): void {
+    this.nombreIngrediente.reset();
+    this.idGrupo.reset();
+    this.mensajeIngrediente = '';
+    this.errorIngrediente = false;
   }
 }

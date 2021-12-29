@@ -75,7 +75,7 @@ export class EditarRecetaComponent implements OnInit {
     ],
   };
 
-  BACK_URL_IMAGES = environment.APIEndpoint + 'images/';
+  BACK_URL_IMAGES = 'https://res.cloudinary.com/tfm-qch/image/upload/';
 
   idUsuario: string;
   receta = new Receta();
@@ -208,19 +208,9 @@ export class EditarRecetaComponent implements OnInit {
       this.receta.imagen = nombreImagen;
       const uploadImageData = new FormData();
       uploadImageData.append('imageFile', this.imageFile, this.receta.imagen);
-      this.recetaService
-        .uploadImage(uploadImageData)
-        .pipe(
-          mergeMap((data1) => this.recetaService.deleteImage(this.receta.id)),
-          mergeMap((data2) => this.recetaService.editarReceta(this.receta)),
-          catchError((err) => {
-            console.log(err);
-            this.mensaje = err.error;
-            this.error = true;
-            return err;
-          })
-        )
-        .subscribe(
+      this.recetaService.uploadImage(uploadImageData).subscribe((data) => {
+        this.receta.imagen = data.publicID;
+        this.recetaService.editarReceta(this.receta).subscribe(
           (res) => {
             console.log(res);
             this.router.navigate(['mis-recetas']);
@@ -231,18 +221,7 @@ export class EditarRecetaComponent implements OnInit {
             this.error = true;
           }
         );
-    } else {
-      this.recetaService.editarReceta(this.receta).subscribe(
-        (res) => {
-          console.log(res);
-          this.router.navigate(['mis-recetas']);
-        },
-        (err) => {
-          console.log(err);
-          this.mensaje = err.error;
-          this.error = true;
-        }
-      );
+      });
     }
   }
 

@@ -7,7 +7,6 @@ import { IngredienteReceta } from '../models/ingrediente-receta';
 import { LikeReceta } from '../models/like-receta';
 import { Receta } from '../models/receta';
 import { RecetaConsumida } from '../models/receta-consumida';
-import { RecetaHistorico } from '../models/receta-historico';
 import { RecetaLista } from '../models/receta-lista';
 import { TipoReceta } from '../models/tipo-receta';
 import { UsuarioReceta } from '../models/usuario-receta';

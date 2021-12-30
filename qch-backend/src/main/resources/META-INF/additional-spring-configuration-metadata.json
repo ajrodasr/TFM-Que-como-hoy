@@ -33,5 +33,25 @@
     "name": "mail.urlFront",
     "type": "java.lang.String",
     "description": "A description for 'mail.urlFront'"
+  },
+  {
+    "name": "cloudinary.cloudname",
+    "type": "java.lang.String",
+    "description": "A description for 'cloudinary.cloudname'"
+  },
+  {
+    "name": "cloudinary.apikey",
+    "type": "java.lang.String",
+    "description": "A description for 'cloudinary.apikey'"
+  },
+  {
+    "name": "cloudinary.apisecret",
+    "type": "java.lang.String",
+    "description": "A description for 'cloudinary.apisecret'"
+  },
+  {
+    "name": "url.frontend",
+    "type": "java.lang.String",
+    "description": "A description for 'url.frontend'"
   }
 ]}

@@ -54,7 +54,7 @@ public class EmailService {
 		helper.setTo(dto.getMailTo());
 		helper.setSubject(dto.getSubject());
 		helper.setText(htmlText, true);
-		FileSystemResource res = new FileSystemResource(new File("src/main/resources/static/images/default.jpg"));
+		FileSystemResource res = new FileSystemResource(new File("src/main/resources/static/images/default.png"));
 		helper.addInline("logo", res);
 		
 		javaMailSender.send(message);

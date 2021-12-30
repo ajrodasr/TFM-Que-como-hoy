@@ -20,17 +20,6 @@ public class IngredienteService {
 	@Autowired
 	IngredienteRepository ingredienteRepository;
 	
-	public List<IngredienteDTO> getIngredientes(){
-		List<Ingrediente> ing = ingredienteRepository.getIngredientes();
-		List<IngredienteDTO> ingredientes = new ArrayList<IngredienteDTO>();
-		if(!ing.isEmpty()) {
-			for (Ingrediente ingrediente : ing) {
-				ingredientes.add(new IngredienteDTO(ingrediente.getId(), ingrediente.getNombre(), ingrediente.getGrupo()));
-			}
-		}
-		return ingredientes;
-	}
-	
 	public Page<IngredienteDTO> getIngredientesFiltrados(Integer idGrupo, String term){
 		return ingredienteRepository.getIngredientesFiltrados(idGrupo, term);
 	}

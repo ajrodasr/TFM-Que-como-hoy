@@ -223,11 +223,61 @@ export class RecetaService {
     );
   }
 
-  public getRecetasByUsuario(idUsuario: string): Observable<Receta[]> {
-    const param = new HttpParams().append('idUsuario', idUsuario);
-    return this.http.get<Receta[]>(BACK_URL + 'api/recetas/usuario', {
-      params: param,
-    });
+  public getRecetasByUsuario(
+    idCreador,
+    tituloReceta: string = '',
+    tipoReceta: number = -1,
+    dificultad: string = '',
+    comensales: number = null,
+    tiempo: number = null,
+    ingredientes: Ingrediente[] = [],
+    pageNum: number = 0
+  ): Observable<any> {
+    const parametros: string[] = [];
+
+    parametros.push(`idCreador=${idCreador}&`);
+
+    if (tituloReceta !== '') {
+      parametros.push(`tituloReceta=${tituloReceta}&`);
+    }
+
+    if (tipoReceta >= 0) {
+      parametros.push(`tipoReceta=${tipoReceta}&`);
+    }
+
+    if (dificultad !== '') {
+      parametros.push(`dificultad=${dificultad}&`);
+    }
+
+    if (comensales) {
+      parametros.push(`comensales=${comensales}&`);
+    }
+
+    if (tiempo) {
+      parametros.push(`tiempo=${tiempo}&`);
+    }
+
+    if (ingredientes.length > 0) {
+      let ing = '';
+      ingredientes.forEach((ingrediente) => {
+        ing += `ingrediente=${ingrediente.id}&`;
+      });
+      parametros.push(ing);
+    }
+
+    if (pageNum !== 0) {
+      parametros.push(`pageNum=${pageNum}&`);
+    }
+
+    let urlConsulta = BACK_URL + 'api/recetas/usuario';
+
+    if (parametros.length > 0) {
+      urlConsulta += '?';
+      parametros.forEach((parametro) => {
+        urlConsulta += parametro;
+      });
+    }
+    return this.http.get<any>(urlConsulta);
   }
 
   public getUsuariosRecetasFilter(term: string): Observable<UsuarioReceta[]> {
@@ -304,13 +354,6 @@ export class RecetaService {
 
   public uploadImage(image: FormData): Observable<any> {
     return this.http.post<any>(BACK_URL + 'api/recetas/upload-image', image);
-  }
-
-  public deleteImage(idReceta: number): Observable<any> {
-    return this.http.post<any>(
-      BACK_URL + 'api/recetas/delete-image?idReceta=' + idReceta,
-      {}
-    );
   }
 
   public anadirConsumida(recetaConsumida: RecetaConsumida): Observable<any> {

@@ -172,14 +172,9 @@ export class NuevaRecetaComponent implements OnInit {
   }
 
   onNuevaReceta(): void {
-    // Nombre a la imagen
-    const nombreImagen =
-      'receta_' + new Date().getTime() + '_' + this.imageFile.name;
-
     this.nuevaReceta.titulo = this.titulo.value;
     this.nuevaReceta.instrucciones = this.instrucciones.value;
     this.nuevaReceta.tipoReceta.id = this.tipoReceta.value;
-    this.nuevaReceta.imagen = nombreImagen;
     this.nuevaReceta.tiempo = this.tiempo.value;
     this.nuevaReceta.comensales = this.comensales.value;
     this.nuevaReceta.dificultad = this.dificultad.value;
@@ -187,11 +182,7 @@ export class NuevaRecetaComponent implements OnInit {
     this.nuevaReceta.ingredientes = this.ingredientesSeleccionados;
 
     const uploadImageData = new FormData();
-    uploadImageData.append(
-      'imageFile',
-      this.imageFile,
-      this.nuevaReceta.imagen
-    );
+    uploadImageData.append('imageFile', this.imageFile);
 
     this.recetaService.uploadImage(uploadImageData).subscribe((data) => {
       this.nuevaReceta.imagen = data.publicID;

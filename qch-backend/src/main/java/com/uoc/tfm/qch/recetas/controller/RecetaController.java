@@ -1,8 +1,6 @@
 package com.uoc.tfm.qch.recetas.controller;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -103,9 +101,22 @@ public class RecetaController {
 	}
 	
 	@GetMapping("usuario")
-	public ResponseEntity<List<RecetaDTO>> getRecetasByUsuario(@RequestParam String idUsuario) {
-		List<RecetaDTO> recetas = recetaService.getRecetasByUsuario(idUsuario);
-		return new ResponseEntity<List<RecetaDTO>>(recetas, HttpStatus.OK);
+	public ResponseEntity<PageInfo<RecetaFiltradaDTO>> getRecetasByUsuario(
+			@RequestParam(required = false, defaultValue = "") String tituloReceta,
+			@RequestParam(required = false) Integer tipoReceta,
+			@RequestParam String idCreador,
+			@RequestParam(required = false) String dificultad,
+			@RequestParam(required = false) Integer comensales,
+			@RequestParam(required = false) Integer tiempo,
+			@RequestParam(required = false, defaultValue = "", value="ingrediente") Integer[] ingredientes,
+			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+			@RequestParam(required = false, defaultValue = "9") Integer pageSize,
+			@RequestParam(required = false, defaultValue = "5") Integer order,
+			@RequestParam(required = false, defaultValue = "true") Boolean desc) {
+		PageHelper.startPage(pageNum, pageSize);
+		Page<RecetaFiltradaDTO> recetas = recetaService.getRecetasByUsuario(tituloReceta, tipoReceta, idCreador, dificultad, comensales, tiempo, Arrays.asList(ingredientes), order, desc);
+		PageInfo<RecetaFiltradaDTO> info = new PageInfo<RecetaFiltradaDTO>(recetas);
+		return new ResponseEntity<PageInfo<RecetaFiltradaDTO>>(info, HttpStatus.OK);
 	}
 	
 	@GetMapping("usuarios")
@@ -297,25 +308,9 @@ public class RecetaController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("upload-image")
 	public ResponseEntity<?> uplaodImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
-		Path path = Path.of("src", "main","resources","static","images",file.getOriginalFilename());
-		Files.write(path, file.getBytes());
 		Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
 				  ObjectUtils.emptyMap());
 		String publicId = uploadResult.get("public_id").toString();
 		return new ResponseEntity(Collections.singletonMap("publicID", publicId), HttpStatus.OK);
 	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping("delete-image")
-	public ResponseEntity<?> deleteImage(@RequestParam int idReceta) throws IOException {
-		RecetaDTO dto = recetaService.getRecetaById(idReceta);
-		if(dto == null) {
-			return new ResponseEntity("La receta no existe", HttpStatus.BAD_REQUEST);
-		} 
-		Path path = Path.of("src", "main","resources","static","images",dto.getImagen());
-		Files.delete(path);
-		return new ResponseEntity(Collections.singletonMap("mensaje", "Imagen eliminada correctamente"), HttpStatus.OK);
-	}
-	
-	
 }

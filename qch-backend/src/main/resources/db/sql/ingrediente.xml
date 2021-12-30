@@ -26,17 +26,6 @@
 		<result column="PORCENTAJE_CONSUMIDO" property="porcentajeConsumido" />
 	</resultMap>
 	
-	<select id="getIngredientes" resultMap="ingrediente">
-		SELECT I.ID AS ID_INGREDIENTE,
-			I.NOMBRE AS NOMBRE_INGREDIENTE,
-			G.ID AS ID_GRUPO,
-			G.NOMBRE AS NOMBRE_GRUPO,
-			G.RACIONES_SEMANA AS RACIONES_SEMANA_GRUPO
-		FROM INGREDIENTES I
-		JOIN GRUPO_INGREDIENTE G ON I.GRUPO = G.ID
-		ORDER BY I.NOMBRE
-	</select>
-
 	<select id="getIngredienteById" resultMap="ingrediente">
 		SELECT I.ID AS ID_INGREDIENTE,
 			I.NOMBRE AS NOMBRE_INGREDIENTE,
@@ -165,16 +154,5 @@
 		GROUP BY gr.ID_GRUPO
 		ORDER BY gr.ID_GRUPO
 	</select>
-
-	<insert id="saveGrupoIngrediente">
-		INSERT INTO GRUPO_INGREDIENTE GRUPO_INGREDIENTE (NOMBRE, RACIONES_SEMANA) VALUES (#{nombre}, #{racionesSemana})
-	</insert>
-	
-	<update id="updateGrupoIngrediente">
-	    UPDATE GRUPO_INGREDIENTE SET
-	        NOMBRE = #{nombre},
-	        RACIONES_SEMANA = #{racionesSemana}
-	    WHERE ID=#{id}
-	</update>
 
 </mapper>

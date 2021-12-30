@@ -17,8 +17,6 @@ import com.uoc.tfm.qch.recetas.dto.UsuarioRecetaDTO;
 @Mapper
 public interface RecetaRepository {
 	Receta getRecetaById(int idReceta);
-	List<Receta> getRecetas();
-	List<Receta> getRecetasPublicadas();
 	Page<RecetaFiltradaDTO> getRecetasFiltradas(
 			String tituloReceta, 
 			Integer tipoReceta,
@@ -42,8 +40,16 @@ public interface RecetaRepository {
 			Boolean desc);
 	Page<RecetaHistoricoDTO> getHistoricoRecetas(String idUsuario);
 	List<RecetaFiltradaDTO> getRecetasMasConsumidasUsuario(String idUsuario);
-	List<Receta> getRecetasByTipo(int idTipoReceta);
-	List<Receta> getRecetasByUsuario(String idUsuario);
+	Page<RecetaFiltradaDTO> getRecetasByUsuario(
+			String tituloReceta, 
+			Integer tipoReceta,
+			String idCreador,
+			String dificultad,
+			Integer comensales,
+			Integer tiempo,
+			List<Integer> ingredientes,
+			Integer orderBy,
+			Boolean desc);
 	void saveReceta(Receta receta);
 	void saveRecetaConsumida(RecetaConsumidaDTO recetaConsumida);
 	void updateRecetaConsumida(RecetaConsumidaDTO recetaConsumida, LocalDateTime nuevaFecha);

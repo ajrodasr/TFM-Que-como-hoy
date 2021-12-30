@@ -40,31 +40,16 @@ public class RecetaService {
 		return dto;
 	}
 	
-	public List<RecetaDTO> getRecetas(){
-		List<Receta> recetas = recetaRepository.getRecetas();
-		List<RecetaDTO> dto = new ArrayList<RecetaDTO>();
-		for (Receta receta : recetas) {
-			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada()));
-		}
-		return dto;
-	}
-	
-	public List<RecetaDTO> getRecetasByUsuario(String idUsuario){
-		List<Receta> recetas = recetaRepository.getRecetasByUsuario(idUsuario);
-		List<RecetaDTO> dto = new ArrayList<RecetaDTO>();
-		for (Receta receta : recetas) {
-			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada()));
-		}
-		return dto;
-	}
-	
-	public List<RecetaDTO> getRecetasPublicadas(){
-		List<Receta> recetas = recetaRepository.getRecetasPublicadas();
-		List<RecetaDTO> dto = new ArrayList<RecetaDTO>();
-		for (Receta receta : recetas) {
-			dto.add(new RecetaDTO(receta.getId(), receta.getTitulo(), receta.getImagen(), receta.getInstrucciones(), receta.getFechaCreacion(), receta.getTiempo(), receta.getComensales(), receta.getDificultad(),receta.getLikes(), receta.getUsuario(), receta.getTipoReceta(),receta.getIngredientes(), receta.isPublicada()));
-		}
-		return dto;
+	public Page<RecetaFiltradaDTO> getRecetasByUsuario(String tituloReceta, 
+			Integer tipoReceta,
+			String idCreador,
+			String dificultad,
+			Integer comensales,
+			Integer tiempo,
+			List<Integer> ingredientes,
+			Integer order,
+			Boolean desc){
+		return recetaRepository.getRecetasByUsuario(tituloReceta, tipoReceta, idCreador, dificultad, comensales, tiempo, ingredientes, order, desc);
 	}
 	
 	public Page<RecetaFiltradaDTO> getRecetasPublicadasPaginadas(

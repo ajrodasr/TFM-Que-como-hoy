@@ -16,7 +16,6 @@ public interface IngredienteRepository {
 	Ingrediente getIngredienteByNombre(String ingredienteNombre);
 	List<Ingrediente> getIngredientesFilterNombre(String term);
 	Page<IngredienteDTO> getIngredientesFiltrados(Integer idGrupo, String term);
-	List<Ingrediente> getIngredientes();
 	List<Ingrediente> getIngredientesByGrupo(int idGrupo);
 	List<Ingrediente> getIngredientesMasUsadosUsuario(String idUsuario);
 	void saveIngrediente(Ingrediente ingrediente);
@@ -25,6 +24,4 @@ public interface IngredienteRepository {
 	List<GrupoIngrediente> getGrupos();
 	GrupoIngrediente getGrupoIngredienteById(int idGrupoIngrediente);
 	List<GrupoIngredienteConsumidoDTO> getGruposConsumidos(String idUsuario);
-	void saveGrupoIngrediente(GrupoIngrediente grupoIngrediente);
-	void updateGrupoIngrediente(GrupoIngrediente grupoIngrediente);
 }

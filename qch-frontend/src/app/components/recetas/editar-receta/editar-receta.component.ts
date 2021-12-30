@@ -200,14 +200,11 @@ export class EditarRecetaComponent implements OnInit {
     this.receta.dificultad = this.dificultad.value;
     this.receta.usuario.id = this.idUsuario;
     this.receta.ingredientes = this.ingredientesSeleccionados;
+    this.receta.imagen = null;
 
     if (this.imageFile) {
-      // Nombre a la imagen
-      const nombreImagen =
-        'receta_' + new Date().getTime() + '_' + this.imageFile.name;
-      this.receta.imagen = nombreImagen;
       const uploadImageData = new FormData();
-      uploadImageData.append('imageFile', this.imageFile, this.receta.imagen);
+      uploadImageData.append('imageFile', this.imageFile);
       this.recetaService.uploadImage(uploadImageData).subscribe((data) => {
         this.receta.imagen = data.publicID;
         this.recetaService.editarReceta(this.receta).subscribe(
@@ -222,6 +219,18 @@ export class EditarRecetaComponent implements OnInit {
           }
         );
       });
+    } else {
+      this.recetaService.editarReceta(this.receta).subscribe(
+        (res) => {
+          console.log(res);
+          this.router.navigate(['mis-recetas']);
+        },
+        (err) => {
+          console.log(err);
+          this.mensaje = err.error;
+          this.error = true;
+        }
+      );
     }
   }
 

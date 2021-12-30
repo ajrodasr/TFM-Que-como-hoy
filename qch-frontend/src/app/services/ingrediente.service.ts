@@ -76,13 +76,6 @@ export class IngredienteService {
     );
   }
 
-  public getIngredientesByGrupo(idGrupo: number): Observable<Ingrediente[]> {
-    const param = new HttpParams().append('idGrupo', idGrupo.toString());
-    return this.http.get<Ingrediente[]>(BACK_URL + 'api/ingredientes', {
-      params: param,
-    });
-  }
-
   public nuevoIngrediente(ingrediente: Ingrediente): Observable<any> {
     return this.http.post<any>(
       BACK_URL + 'api/ingredientes/nuevo',
